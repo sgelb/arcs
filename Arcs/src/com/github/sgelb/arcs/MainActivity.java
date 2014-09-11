@@ -124,86 +124,108 @@ public class MainActivity extends Activity implements CvCameraViewListener2 {
     public Mat onCameraFrame(CvCameraViewFrame inputFrame) {
     	frame = inputFrame.rgba();
     	
-    	paintSquareDetectionRectangles();
+    	drawSquareDetectionRectangles();
+    	drawViewBackground();
     	
     	// Flip frame to revert mirrored front camera image
     	Core.flip(frame, frame, 1);
         return frame;
     }
+
     
-    private Point pointSubtraction(Point a, Point b) {
+    
+    private void drawSquareDetectionRectangles() {
+    	// draw nine squares
+    	for (HashMap<String, Point> square : squares) {
+    		Core.rectangle(frame, square.get("tl"), square.get("br"), RECTCOLOR, 3);
+    	}
+    }
+ 
+    private void drawViewBackground() {
+    	// draw solid rect as background for text/button on right side of layout 
+    	Core.rectangle(frame, new Point(width-xOffset+padding/2, 0), 
+    			new Point(0, height), BGCOLOR, -1);
+    }
+    
+    private Point movePointDiagonally(Point a, Point b) {
     	return new Point(a.x - b.x, a.y + b.y);
     }
     
+    private Point movePointHorizontally(Point a, Point b) {
+    	return new Point(a.x - b.x, a.y);
+    }
+    
+    private Point movePointVertically(Point a, Point b) {
+    	return new Point(a.x, a.y + b.y);
+    }
     private void calculateSquareCoordinates(int width, int height) {
     	// Set coordinates of SquareDetectionRectangles
     	
+    	// Array holding HashMaps of square coordinates 
+        // HashMaps has two keys: 
+        // "tl" for top-left coordinates (Point)
+        // "br" for bottom-right coordinates of square (Point)
+    	
     	// Beware: because front camera output is y-mirrored,
     	// point of origin is on top left corner. 
-    	// 
+
     	// |0|1|2|
     	// |3|4|5|
     	// |6|7|8|
     	
+    	
     	// spacing between sqaures to % of height
-    	int squareSpacing = 5*height/100;
+    	int squareSpacing = 7*height/100;
+    	
     	// margin around face
     	int faceMargin = 10*height/100;
+    	
     	// height/width of single square
     	int squareSize = (height - 2*squareSpacing - 2*faceMargin)/3;
+    	
+    	// vector from tl to br of square
     	Point squareDiagonal = new Point(squareSize, squareSize);
     	
-    	HashMap<String, Point> zero = new HashMap<String, Point>();
-    	zero.put("tl", new Point(width - faceMargin, faceMargin));
-    	zero.put("br", pointSubtraction(zero.get("tl"), squareDiagonal));
-    	squares.add(zero);
+    	// vector from tl of square to tl of square on the right
+    	Point squareDistance = new Point(squareSize + squareSpacing, 
+    			squareSize + squareSpacing);
     	
-    	HashMap<String, Point> one = new HashMap<String, Point>();
-    	one.put("tl", new Point(width - (faceMargin + squareSize + squareSpacing), faceMargin));
-    	one.put("br", pointSubtraction(one.get("tl"), squareDiagonal));
-    	squares.add(one);
+    	// Initial point: top left corner of square 0
+    	Point topLeft = new Point(width - faceMargin, faceMargin);
+    	
+    	// Values needed by positionViews()
+    	padding = faceMargin;
+    	xOffset = 2*faceMargin + 3*squareSize + 2*squareSpacing;
+    	
+    	// Create nine squares, three in each row
+    	for (int row=0; row<3; row++) {
+    		HashMap<String, Point> zero = new HashMap<String, Point>();
+    		zero.put("tl", topLeft);
+    		zero.put("br", movePointDiagonally(zero.get("tl"), squareDiagonal));
+    		squares.add(zero);
 
-    	HashMap<String, Point> two = new HashMap<String, Point>();
-    	two.put("tl", new Point(width - (faceMargin + 2*(squareSize  + squareSpacing)), faceMargin));
-    	two.put("br", pointSubtraction(two.get("tl"), squareDiagonal));
-    	squares.add(two);
-    	
-    	HashMap<String, Point> three = new HashMap<String, Point>();
-    	three.put("tl", new Point(width - faceMargin, faceMargin + squareSize + squareSpacing));
-    	three.put("br", pointSubtraction(three.get("tl"), squareDiagonal));
-    	squares.add(three);
-    	
-    	HashMap<String, Point> four = new HashMap<String, Point>();
-    	four.put("tl", new Point(width - (faceMargin + squareSize + squareSpacing), faceMargin + squareSize + squareSpacing));
-    	four.put("br", pointSubtraction(four.get("tl"), squareDiagonal));
-    	squares.add(four);
+    		HashMap<String, Point> one = new HashMap<String, Point>();
+    		one.put("tl", movePointHorizontally(topLeft, squareDistance));
+    		one.put("br", movePointDiagonally(one.get("tl"), squareDiagonal));
+    		squares.add(one);
 
-    	HashMap<String, Point> five = new HashMap<String, Point>();
-    	five.put("tl", new Point(width - (faceMargin + 2*(squareSize  + squareSpacing)), faceMargin + squareSize + squareSpacing));
-    	five.put("br", pointSubtraction(five.get("tl"), squareDiagonal));
-    	squares.add(five);
-    	
-    	HashMap<String, Point> six = new HashMap<String, Point>();
-    	six.put("tl", new Point(width - faceMargin, faceMargin + 2*squareSize + 2*squareSpacing));
-    	six.put("br", pointSubtraction(six.get("tl"), squareDiagonal));
-    	squares.add(six);
-    	
-    	HashMap<String, Point> seven = new HashMap<String, Point>();
-    	seven.put("tl", new Point(width - (faceMargin + squareSize + squareSpacing), faceMargin + 2*squareSize + 2*squareSpacing));
-    	seven.put("br", pointSubtraction(seven.get("tl"), squareDiagonal));
-    	squares.add(seven);
+    		HashMap<String, Point> two = new HashMap<String, Point>();
+    		two.put("tl", movePointHorizontally(one.get("tl"), squareDistance));
+    		two.put("br", movePointDiagonally(two.get("tl"), squareDiagonal));
+    		squares.add(two);
 
-    	HashMap<String, Point> eight = new HashMap<String, Point>();
-    	eight.put("tl", new Point(width - (faceMargin + 2*(squareSize  + squareSpacing)), faceMargin + 2*squareSize + 2*squareSpacing));
-    	eight.put("br", pointSubtraction(eight.get("tl"), squareDiagonal));
-    	squares.add(eight);
-    }
-    
-    private void paintSquareDetectionRectangles() {
-    	for (HashMap<String, Point> square : squares) {
-    		Core.rectangle(frame, square.get("tl"), square.get("br"), RECTCOLOR, 5);
+    		topLeft = movePointVertically(topLeft, squareDistance);
     	}
+    }
+ 
+    private void positionViews() {
+    	LinearLayout layout = (LinearLayout) findViewById(R.id.linearView);
+    	layout.setPadding(xOffset, padding, padding, padding);
     	
+    	TextView text = (TextView) findViewById(R.id.instructionContentText);
+    	text.setMaxWidth(width-padding-xOffset);
+    	text.setMinWidth(width-padding-xOffset);
+
     }
     
 }
