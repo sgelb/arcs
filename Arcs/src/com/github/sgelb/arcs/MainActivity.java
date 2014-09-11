@@ -21,13 +21,21 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SurfaceView;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 public class MainActivity extends Activity implements CvCameraViewListener2 {
 
 	private static final String TAG = "ARCS::MainActivity";
-	private static final Scalar RECTCOLOR = new Scalar(200, 200, 200); 
+	private static final Scalar RECTCOLOR = new Scalar(200, 200, 200);
+	private static final Scalar BGCOLOR = new Scalar(70, 70, 70); 
 	private Mat frame;
     private CameraBridgeViewBase mOpenCvCameraView;
+    
+    private int padding;
+    private int xOffset;
+    private int width;
+    private int height;
     
     // Array holding coordinates of square overlays
     private ArrayList<HashMap<String, Point>> squares;
@@ -82,7 +90,8 @@ public class MainActivity extends Activity implements CvCameraViewListener2 {
     public void onResume()
     {
         super.onResume();
-        OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_9, this, mLoaderCallback);
+        OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_9, 
+        		this, mLoaderCallback);
     }
 
     public void onDestroy() {
@@ -102,7 +111,11 @@ public class MainActivity extends Activity implements CvCameraViewListener2 {
     }
 
     public void onCameraViewStarted(int width, int height) {
+    	this.width = width;
+    	this.height = height;
     	calculateSquareCoordinates(width, height);
+    	positionViews();
+    	
     }
 
     public void onCameraViewStopped() {

@@ -7,7 +7,7 @@
     <application
         android:label="@string/app_name"
         android:icon="@drawable/ic_launcher"
-        android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
+        android:theme="@android:style/Theme.DeviceDefault.NoActionBar.Fullscreen" >
 
         <activity android:name="com.github.sgelb.arcs.MainActivity"
                   android:label="@string/app_name"

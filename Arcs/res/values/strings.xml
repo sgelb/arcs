@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">A.R.C.S.</string>
+    
+    <string name="instructionTitle">Title</string>
+    <string name="instructionContent">Content</string>
+    <string name="instructionBtn">Next</string>
 </resources>
