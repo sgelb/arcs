@@ -27,8 +27,10 @@ import android.widget.TextView;
 public class MainActivity extends Activity implements CvCameraViewListener2 {
 
 	private static final String TAG = "ARCS::MainActivity";
+	
 	private static final Scalar RECTCOLOR = new Scalar(200, 200, 200);
-	private static final Scalar BGCOLOR = new Scalar(70, 70, 70); 
+	private static final Scalar BGCOLOR = new Scalar(70, 70, 70);
+	
 	private Mat frame;
     private CameraBridgeViewBase mOpenCvCameraView;
     
@@ -150,33 +152,36 @@ public class MainActivity extends Activity implements CvCameraViewListener2 {
     }
     
     private Point movePointDiagonally(Point a, Point b) {
-    	return new Point(a.x - b.x, a.y + b.y);
+    	return new Point(a.x + b.x, a.y + b.y);
     }
     
     private Point movePointHorizontally(Point a, Point b) {
-    	return new Point(a.x - b.x, a.y);
+    	return new Point(a.x + b.x, a.y);
     }
     
     private Point movePointVertically(Point a, Point b) {
     	return new Point(a.x, a.y + b.y);
     }
+    
     private void calculateSquareCoordinates(int width, int height) {
     	// Set coordinates of SquareDetectionRectangles
     	
-    	// Array holding HashMaps of square coordinates 
-        // HashMaps has two keys: 
+    	// Creates ListArray of HashMaps of square coordinates. 
+        // Each HashMap stands for a square and has two keys: 
         // "tl" for top-left coordinates (Point)
         // "br" for bottom-right coordinates of square (Point)
     	
     	// Beware: because front camera output is y-mirrored,
-    	// point of origin is on top left corner. 
+    	// point of origin is on top left corner and some values 
+    	// have to be negated for correct calculating
 
+    	// Square positions in ListArray:
     	// |0|1|2|
     	// |3|4|5|
     	// |6|7|8|
     	
     	
-    	// spacing between sqaures to % of height
+    	// spacing between squares
     	int squareSpacing = 7*height/100;
     	
     	// margin around face
@@ -186,10 +191,10 @@ public class MainActivity extends Activity implements CvCameraViewListener2 {
     	int squareSize = (height - 2*squareSpacing - 2*faceMargin)/3;
     	
     	// vector from tl to br of square
-    	Point squareDiagonal = new Point(squareSize, squareSize);
+    	Point squareDiagonal = new Point(-squareSize, squareSize);
     	
     	// vector from tl of square to tl of square on the right
-    	Point squareDistance = new Point(squareSize + squareSpacing, 
+    	Point squareDistance = new Point(-(squareSize + squareSpacing), 
     			squareSize + squareSpacing);
     	
     	// Initial point: top left corner of square 0
@@ -216,18 +221,20 @@ public class MainActivity extends Activity implements CvCameraViewListener2 {
     		two.put("br", movePointDiagonally(two.get("tl"), squareDiagonal));
     		squares.add(two);
 
+    		// move to next row
     		topLeft = movePointVertically(topLeft, squareDistance);
     	}
     }
  
     private void positionViews() {
+    	// Position views according to calculated size of squares
+    	
     	LinearLayout layout = (LinearLayout) findViewById(R.id.linearView);
     	layout.setPadding(xOffset, padding, padding, padding);
     	
     	TextView text = (TextView) findViewById(R.id.instructionContentText);
     	text.setMaxWidth(width-padding-xOffset);
     	text.setMinWidth(width-padding-xOffset);
-
     }
     
 }
