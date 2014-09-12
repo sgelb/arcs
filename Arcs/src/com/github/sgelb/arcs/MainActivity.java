@@ -113,7 +113,9 @@ public class MainActivity extends Activity implements CvCameraViewListener2 {
     public void onCameraViewStarted(int width, int height) {
     	this.width = width;
     	this.height = height;
-    	calculateSquareCoordinates(width, height);
+    	if (squares.isEmpty()) {
+    		calculateSquareCoordinates(width, height);
+    	}
     	positionViews();
     	
     }
@@ -137,7 +139,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2 {
     private void drawSquareDetectionRectangles() {
     	// draw nine squares
     	for (HashMap<String, Point> square : squares) {
-    		Core.rectangle(frame, square.get("tl"), square.get("br"), RECTCOLOR, 3);
+    		Core.rectangle(frame, square.get("tl"), square.get("br"), RECTCOLOR, 2);
     	}
     }
  

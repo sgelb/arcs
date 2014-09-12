@@ -41,10 +41,4 @@
             android:text="@string/instructionBtn" />
     </LinearLayout>
 
-    <Space
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true" />
-
 </RelativeLayout>
