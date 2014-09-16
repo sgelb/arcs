@@ -29,6 +29,9 @@ public class Face {
 	
 	//##### getter #####
 	
+	/* It can only 
+	 * 
+	 */
 	public Color[] getSquaresAt(int[] pos) {
 		Color[] temp = new Color[3];
 		temp[0] = squares[pos[0]];
@@ -69,8 +72,8 @@ public class Face {
 				squares[i] = oldSquares[counter];
 			}
 		} else {
-			for(int i = 9; i >= 0; i--) {
-				if(counter - 3 > 0) {
+			for(int i = 8; i >= 0; i--) {
+				if(counter - 3 >= 0) {
 					counter -= 3;
 				} else {
 					counter += 7;
