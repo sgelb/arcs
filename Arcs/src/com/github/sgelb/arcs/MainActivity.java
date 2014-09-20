@@ -61,7 +61,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2 {
 
     public MainActivity() {
         Log.i(TAG, "Instantiated new " + this.getClass());
-        squares = new ArrayList<HashMap<String,Point>>();
+        this.squares = new ArrayList<HashMap<String,Point>>();
     }
 
     /** Called when the activity is first created. */
@@ -116,7 +116,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2 {
     	this.width = width;
     	this.height = height;
     	if (squares.isEmpty()) {
-    		calculateSquareCoordinates(width, height);
+    		squares = calculateSquareCoordinates(width, height);
     	}
     	positionViews();
     	
@@ -151,19 +151,19 @@ public class MainActivity extends Activity implements CvCameraViewListener2 {
     			new Point(0, height), BGCOLOR, -1);
     }
     
-    private Point movePointDiagonally(Point a, Point b) {
+    public Point movePointDiagonally(Point a, Point b) {
     	return new Point(a.x + b.x, a.y + b.y);
     }
     
-    private Point movePointHorizontally(Point a, Point b) {
+    public Point movePointHorizontally(Point a, Point b) {
     	return new Point(a.x + b.x, a.y);
     }
     
-    private Point movePointVertically(Point a, Point b) {
+    public Point movePointVertically(Point a, Point b) {
     	return new Point(a.x, a.y + b.y);
     }
     
-    private void calculateSquareCoordinates(int width, int height) {
+    public ArrayList<HashMap<String, Point>> calculateSquareCoordinates(int width, int height) {
     	// Set coordinates of SquareDetectionRectangles
     	
     	// Creates ListArray of HashMaps of square coordinates. 
@@ -180,6 +180,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2 {
     	// |3|4|5|
     	// |6|7|8|
     	
+    	ArrayList<HashMap<String, Point>> tmpSquares = new ArrayList<HashMap<String,Point>>();
     	
     	// spacing between squares
     	int squareSpacing = 7*height/100;
@@ -209,21 +210,23 @@ public class MainActivity extends Activity implements CvCameraViewListener2 {
     		HashMap<String, Point> zero = new HashMap<String, Point>();
     		zero.put("tl", topLeft);
     		zero.put("br", movePointDiagonally(zero.get("tl"), squareDiagonal));
-    		squares.add(zero);
-
+    		tmpSquares.add(zero);
+    		
     		HashMap<String, Point> one = new HashMap<String, Point>();
     		one.put("tl", movePointHorizontally(topLeft, squareDistance));
     		one.put("br", movePointDiagonally(one.get("tl"), squareDiagonal));
-    		squares.add(one);
+    		tmpSquares.add(one);
 
     		HashMap<String, Point> two = new HashMap<String, Point>();
     		two.put("tl", movePointHorizontally(one.get("tl"), squareDistance));
     		two.put("br", movePointDiagonally(two.get("tl"), squareDiagonal));
-    		squares.add(two);
+    		tmpSquares.add(two);
+    		
 
     		// move to next row
     		topLeft = movePointVertically(topLeft, squareDistance);
     	}
+    	return tmpSquares;
     }
  
     private void positionViews() {
