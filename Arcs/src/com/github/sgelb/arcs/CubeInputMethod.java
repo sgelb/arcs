@@ -4,7 +4,7 @@ import org.opencv.core.Mat;
 
 import android.view.MotionEvent;
 
-public interface CubeInputView {
+public interface CubeInputMethod {
 	
 	public void init(int width, int height);
 	public void drawOverlay(Mat frame);

@@ -13,7 +13,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.Toast;
 
-public class ManualCubeInputView implements CubeInputView {
+public class ManualCubeInputMethod implements CubeInputMethod {
 
 	private static final String TAG = "ARCS::ManualCubeInputActivity";
 	private static final Scalar RECTCOLOR = new Scalar(200, 200, 200);
@@ -24,7 +24,7 @@ public class ManualCubeInputView implements CubeInputView {
     private ArrayList<Rect> rectangles;
 
 
-	public ManualCubeInputView() {
+	public ManualCubeInputMethod() {
 	}
 
 	@Override

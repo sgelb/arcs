@@ -13,9 +13,13 @@ import org.opencv.core.Scalar;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
@@ -31,7 +35,8 @@ public class MainActivity extends Activity implements CvCameraViewListener2 {
 
 	private Mat frame;
 	private CameraBridgeViewBase mOpenCvCameraView;
-	private CubeInputView inputView = null;
+	private CubeInputMethod inputView = null;
+	private SharedPreferences prefs;
 
 	private int width;
 	private int height;
@@ -56,7 +61,6 @@ public class MainActivity extends Activity implements CvCameraViewListener2 {
 
 	public MainActivity() {
 		Log.i(TAG, "Instantiated new " + this.getClass());
-		this.inputView = new ManualCubeInputView();
 	}
 
 	public static Context getContext() {
@@ -72,6 +76,9 @@ public class MainActivity extends Activity implements CvCameraViewListener2 {
 
 		MainActivity.context = getApplicationContext();
 		setContentView(R.layout.main_activity);
+
+		prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		setCubeInputMethod();
 
 		mOpenCvCameraView = (CameraBridgeViewBase) findViewById(R.id.java_camera_view);
 		mOpenCvCameraView.setVisibility(SurfaceView.VISIBLE);
@@ -104,12 +111,24 @@ public class MainActivity extends Activity implements CvCameraViewListener2 {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		return true;
+		// Inflate the menu; this adds items to the action bar if it is present.
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.main_activity_actions, menu);
+		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		return true;
+		// Handle action bar item clicks here. The action bar will
+		// automatically handle clicks on the Home/Up button, so long
+		// as you specify a parent activity in AndroidManifest.xml.
+		switch (item.getItemId()) {
+		case R.id.action_settings:
+			Intent settingsIntent = new Intent(this, SettingsActivity.class);
+			startActivity(settingsIntent);
+		default:
+			return super.onOptionsItemSelected(item);
+		}
 	}
 
 	public void onCameraViewStarted(int width, int height) {
@@ -157,6 +176,16 @@ public class MainActivity extends Activity implements CvCameraViewListener2 {
 		TextView text = (TextView) findViewById(R.id.instructionContentText);
 		text.setMaxWidth(width - padding - xOffset);
 		text.setMinWidth(width - padding - xOffset);
+	}
+	
+	private void setCubeInputMethod() {
+		switch (prefs.getString("cube_input_method", "manual")) {
+		case "manual":			
+			this.inputView = new ManualCubeInputMethod();
+			break;
+		default:
+			this.inputView = new ManualCubeInputMethod();
+		}
 	}
 
 }
