@@ -119,7 +119,6 @@ public class ManualCubeInputView implements CubeInputView {
 		Point bottomRight = new Point(width - faceMargin - rectSize.width,
 				faceMargin + rectSize.height);
 
-
 		// Values needed by positionViews()
 		this.padding = faceMargin;
 		this.xOffset = (int) (2*faceMargin + 3*rectSize.width + 2*rectSpacing);

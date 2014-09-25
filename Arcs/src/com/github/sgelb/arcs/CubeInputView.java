@@ -11,5 +11,4 @@ public interface CubeInputView {
 	public boolean onTouchEvent(MotionEvent event);
 	public int getXOffset();
 	public int getPadding();
-
 }
