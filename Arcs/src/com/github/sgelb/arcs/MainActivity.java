@@ -1,7 +1,6 @@
 package com.github.sgelb.arcs;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
@@ -12,7 +11,9 @@ import org.opencv.android.OpenCVLoader;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
+import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
+import org.opencv.core.Size;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -39,8 +40,8 @@ public class MainActivity extends Activity implements CvCameraViewListener2 {
     private int width;
     private int height;
     
-    // Array holding coordinates of square overlays
-    private ArrayList<HashMap<String, Point>> squares;
+    // Array holding coordinates of rectangle overlays
+    private ArrayList<Rect> rectangles;
 
     private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
         @Override
@@ -61,7 +62,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2 {
 
     public MainActivity() {
         Log.i(TAG, "Instantiated new " + this.getClass());
-        this.squares = new ArrayList<HashMap<String,Point>>();
+        this.rectangles = new ArrayList<Rect>(9);
     }
 
     /** Called when the activity is first created. */
@@ -115,8 +116,8 @@ public class MainActivity extends Activity implements CvCameraViewListener2 {
     public void onCameraViewStarted(int width, int height) {
     	this.width = width;
     	this.height = height;
-    	if (squares.isEmpty()) {
-    		squares = calculateSquareCoordinates(width, height);
+    	if (rectangles.isEmpty()) {
+    		rectangles = calculateRectanglesCoordinates(width, height);
     	}
     	positionViews();
     	
@@ -128,7 +129,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2 {
     public Mat onCameraFrame(CvCameraViewFrame inputFrame) {
     	frame = inputFrame.rgba();
     	
-    	drawSquareDetectionRectangles();
+    	drawDetectionRectangles();
     	drawViewBackground();
     	
     	// Flip frame to revert mirrored front camera image
@@ -138,10 +139,10 @@ public class MainActivity extends Activity implements CvCameraViewListener2 {
 
     
     
-    private void drawSquareDetectionRectangles() {
-    	// draw nine squares
-    	for (HashMap<String, Point> square : squares) {
-    		Core.rectangle(frame, square.get("tl"), square.get("br"), RECTCOLOR, 2);
+    private void drawDetectionRectangles() {
+    	// draw nine rectangles
+    	for (Rect rect : rectangles) {
+    		Core.rectangle(frame, rect.tl(), rect.br(), RECTCOLOR, 2);
     	}
     }
  
@@ -151,93 +152,83 @@ public class MainActivity extends Activity implements CvCameraViewListener2 {
     			new Point(0, height), BGCOLOR, -1);
     }
     
-    public Point movePointDiagonally(Point a, Point b) {
-    	return new Point(a.x + b.x, a.y + b.y);
+    
+    public Point movePointHorizontally(Point a, Point b, int factor) {
+    	// beware: due to y-mirrored output, we have to substract x
+    	return new Point(a.x - factor*b.x, a.y);
     }
     
-    public Point movePointHorizontally(Point a, Point b) {
-    	return new Point(a.x + b.x, a.y);
+    public Rect getNextRectInRow(Point tl, Point br, Point dist, int factor) {
+    	// calculate next rectangle in row 
+    	return new Rect(
+				movePointHorizontally(tl, dist, factor),
+				movePointHorizontally(br, dist, factor));
     }
     
     public Point movePointVertically(Point a, Point b) {
     	return new Point(a.x, a.y + b.y);
     }
     
-    public ArrayList<HashMap<String, Point>> calculateSquareCoordinates(int width, int height) {
-    	// Set coordinates of SquareDetectionRectangles
-    	
-    	// Creates ListArray of HashMaps of square coordinates. 
-        // Each HashMap stands for a square and has two keys: 
-        // "tl" for top-left coordinates (Point)
-        // "br" for bottom-right coordinates of square (Point)
+    public ArrayList<Rect> calculateRectanglesCoordinates(int width, int height) {
+    	// Creates ListArray of cv::rects to draw overlay
     	
     	// Beware: because front camera output is y-mirrored,
     	// point of origin is on top left corner and some values 
-    	// have to be negated for correct calculating
+    	// have to be negated/subtracted for correct calculating
 
-    	// Square positions in ListArray:
+    	// Rectangle positions in ListArray:
     	// |0|1|2|
     	// |3|4|5|
     	// |6|7|8|
     	
-    	ArrayList<HashMap<String, Point>> tmpSquares = new ArrayList<HashMap<String,Point>>();
+    	ArrayList<Rect> tmpRect = new ArrayList<Rect>(9);
     	
-    	// spacing between squares
-    	int squareSpacing = 7*height/100;
+    	// spacing between rects
+    	int rectSpacing = 7*height/100;
     	
     	// margin around face
     	int faceMargin = 10*height/100;
     	
-    	// height/width of single square
-    	int squareSize = (height - 2*squareSpacing - 2*faceMargin)/3;
+    	// Size of single rect
+    	Size rectSize = new Size(
+    			(height - 2*rectSpacing - 2*faceMargin)/3,
+    			(height - 2*rectSpacing - 2*faceMargin)/3); 
     	
-    	// vector from tl to br of square
-    	Point squareDiagonal = new Point(-squareSize, squareSize);
+    	// vector from tl of rect to tl of rect on the right
+    	Point rectDistance = new Point(rectSize.width + rectSpacing, 
+    			(double) rectSize.height + rectSpacing);
     	
-    	// vector from tl of square to tl of square on the right
-    	Point squareDistance = new Point(-(squareSize + squareSpacing), 
-    			squareSize + squareSpacing);
-    	
-    	// Initial point: top left corner of square 0
+    	// Initial points: top left/bottom right corners of first rectangle
     	Point topLeft = new Point(width - faceMargin, faceMargin);
+    	Point bottomRight = new Point(width - faceMargin - rectSize.width,
+    			faceMargin + rectSize.height);
+    	
     	
     	// Values needed by positionViews()
     	padding = faceMargin;
-    	xOffset = 2*faceMargin + 3*squareSize + 2*squareSpacing;
-    	
-    	// Create nine squares, three in each row
-    	for (int row=0; row<3; row++) {
-    		HashMap<String, Point> zero = new HashMap<String, Point>();
-    		zero.put("tl", topLeft);
-    		zero.put("br", movePointDiagonally(zero.get("tl"), squareDiagonal));
-    		tmpSquares.add(zero);
-    		
-    		HashMap<String, Point> one = new HashMap<String, Point>();
-    		one.put("tl", movePointHorizontally(topLeft, squareDistance));
-    		one.put("br", movePointDiagonally(one.get("tl"), squareDiagonal));
-    		tmpSquares.add(one);
+    	xOffset = (int) (2*faceMargin + 3*rectSize.width + 2*rectSpacing);
 
-    		HashMap<String, Point> two = new HashMap<String, Point>();
-    		two.put("tl", movePointHorizontally(one.get("tl"), squareDistance));
-    		two.put("br", movePointDiagonally(two.get("tl"), squareDiagonal));
-    		tmpSquares.add(two);
-    		
-
+    	// Create nine rectangles, three in each row
+    	for (int row=0; row < 3; row++) {
+    		for (int col=0; col < 3; col++) {
+    			tmpRect.add(getNextRectInRow(topLeft, bottomRight, rectDistance, col));
+    		}
     		// move to next row
-    		topLeft = movePointVertically(topLeft, squareDistance);
+    		topLeft = movePointVertically(topLeft, rectDistance);
+    		bottomRight = movePointVertically(bottomRight, rectDistance);
     	}
-    	return tmpSquares;
+    	return tmpRect;
     }
  
     private void positionViews() {
-    	// Position views according to calculated size of squares
+    	// Position views according to calculated size of rectangles
     	
     	LinearLayout layout = (LinearLayout) findViewById(R.id.linearView);
     	layout.setPadding(xOffset, padding, padding, padding);
     	
     	TextView text = (TextView) findViewById(R.id.instructionContentText);
-    	text.setMaxWidth(width-padding-xOffset);
-    	text.setMinWidth(width-padding-xOffset);
+    	text.setMaxWidth(width - padding - xOffset);
+    	text.setMinWidth(width - padding - xOffset);
     }
     
 }

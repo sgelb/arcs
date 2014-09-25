@@ -1,9 +1,9 @@
 package com.github.sgelb.arcs.test;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import org.opencv.core.Point;
+import org.opencv.core.Rect;
 
 import android.test.ActivityInstrumentationTestCase2;
 
@@ -26,18 +26,12 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 	    assertNotNull("MainActivity is null", activity);
 	}
 	
-	public void testMovePointDiagonally() {
-		Point a = new Point(1,1);
-		Point b = new Point(2,2);
-		Point expected = new Point(3, 3);
-		assertEquals(expected, activity.movePointDiagonally(a, b));
-    }
-	
 	public void testMovePointHorizontally() {
 		Point a = new Point(1,1);
 		Point b = new Point(2,2);
-		Point expected = new Point(3, 1);
-		assertEquals(expected, activity.movePointHorizontally(a, b));
+		int factor = 2;
+		Point expected = new Point(-3, 1);
+		assertEquals(expected, activity.movePointHorizontally(a, b, factor));
     }
 	
 	public void testMovePointVertically() {
@@ -48,22 +42,18 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
     }
 	
 	public void testCalculateSquareCoordinates() {
-		ArrayList<HashMap<String, Point>> expected = new ArrayList<HashMap<String,Point>>();
-		ArrayList<HashMap<String, Point>> result = new ArrayList<HashMap<String,Point>>();
+		ArrayList<Rect> expected = new ArrayList<Rect>();
+		ArrayList<Rect> result = new ArrayList<Rect>();
 		
 		// first square
-		HashMap<String, Point> first = new HashMap<>();
-		first.put("tl", new Point(1208, 72));
-		first.put("br", new Point(1050, 230));
+		Rect first = new Rect(new Point(1208, 72), new Point(1050, 230));
 		expected.add(first);
 		
 		// last square
-		HashMap<String, Point> last = new HashMap<>();
-		last.put("tl", new Point(792, 488));
-		last.put("br", new Point(634, 646));
+		Rect last = new Rect(new Point(792, 646), new Point(634, 488));
 		expected.add(last);
 		
-		result = activity.calculateSquareCoordinates(1280, 720);
+		result = activity.calculateRectanglesCoordinates(1280, 720);
 		assertEquals(expected.get(0), result.get(0));
 		assertEquals(expected.get(1), result.get(8));
 	}
