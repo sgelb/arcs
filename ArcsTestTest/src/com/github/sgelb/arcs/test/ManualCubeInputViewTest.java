@@ -2,19 +2,19 @@ package com.github.sgelb.arcs.test;
 
 import java.util.ArrayList;
 
-import junit.framework.TestCase;
-
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
 
+import android.test.ActivityTestCase;
+
 import com.github.sgelb.arcs.ManualCubeInputMethod;
 
-public class ManualCubeInputViewTest extends TestCase {
+public class ManualCubeInputViewTest extends ActivityTestCase {
 
 	private ManualCubeInputMethod manualCubeInputMethod;
 	
 	public ManualCubeInputViewTest() {
-		manualCubeInputMethod = new ManualCubeInputMethod();
+		manualCubeInputMethod = new ManualCubeInputMethod(getActivity());
 	}
 	
 	public void testMovePointHorizontally() {

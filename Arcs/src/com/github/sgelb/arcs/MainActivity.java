@@ -61,6 +61,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2 {
 
 	public MainActivity() {
 		Log.i(TAG, "Instantiated new " + this.getClass());
+		this.inputView = new ManualCubeInputMethod(this);
 	}
 
 	public static Context getContext() {
@@ -181,10 +182,10 @@ public class MainActivity extends Activity implements CvCameraViewListener2 {
 	private void setCubeInputMethod() {
 		switch (prefs.getString("cube_input_method", "manual")) {
 		case "manual":			
-			this.inputView = new ManualCubeInputMethod();
+			this.inputView = new ManualCubeInputMethod(this);
 			break;
 		default:
-			this.inputView = new ManualCubeInputMethod();
+			this.inputView = new ManualCubeInputMethod(this);
 		}
 	}
 

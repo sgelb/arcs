@@ -17,4 +17,14 @@
      </string-array>
      <string name="summary_cube_input_method_prefs">How to input initial cube configuration: %s</string>
      <string name="title_cube_input_method_prefs">Cube Input Method</string>
+
+    <string name="chooseColorDialogTitle">Choose a color</string>
+    <string-array name="colors">
+    	<item>Blue</item>
+    	<item>Green</item>
+    	<item>Orange</item>
+        <item>Red</item>
+    	<item>White</item>
+    	<item>Yellow</item>
+    </string-array>
 </resources>
