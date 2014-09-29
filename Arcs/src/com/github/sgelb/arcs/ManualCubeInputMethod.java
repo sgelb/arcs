@@ -37,14 +37,14 @@ public class ManualCubeInputMethod implements CubeInputMethod {
 
 	public ManualCubeInputMethod(Context mContext) {
 		this.mContext = mContext;
+		this.rectangles = new ArrayList<Rect>(9);
+		this.colorChoices = new ArrayList<Scalar>(6);
+		this.rectColors = new ArrayList<Scalar>(9);
 	}
 
 	@Override
 	public void init(int width, int height) {
 		this.width = width;
-		this.rectangles = new ArrayList<Rect>(9);
-		this.rectColors = new ArrayList<Scalar>(9);
-		this.colorChoices = new ArrayList<Scalar>(6);
 		colorChoices.add(BLUE);
 		colorChoices.add(GREEN);
 		colorChoices.add(ORANGE);
@@ -92,6 +92,7 @@ public class ManualCubeInputMethod implements CubeInputMethod {
 	public int getPadding() {
 		return this.padding;
 	}
+	
 	
 	public Point movePointHorizontally(Point a, Point b, int factor) {
 		// beware: due to y-mirrored output, we have to substract x
@@ -172,7 +173,6 @@ public class ManualCubeInputMethod implements CubeInputMethod {
 		});
 		AlertDialog alertDialog = alert.create();
 		alertDialog.show();
-		
 	}
 	
 }
