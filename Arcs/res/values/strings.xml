@@ -5,4 +5,16 @@
     <string name="instructionTitle">Title</string>
     <string name="instructionContent">Content</string>
     <string name="instructionBtn">Next</string>
+    
+    <string name="chooseColorDialogTitle">Choose a color</string>
+    <string-array name="colors">
+    	<item>Blue</item>
+    	<item>Green</item>
+    	<item>Orange</item>
+        <item>Red</item>
+    	<item>White</item>
+    	<item>Yellow</item>
+    </string-array>
+        
+        
 </resources>

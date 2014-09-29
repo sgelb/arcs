@@ -56,7 +56,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2 {
 
 	public MainActivity() {
 		Log.i(TAG, "Instantiated new " + this.getClass());
-		this.inputView = new ManualCubeInputView();
+		this.inputView = new ManualCubeInputView(this);
 	}
 
 	public static Context getContext() {

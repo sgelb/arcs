@@ -9,28 +9,48 @@ import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 
-import android.util.Log;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.view.MotionEvent;
-import android.widget.Toast;
 
 public class ManualCubeInputView implements CubeInputView {
 
 	private static final String TAG = "ARCS::ManualCubeInputActivity";
-	private static final Scalar RECTCOLOR = new Scalar(200, 200, 200);
+	private static final Scalar UNSET = new Scalar(0, 0, 0);
+	private static final Scalar BLUE = new Scalar(0, 0, 255);
+	private static final Scalar GREEN = new Scalar(0, 255, 0);
+	private static final Scalar ORANGE = new Scalar(255, 165, 0);
+	private static final Scalar RED = new Scalar(255, 0, 0);
+	private static final Scalar WHITE = new Scalar(255, 255, 255);
+	private static final Scalar YELLOW = new Scalar(255, 255, 0);
+	private ArrayList<Scalar> colorChoices;
+	
+	private Context mContext;
 	private int width;
 	private int xOffset;
 	private int padding;
 	// Array holding coordinates of rectangle overlays
     private ArrayList<Rect> rectangles;
+    private ArrayList<Scalar> rectColors;
 
 
-	public ManualCubeInputView() {
+	public ManualCubeInputView(Context mContext) {
+		this.mContext = mContext;
 	}
 
 	@Override
 	public void init(int width, int height) {
 		this.width = width;
 		this.rectangles = new ArrayList<Rect>(9);
+		this.rectColors = new ArrayList<Scalar>(9);
+		this.colorChoices = new ArrayList<Scalar>(6);
+		colorChoices.add(BLUE);
+		colorChoices.add(GREEN);
+		colorChoices.add(ORANGE);
+		colorChoices.add(RED);
+		colorChoices.add(WHITE);
+		colorChoices.add(YELLOW);
 		if (rectangles.isEmpty()) {
     		rectangles = calculateRectanglesCoordinates(width, height);
     	}
@@ -38,8 +58,13 @@ public class ManualCubeInputView implements CubeInputView {
 
 	@Override
 	public void drawOverlay(Mat frame) {
-		for (Rect rect : rectangles) {
-			Core.rectangle(frame, rect.tl(), rect.br(), RECTCOLOR, 2);
+		for (int i=0; i<rectangles.size(); i++) {
+			int strokewidth = 2;
+			if (rectColors.get(i) != UNSET) {
+				strokewidth = 5;
+			}
+			Core.rectangle(frame, rectangles.get(i).tl(), rectangles.get(i).br(), 
+					rectColors.get(i), strokewidth);
 		}
 	}
 
@@ -51,8 +76,7 @@ public class ManualCubeInputView implements CubeInputView {
 		if (event.getAction() == MotionEvent.ACTION_DOWN) {
 			for (int i=0; i < rectangles.size(); i++) {
 				if (rectangles.get(i).contains(new Point(touchX, touchY))) {
-					Log.d(TAG, "Touched rectangle " + i);
-					Toast.makeText(MainActivity.getContext(), "RECT " + i, Toast.LENGTH_SHORT).show();
+					setColorDialog(i);
 				}
 			}
 		}
@@ -127,6 +151,7 @@ public class ManualCubeInputView implements CubeInputView {
 		for (int row=0; row < 3; row++) {
 			for (int col=0; col < 3; col++) {
 				tmpRect.add(getNextRectInRow(topLeft, bottomRight, rectDistance, col));
+				rectColors.add(UNSET);
 			}
 			// move to next row
 			topLeft = movePointVertically(topLeft, rectDistance);
@@ -135,4 +160,19 @@ public class ManualCubeInputView implements CubeInputView {
 		return tmpRect;
 	}
 
+	private void setColorDialog(final int position) {
+		// show dialog to choose color of rectangle at position
+		AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
+		alert.setTitle(R.string.chooseColorDialogTitle);
+		alert.setItems(R.array.colors, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				rectColors.set(position, colorChoices.get(which));
+			}
+		});
+		AlertDialog alertDialog = alert.create();
+		alertDialog.show();
+		
+	}
+	
 }
