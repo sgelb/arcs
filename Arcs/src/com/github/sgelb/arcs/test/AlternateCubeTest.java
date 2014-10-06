@@ -10,8 +10,6 @@ import com.github.sgelb.arcs.Square;
 
 public class AlternateCubeTest {
 	
-//	private AlternateCube cube;
-//	private AlternateCube testCube;
 	private Rotation rot;
 	private SquareLocation locationA;
 	private SquareLocation locationB;
@@ -20,14 +18,13 @@ public class AlternateCubeTest {
 	@Before
 	public void setUp() {
 		rot = new Rotation();
-		locationA = new SquareLocation(-1, 1, -1);
-		locationB = new SquareLocation(-1, 0, -1);
-		locationC = new SquareLocation(-1, -1, -1);
 	}
 	
-	@Ignore
 	@Test
 	public void rotateRight() {
+		locationA = new SquareLocation(1, 1, 1);
+		locationB = new SquareLocation(1, 1, 0);
+		locationC = new SquareLocation(1, 1, -1);
 		rot.setUpSquaresForRotation(Rotation.ROTATION_RIGHT);
 		rot.rotateRight();
 		assertArrayEquals(locationA.getLocationsAsArray(), rot.squares.get(0).getLocation().getLocationsAsArray());
@@ -35,9 +32,11 @@ public class AlternateCubeTest {
 		assertArrayEquals(locationC.getLocationsAsArray(), rot.squares.get(2).getLocation().getLocationsAsArray());
 	}
 	
-	@Ignore
 	@Test
 	public void rotateLeft() {
+		locationA = new SquareLocation(-1, -1, -1);
+		locationB = new SquareLocation(-1, -1, 0);
+		locationC = new SquareLocation(-1, -1, 1);
 		rot.setUpSquaresForRotation(Rotation.ROTATION_LEFT);
 		rot.rotateLeft();
 		assertArrayEquals(locationA.getLocationsAsArray(), rot.squares.get(0).getLocation().getLocationsAsArray());
@@ -45,9 +44,11 @@ public class AlternateCubeTest {
 		assertArrayEquals(locationC.getLocationsAsArray(), rot.squares.get(2).getLocation().getLocationsAsArray());
 	}
 	
-	@Ignore
 	@Test
-	public void rotateTop() {
+	public void rotateUp() {
+		locationA = new SquareLocation(-1, 1, -1);
+		locationB = new SquareLocation(-1, 1, 0);
+		locationC = new SquareLocation(-1, 1, 1);
 		rot.setUpSquaresForRotation(Rotation.ROTATION_UP);
 		rot.rotateUp();
 		assertArrayEquals(locationA.getLocationsAsArray(), rot.squares.get(0).getLocation().getLocationsAsArray());
@@ -55,9 +56,11 @@ public class AlternateCubeTest {
 		assertArrayEquals(locationC.getLocationsAsArray(), rot.squares.get(2).getLocation().getLocationsAsArray());
 	}
 	
-	@Ignore
 	@Test
 	public void rotateDown() {
+		locationA = new SquareLocation(1, -1, 1);
+		locationB = new SquareLocation(1, -1, 0);
+		locationC = new SquareLocation(1, -1, -1);
 		rot.setUpSquaresForRotation(Rotation.ROTATION_DOWN);
 		rot.rotateDown();
 		assertArrayEquals(locationA.getLocationsAsArray(), rot.squares.get(0).getLocation().getLocationsAsArray());
@@ -65,9 +68,11 @@ public class AlternateCubeTest {
 		assertArrayEquals(locationC.getLocationsAsArray(), rot.squares.get(2).getLocation().getLocationsAsArray());
 	}
 	
-	@Ignore
 	@Test
 	public void rotateFront() {
+		locationA = new SquareLocation(-1, 1, 1);
+		locationB = new SquareLocation(0, 1, 1);
+		locationC = new SquareLocation(1, 1, 1);
 		rot.setUpSquaresForRotation(Rotation.ROTATION_FRONT);
 		rot.rotateFront();
 		assertArrayEquals(locationA.getLocationsAsArray(), rot.squares.get(0).getLocation().getLocationsAsArray());
@@ -77,6 +82,9 @@ public class AlternateCubeTest {
 	
 	@Test
 	public void rotateBack() {
+		locationA = new SquareLocation(1, -1, -1);
+		locationB = new SquareLocation(1, 0, -1);
+		locationC = new SquareLocation(1, 1, -1);
 		rot.setUpSquaresForRotation(Rotation.ROTATION_BACK);
 		rot.rotateBack();
 		assertArrayEquals(locationA.getLocationsAsArray(), rot.squares.get(0).getLocation().getLocationsAsArray());

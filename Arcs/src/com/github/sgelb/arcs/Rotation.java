@@ -207,25 +207,25 @@ public class Rotation {
 	
 	public void rotateFront() {
 		for(Square square : squares) {
-			rotateSquare(square, "z", Math.PI / 2);
+			rotateSquare(square, "z", -Math.PI / 2);
 		}
 	}
 	
 	public void rotateBack() {
 		for(Square square : squares) {
-			rotateSquare(square, "z", -Math.PI / 2);
+			rotateSquare(square, "z", Math.PI / 2);
 		}
 	}
 	
 	public void rotateUp() {
 		for(Square square : squares) {
-			rotateSquare(square, "y", Math.PI / 2);
+			rotateSquare(square, "y", -Math.PI / 2);
 		}
 	}
 	
 	public void rotateDown() {
 		for(Square square : squares) {
-			rotateSquare(square, "y", -Math.PI / 2);
+			rotateSquare(square, "y", Math.PI / 2);
 		}
 	}
 	
