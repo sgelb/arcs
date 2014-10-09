@@ -11,9 +11,14 @@ import com.github.sgelb.arcs.Square;
 public class AlternateCubeTest {
 	
 	private Rotation rot;
+	
 	private SquareLocation locationA;
 	private SquareLocation locationB;
 	private SquareLocation locationC;
+	
+	private SquareLocation directionA;
+	private SquareLocation directionB;
+	private SquareLocation directionC;
 	
 	@Before
 	public void setUp() {
@@ -94,12 +99,24 @@ public class AlternateCubeTest {
 		assertArrayEquals(locationC.getLocationsAsArray(), rot.selectedSquares.get(2).getLocation().getLocationsAsArray());
 	}
 	
+	@Test
+	public void printCube() {
+		Square[] testCube = rot.cube.clone();
+		rot.setUpSquaresForRotation(Rotation.ROTATION_RIGHT);
+		rot.rotateRight();
+		for(int i = 0; i < 54; i++) {
+			if(rot.cube[i] != testCube[i]) {
+				System.out.println("not equal!");
+			}
+		}
+	}
+	
 	@Ignore
 	@Test
 	public void getColors() {
 		for(Square square : rot.cube) {
-			if(square.getLocation().locationX == 0 &&
-					square.getLocation().locationY == 0 &&
+			if(square.getLocation().locationX == -1 &&
+					square.getLocation().locationY == -1 &&
 					square.getLocation().locationZ == 1) {
 				System.out.println(square.getColor());
 			}

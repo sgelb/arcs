@@ -67,12 +67,12 @@ public class Rotation {
 	public SquareLocation rotateOnXAxis(SquareLocation loc, double degree) {
 		int x = (int) loc.locationX;
 		int y = (int) Math.round(loc.locationY * Math.cos(degree) - loc.locationZ * Math.sin(degree));
-		int z = (int) Math.round(loc.locationY * Math.sin(degree) - loc.locationZ * Math.cos(degree));
+		int z = (int) Math.round(loc.locationY * Math.sin(degree) + loc.locationZ * Math.cos(degree));
 		return new SquareLocation(x, y, z);
 	}
 	
 	public SquareLocation rotateOnYAxis(SquareLocation loc, double degree) {
-		int x = (int) Math.round(loc.locationZ * Math.sin(degree) - loc.locationX * Math.cos(degree));
+		int x = (int) Math.round(loc.locationZ * Math.sin(degree) + loc.locationX * Math.cos(degree));
 		int y = (int) loc.locationY;
 		int z = (int) Math.round(loc.locationZ * Math.cos(degree) - loc.locationX * Math.sin(degree));
 		return new SquareLocation(x, y, z);
@@ -80,7 +80,7 @@ public class Rotation {
 	
 	public SquareLocation rotateOnZAxis(SquareLocation loc, double degree) {
 		int x = (int) Math.round(loc.locationX * Math.cos(degree) - loc.locationY * Math.sin(degree));
-		int y = (int) Math.round(loc.locationX * Math.sin(degree) - loc.locationY * Math.cos(degree));
+		int y = (int) Math.round(loc.locationX * Math.sin(degree) + loc.locationY * Math.cos(degree));
 		int z = (int) loc.locationZ;
 		return new SquareLocation(x, y, z);
 	}
@@ -98,13 +98,13 @@ public class Rotation {
 		
 		if(axis.equalsIgnoreCase("x")) {
 			newSquareLocation = rotateOnXAxis(square.getLocation(), degree);
-			newSquareDirection = rotateOnXAxis(square.getLocation(), degree);
+			newSquareDirection = rotateOnXAxis(square.getDirection(), degree);
 		} else if(axis.equalsIgnoreCase("y")) {
 			newSquareLocation = rotateOnYAxis(square.getLocation(), degree);
-			newSquareDirection = rotateOnYAxis(square.getLocation(), degree);
+			newSquareDirection = rotateOnYAxis(square.getDirection(), degree);
 		} else if(axis.equalsIgnoreCase("z")) {
 			newSquareLocation = rotateOnZAxis(square.getLocation(), degree);
-			newSquareDirection = rotateOnZAxis(square.getLocation(), degree);
+			newSquareDirection = rotateOnZAxis(square.getDirection(), degree);
 		}
 		
 		square.setLocation(newSquareLocation);
@@ -178,6 +178,7 @@ public class Rotation {
 			for(int j = 0; j < 9; j++) {
 				cube[i * 9 + j] = squaresForEachFace.get(j);
 			}
+			
 		}
 	}
 	
@@ -231,38 +232,50 @@ public class Rotation {
 	 * over them, rotating each square to their new location.
 	 */
 	public void rotateLeft() {
-		for(Square square : selectedSquares) {
-			rotateSquare(square, "x", Math.PI / 2);
+		for(Square square : cube) {
+			if(selectedSquares.contains(square)) {
+				rotateSquare(square, "x", Math.PI / 2);
+			}
 		}
 	}
 	
 	public void rotateRight() {
-		for(Square square : selectedSquares) {
-			rotateSquare(square, "x", -Math.PI / 2);
+		for(Square square : cube) {
+			if(selectedSquares.contains(square)) {
+				rotateSquare(square, "x", -Math.PI / 2);
+			}
 		}
 	}
 	
 	public void rotateFront() {
-		for(Square square : selectedSquares) {
-			rotateSquare(square, "z", -Math.PI / 2);
+		for(Square square : cube) {
+			if(selectedSquares.contains(square)) {
+				rotateSquare(square, "z", -Math.PI / 2);
+			}
 		}
 	}
 	
 	public void rotateBack() {
-		for(Square square : selectedSquares) {
-			rotateSquare(square, "z", Math.PI / 2);
+		for(Square square : cube) {
+			if(selectedSquares.contains(square)) {
+				rotateSquare(square, "z", Math.PI / 2);
+			}
 		}
 	}
 	
 	public void rotateUp() {
-		for(Square square : selectedSquares) {
-			rotateSquare(square, "y", -Math.PI / 2);
+		for(Square square : cube) {
+			if(selectedSquares.contains(square)) {
+				rotateSquare(square, "y", -Math.PI / 2);
+			}
 		}
 	}
 	
 	public void rotateDown() {
-		for(Square square : selectedSquares) {
-			rotateSquare(square, "y", Math.PI / 2);
+		for(Square square : cube) {
+			if(selectedSquares.contains(square)) {
+				rotateSquare(square, "y", Math.PI / 2);
+			}
 		}
 	}
 	
