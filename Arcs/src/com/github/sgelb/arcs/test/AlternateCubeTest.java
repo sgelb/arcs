@@ -21,75 +21,89 @@ public class AlternateCubeTest {
 	}
 	
 	@Test
-	public void rotateRight() {
+	public void shouldRotateRight() {
 		locationA = new SquareLocation(1, 1, 1);
 		locationB = new SquareLocation(1, 1, 0);
 		locationC = new SquareLocation(1, 1, -1);
 		rot.setUpSquaresForRotation(Rotation.ROTATION_RIGHT);
 		rot.rotateRight();
-		assertArrayEquals(locationA.getLocationsAsArray(), rot.squares.get(0).getLocation().getLocationsAsArray());
-		assertArrayEquals(locationB.getLocationsAsArray(), rot.squares.get(1).getLocation().getLocationsAsArray());
-		assertArrayEquals(locationC.getLocationsAsArray(), rot.squares.get(2).getLocation().getLocationsAsArray());
+		assertArrayEquals(locationA.getLocationsAsArray(), rot.selectedSquares.get(0).getLocation().getLocationsAsArray());
+		assertArrayEquals(locationB.getLocationsAsArray(), rot.selectedSquares.get(1).getLocation().getLocationsAsArray());
+		assertArrayEquals(locationC.getLocationsAsArray(), rot.selectedSquares.get(2).getLocation().getLocationsAsArray());
 	}
 	
 	@Test
-	public void rotateLeft() {
+	public void shouldRotateLeft() {
 		locationA = new SquareLocation(-1, -1, -1);
 		locationB = new SquareLocation(-1, -1, 0);
 		locationC = new SquareLocation(-1, -1, 1);
 		rot.setUpSquaresForRotation(Rotation.ROTATION_LEFT);
 		rot.rotateLeft();
-		assertArrayEquals(locationA.getLocationsAsArray(), rot.squares.get(0).getLocation().getLocationsAsArray());
-		assertArrayEquals(locationB.getLocationsAsArray(), rot.squares.get(1).getLocation().getLocationsAsArray());
-		assertArrayEquals(locationC.getLocationsAsArray(), rot.squares.get(2).getLocation().getLocationsAsArray());
+		assertArrayEquals(locationA.getLocationsAsArray(), rot.selectedSquares.get(0).getLocation().getLocationsAsArray());
+		assertArrayEquals(locationB.getLocationsAsArray(), rot.selectedSquares.get(1).getLocation().getLocationsAsArray());
+		assertArrayEquals(locationC.getLocationsAsArray(), rot.selectedSquares.get(2).getLocation().getLocationsAsArray());
 	}
 	
 	@Test
-	public void rotateUp() {
+	public void shouldRotateUp() {
 		locationA = new SquareLocation(-1, 1, -1);
 		locationB = new SquareLocation(-1, 1, 0);
 		locationC = new SquareLocation(-1, 1, 1);
 		rot.setUpSquaresForRotation(Rotation.ROTATION_UP);
 		rot.rotateUp();
-		assertArrayEquals(locationA.getLocationsAsArray(), rot.squares.get(0).getLocation().getLocationsAsArray());
-		assertArrayEquals(locationB.getLocationsAsArray(), rot.squares.get(1).getLocation().getLocationsAsArray());
-		assertArrayEquals(locationC.getLocationsAsArray(), rot.squares.get(2).getLocation().getLocationsAsArray());
+		assertArrayEquals(locationA.getLocationsAsArray(), rot.selectedSquares.get(0).getLocation().getLocationsAsArray());
+		assertArrayEquals(locationB.getLocationsAsArray(), rot.selectedSquares.get(1).getLocation().getLocationsAsArray());
+		assertArrayEquals(locationC.getLocationsAsArray(), rot.selectedSquares.get(2).getLocation().getLocationsAsArray());
 	}
 	
 	@Test
-	public void rotateDown() {
+	public void shouldRotateDown() {
 		locationA = new SquareLocation(1, -1, 1);
 		locationB = new SquareLocation(1, -1, 0);
 		locationC = new SquareLocation(1, -1, -1);
 		rot.setUpSquaresForRotation(Rotation.ROTATION_DOWN);
 		rot.rotateDown();
-		assertArrayEquals(locationA.getLocationsAsArray(), rot.squares.get(0).getLocation().getLocationsAsArray());
-		assertArrayEquals(locationB.getLocationsAsArray(), rot.squares.get(1).getLocation().getLocationsAsArray());
-		assertArrayEquals(locationC.getLocationsAsArray(), rot.squares.get(2).getLocation().getLocationsAsArray());
+		assertArrayEquals(locationA.getLocationsAsArray(), rot.selectedSquares.get(0).getLocation().getLocationsAsArray());
+		assertArrayEquals(locationB.getLocationsAsArray(), rot.selectedSquares.get(1).getLocation().getLocationsAsArray());
+		assertArrayEquals(locationC.getLocationsAsArray(), rot.selectedSquares.get(2).getLocation().getLocationsAsArray());
 	}
 	
 	@Test
-	public void rotateFront() {
+	public void shouldRotateFront() {
 		locationA = new SquareLocation(-1, 1, 1);
 		locationB = new SquareLocation(0, 1, 1);
 		locationC = new SquareLocation(1, 1, 1);
 		rot.setUpSquaresForRotation(Rotation.ROTATION_FRONT);
 		rot.rotateFront();
-		assertArrayEquals(locationA.getLocationsAsArray(), rot.squares.get(0).getLocation().getLocationsAsArray());
-		assertArrayEquals(locationB.getLocationsAsArray(), rot.squares.get(1).getLocation().getLocationsAsArray());
-		assertArrayEquals(locationC.getLocationsAsArray(), rot.squares.get(2).getLocation().getLocationsAsArray());
+		assertArrayEquals(locationA.getLocationsAsArray(), rot.selectedSquares.get(0).getLocation().getLocationsAsArray());
+		assertArrayEquals(locationB.getLocationsAsArray(), rot.selectedSquares.get(1).getLocation().getLocationsAsArray());
+		assertArrayEquals(locationC.getLocationsAsArray(), rot.selectedSquares.get(2).getLocation().getLocationsAsArray());
 	}
 	
 	@Test
-	public void rotateBack() {
+	public void shouldRotateBack() {
 		locationA = new SquareLocation(1, -1, -1);
 		locationB = new SquareLocation(1, 0, -1);
 		locationC = new SquareLocation(1, 1, -1);
+//		System.out.println(rot.toString());
 		rot.setUpSquaresForRotation(Rotation.ROTATION_BACK);
 		rot.rotateBack();
-		assertArrayEquals(locationA.getLocationsAsArray(), rot.squares.get(0).getLocation().getLocationsAsArray());
-		assertArrayEquals(locationB.getLocationsAsArray(), rot.squares.get(1).getLocation().getLocationsAsArray());
-		assertArrayEquals(locationC.getLocationsAsArray(), rot.squares.get(2).getLocation().getLocationsAsArray());
+//		System.out.println(rot.toString());
+		assertArrayEquals(locationA.getLocationsAsArray(), rot.selectedSquares.get(0).getLocation().getLocationsAsArray());
+		assertArrayEquals(locationB.getLocationsAsArray(), rot.selectedSquares.get(1).getLocation().getLocationsAsArray());
+		assertArrayEquals(locationC.getLocationsAsArray(), rot.selectedSquares.get(2).getLocation().getLocationsAsArray());
+	}
+	
+	@Ignore
+	@Test
+	public void getColors() {
+		for(Square square : rot.cube) {
+			if(square.getLocation().locationX == 0 &&
+					square.getLocation().locationY == 0 &&
+					square.getLocation().locationZ == 1) {
+				System.out.println(square.getColor());
+			}
+		}
 	}
 
 }

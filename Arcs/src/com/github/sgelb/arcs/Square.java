@@ -21,21 +21,38 @@ public class Square {
 	
 	private SquareLocation location;
 	
-	public Square(SquareLocation location, String color) {
+	/* direction holds the information on which face it is located.
+	 * Only one of the x, y or z coordinates has a value that is non-zero.
+	 * If, for example, the z value is 1, the square is located at the front
+	 * face.
+	 */
+	private SquareLocation direction;
+	
+	public Square(SquareLocation location, SquareLocation direction, String color) {
 		this.location = location;
+		this.direction = direction;
 		this.color = color;
+	}
+	
+	// getter and setter-methods
+	public SquareLocation getLocation() {
+		return location;
+	}
+	
+	public SquareLocation getDirection() {
+		return direction;
 	}
 	
 	public String getColor() {
 		return color;
 	}
 	
-	public SquareLocation getLocation() {
-		return location;
-	}
-	
 	public void setLocation(SquareLocation newLocation) {
 		this.location = newLocation;
+	}
+	
+	public void setDirection(SquareLocation newDirection) {
+		this.direction = newDirection;
 	}
 	
 	public void setColor(String newColor) {
