@@ -31,7 +31,7 @@ public class Rotation {
 	/* This is the actual cube, containing all squares and their
 	 * information about location and color.
 	 */
-	public Square[] cube = new Square[54];
+	public Square[] cube;
 	
 	// TODO: new squares have to be assigned to cube.
 	
@@ -51,6 +51,8 @@ public class Rotation {
 	public String[] colors;
 	
 	public Rotation() {
+		this.cube = new Square[54];
+		
 		colors = new String[6];
 		colors[0] = "yellow";
 		colors[1] = "orange";
@@ -197,7 +199,7 @@ public class Rotation {
 	 */
 	public void setUpSquaresForRotation(int rotation) {
 		selectedSquares = new ArrayList<Square>();
-		for(Square square : getAllSquares()) {
+		for(Square square : getCube()) {
 			
 			if(rotation == ROTATION_FRONT) {
 				if(square.getLocation().locationZ == 1) {
@@ -281,98 +283,8 @@ public class Rotation {
 	}
 	
 	// Returns all squares.
-	public Square[] getAllSquares() {
-		return cube;
-	}
-	
-	// toString-methods for testing purposes.
-	
-	@Override
-	public String toString() {
-		String string = "";
-		for(int i = 0; i < cube.length; i += 3) {
-			string += cube[i].getColor() + " " + cube[i + 1].getColor() + " " + cube[i + 2].getColor() + "\n";
-		}
-		return string;
-	}
-	
-	public String getPositions() {
-		String string = "";
-		for(int i = 0; i < 9; i++) {
-			string += "Color: " + cube[i].getColor() + ", " + cube[i].getLocation().toString();
-		}
-		return string;
-	}
-	
-	public void hugeUpdateMethod() {
-		int position = 0;
-		Square[] backupCube = new Square[54];
-		
-		// Front face.
-		for(int y = 1; y > -2; y--) {
-			for(int x = -1; x < 2; x++) {
-				backupCube[position] = getSquareAt(new SquareLocation(x, y, 1), new SquareLocation(0, 0, 1));
-				position++;
-			}
-		}
-		
-		// Up face.
-		for(int z = -1; z < 2; z++) {
-			for(int x = -1; x < 2; x++) {
-				backupCube[position] = getSquareAt(new SquareLocation(x, 1, z), new SquareLocation(0, 1, 0));
-				position++;
-			}
-		}
-		
-		// Back face.
-		for(int y = 1; y > -2; y--) {
-			for(int x = 1; x > -2; x--) {
-				backupCube[position] = getSquareAt(new SquareLocation(x, y, -1), new SquareLocation(0, 0, -1));
-				position++;
-			}
-		}
-		
-		// Down face.
-		for(int z = 1; z > -2; z--) {
-			for(int x = -1; x < 2; x++) {
-				backupCube[position] = getSquareAt(new SquareLocation(x, -1, z), new SquareLocation(0, -1, 0));
-				position++;
-			}
-		}
-		
-		// Left face.
-		for(int y = 1; y > -2; y--) {
-			for(int z = -1; z < 2; z++) {
-				backupCube[position] = getSquareAt(new SquareLocation(-1, y, z), new SquareLocation(-1, 0, 0));
-				position++;
-			}
-		}
-		
-		// Right face.
-		for(int y = 1; y > -2; y--) {
-			for(int z = 1; z > -2; z--) {
-				backupCube[position] = getSquareAt(new SquareLocation(1, y, z), new SquareLocation(1, 0, 0));
-				position++;
-			}
-		}
-		
-		
-		cube = backupCube.clone();
-	}
-	
-	public Square getSquareAt(SquareLocation loc, SquareLocation dir) {
-		Square[] backupCube = cube.clone();
-		for(Square square : backupCube) {
-			int[] getLoc = square.getLocation().getLocationsAsArray();
-			int[] getDir = square.getDirection().getLocationsAsArray();
-			
-			if(Arrays.equals(loc.getLocationsAsArray(), getLoc)) {
-				if(Arrays.equals(dir.getLocationsAsArray(), getDir)) {
-					return square;
-				}
-			}
-		}
-		return null;
+	public Square[] getCube() {
+		return cube.clone();
 	}
 	
 }
