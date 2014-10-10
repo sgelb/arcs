@@ -16,10 +16,6 @@ public class AlternateCubeTest {
 	private SquareLocation locationB;
 	private SquareLocation locationC;
 	
-	private SquareLocation directionA;
-	private SquareLocation directionB;
-	private SquareLocation directionC;
-	
 	@Before
 	public void setUp() {
 		rot = new Rotation();
@@ -99,16 +95,16 @@ public class AlternateCubeTest {
 		assertArrayEquals(locationC.getLocationsAsArray(), rot.selectedSquares.get(2).getLocation().getLocationsAsArray());
 	}
 	
+	
 	@Test
-	public void printCube() {
-		Square[] testCube = rot.cube.clone();
+	public void shouldUpdateCube() {
+		System.out.println(rot.toString());
 		rot.setUpSquaresForRotation(Rotation.ROTATION_RIGHT);
 		rot.rotateRight();
-		for(int i = 0; i < 54; i++) {
-			if(rot.cube[i] != testCube[i]) {
-				System.out.println("not equal!");
-			}
-		}
+		rot.setUpSquaresForRotation(Rotation.ROTATION_FRONT);
+		rot.rotateFront();
+		rot.hugeUpdateMethod();
+		System.out.println(rot.toString());
 	}
 	
 	@Ignore
