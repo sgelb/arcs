@@ -110,5 +110,14 @@ public class RubiksCubeTest {
 			}
 		}
 	}
+	
+	@Ignore
+	@Test
+	public void shouldReturnFaces() {
+		shouldUpdateCube();
+		for(int i = 0; i < 9; i++) {
+			System.out.println(cube.getRightFace()[i].getColor());
+		}
+	}
 
 }
