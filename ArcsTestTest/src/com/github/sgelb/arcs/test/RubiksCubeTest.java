@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import junit.framework.TestCase;
 
+import com.github.sgelb.arcs.Rotation;
 import com.github.sgelb.arcs.RubiksCube;
 import com.github.sgelb.arcs.Square;
 import com.github.sgelb.arcs.SquareLocation;
@@ -82,10 +83,10 @@ public class RubiksCubeTest  extends TestCase {
 	}
 	
 	public void testShouldUpdateCube() {
-		Square[] originalFrontFace = cube.getFrontFace();
+		Square[] originalFrontFace = cube.getFace(Rotation.FRONT);
 		originalFrontFace[0].setColor(Square.BLUE);
 		cube.rotateUp();
-		Square[] updatedFrontFace = cube.getFrontFace();
+		Square[] updatedFrontFace = cube.getFace(Rotation.FRONT);
 		assertNotSame(originalFrontFace[0].getColor(), updatedFrontFace[0].getColor());
 	}
 	

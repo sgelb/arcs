@@ -2,9 +2,9 @@ package com.github.sgelb.arcs;
 
 public class RubiksCube {
 	
-	public Rotation rotator;
-	public CubeUpdater updater;
-	public Square[] cube;
+	private Rotation rotator;
+	private CubeUpdater updater;
+	private Square[] cube;
 	
 	public RubiksCube() {
 		this.rotator = new Rotation();
@@ -51,56 +51,14 @@ public class RubiksCube {
 		return cube;
 	}
 	
-	/* The getter-methods return an square-array of length 9,
-	 * which contains all squares of the desired face.
-	 * The squares can be accessed to get or set their color
-	 * (square.getColor() or square.setColor(String newColor).
+	/* Returns all squares of the desired face.
+	 * facename is defined as an public final static variable in Rotation.java:
+	 * Rotation.FRONT, Rotation.RIGHT, ...
 	 */
-	
-	public Square[] getFrontFace() {
+	public Square[] getFace(int facename) {
 		Square[] face = new Square[9];
 		for(int i = 0; i < 9; i++) {
-			face[i] = cube[i];
-		}
-		return face;
-	}
-	
-	public Square[] getBackFace() {
-		Square[] face = new Square[9];
-		for(int i = 0; i < 9; i++) {
-			face[i] = cube[18 + i];
-		}
-		return face;
-	}
-	
-	public Square[] getUpFace() {
-		Square[] face = new Square[9];
-		for(int i = 0; i < 9; i++) {
-			face[i] = cube[9 + i];
-		}
-		return face;
-	}
-	
-	public Square[] getDownFace() {
-		Square[] face = new Square[9];
-		for(int i = 0; i < 9; i++) {
-			face[i] = cube[27 + i];
-		}
-		return face;
-	}
-	
-	public Square[] getLeftFace() {
-		Square[] face = new Square[9];
-		for(int i = 0; i < 9; i++) {
-			face[i] = cube[36 + i];
-		}
-		return face;
-	}
-	
-	public Square[] getRightFace() {
-		Square[] face = new Square[9];
-		for(int i = 0; i < 9; i++) {
-			face[i] = cube[45 + i];
+			face[i] = cube[9*facename + i];
 		}
 		return face;
 	}
