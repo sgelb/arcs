@@ -90,16 +90,13 @@ public class RubiksCubeTest  extends TestCase {
 		assertNotSame(originalFrontFace[0].getColor(), updatedFrontFace[0].getColor());
 	}
 	
-//	public void testGetColors() {
-//		for(Square square : squares.rotation.cube) {
-//			if(square.getLocation().locationX == -1 &&
-//					square.getLocation().locationY == -1 &&
-//					square.getLocation().locationZ == 1) {
-//				System.out.println(square.getColor());
-//			}
-//		}
-//	}
-//	
+	public void testGetColors() {
+		Square[] face = cube.getFace(Rotation.FRONT);
+		face[0].setColor(Square.BLUE);
+		String color = face[0].getColor();
+		assertEquals(Square.BLUE, color);
+	}
+
 //	public void testShouldReturnFaces() {
 //		testShouldUpdateCube();
 //		for(int i = 0; i < 9; i++) {
