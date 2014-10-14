@@ -234,6 +234,7 @@ public class Rotation {
 	 * over them, rotating each square to their new location.
 	 */
 	public void rotateLeft() {
+		setUpSquaresForRotation(Rotation.ROTATION_LEFT);
 		for(Square square : cube) {
 			if(selectedSquares.contains(square)) {
 				rotateSquare(square, "x", Math.PI / 2);
@@ -242,6 +243,7 @@ public class Rotation {
 	}
 	
 	public void rotateRight() {
+		setUpSquaresForRotation(Rotation.ROTATION_RIGHT);
 		for(Square square : cube) {
 			if(selectedSquares.contains(square)) {
 				rotateSquare(square, "x", -Math.PI / 2);
@@ -250,6 +252,7 @@ public class Rotation {
 	}
 	
 	public void rotateFront() {
+		setUpSquaresForRotation(Rotation.ROTATION_FRONT);
 		for(Square square : cube) {
 			if(selectedSquares.contains(square)) {
 				rotateSquare(square, "z", -Math.PI / 2);
@@ -258,6 +261,7 @@ public class Rotation {
 	}
 	
 	public void rotateBack() {
+		setUpSquaresForRotation(Rotation.ROTATION_BACK);
 		for(Square square : cube) {
 			if(selectedSquares.contains(square)) {
 				rotateSquare(square, "z", Math.PI / 2);
@@ -266,6 +270,7 @@ public class Rotation {
 	}
 	
 	public void rotateUp() {
+		setUpSquaresForRotation(Rotation.ROTATION_UP);
 		for(Square square : cube) {
 			if(selectedSquares.contains(square)) {
 				rotateSquare(square, "y", -Math.PI / 2);
@@ -274,6 +279,7 @@ public class Rotation {
 	}
 	
 	public void rotateDown() {
+		setUpSquaresForRotation(Rotation.ROTATION_DOWN);
 		for(Square square : cube) {
 			if(selectedSquares.contains(square)) {
 				rotateSquare(square, "y", Math.PI / 2);

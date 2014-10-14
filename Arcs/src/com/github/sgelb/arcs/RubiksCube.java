@@ -6,47 +6,38 @@ public class RubiksCube {
 	public CubeUpdater updater;
 	public Square[] cube;
 	
-	public Square[] face;
-	
 	public RubiksCube() {
 		this.rotation = new Rotation();
 		this.updater = new CubeUpdater();
 		this.cube = rotation.getCube();
-		this.face = new Square[9];
 	}
 	
 	public void rotateFront() {
-		rotation.setUpSquaresForRotation(Rotation.ROTATION_FRONT);
 		rotation.rotateFront();
 		update();
 	}
 	
 	public void rotateBack() {
-		rotation.setUpSquaresForRotation(Rotation.ROTATION_BACK);
 		rotation.rotateBack();
 		update();
 	}
 	
 	public void rotateUp() {
-		rotation.setUpSquaresForRotation(Rotation.ROTATION_UP);
 		rotation.rotateUp();
 		update();
 	}
 	
 	public void rotateDown() {
-		rotation.setUpSquaresForRotation(Rotation.ROTATION_DOWN);
 		rotation.rotateDown();
 		update();
 	}
 	
 	public void rotateLeft() {
-		rotation.setUpSquaresForRotation(Rotation.ROTATION_LEFT);
 		rotation.rotateLeft();
 		update();
 	}
 	
 	public void rotateRight() {
-		rotation.setUpSquaresForRotation(Rotation.ROTATION_RIGHT);
 		rotation.rotateRight();
 		update();
 	}
