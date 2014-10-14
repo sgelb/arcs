@@ -130,8 +130,7 @@ public class Rotation {
 			// This will be the front face.
 			for(int j = -1; j < 2; j++) {
 				for(int k = -1; k < 2; k++) {
-					squaresForEachFace.add(new Square(new SquareLocation(j, k, 1), 
-							new SquareLocation(0, 0, 1), Square.UNSET_COLOR));
+					squaresForEachFace.add(new Square(new SquareLocation(j, k, 1), new SquareLocation(0, 0, 1), Square.UNSET_COLOR));
 				}
 			}
 			

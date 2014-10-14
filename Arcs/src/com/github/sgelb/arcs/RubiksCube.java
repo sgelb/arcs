@@ -44,7 +44,7 @@ public class RubiksCube {
 
 	public void update() {
 		cube = rotator.getCube();
-		cube = updater.updateCube(cube);
+		cube = updater.updateSquares(cube);
 	}
 	
 	public Square[] getCube() {

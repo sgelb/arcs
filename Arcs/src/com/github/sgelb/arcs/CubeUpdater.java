@@ -4,22 +4,22 @@ import java.util.Arrays;
 
 public class CubeUpdater {
 	
-	private Square[] cube;
+	private Square[] squares;
 	
 	public CubeUpdater() {
 		// initialized to prevent null-pointer-exceptions.
-		cube = new Square[54];
+		squares = new Square[54];
 	}
 	
-	public Square[] updateCube(Square[] cube) {
-		this.cube = cube;
+	public Square[] updateSquares(Square[] squares) {
+		this.squares = squares;
 		int position = 0;
-		Square[] backupCube = new Square[54];
+		Square[] updatedSquares = new Square[54];
 		
 		// Front face.
 		for(int y = 1; y > -2; y--) {
 			for(int x = -1; x < 2; x++) {
-				backupCube[position] = getSquareAt(new SquareLocation(x, y, 1), new SquareLocation(0, 0, 1));
+				updatedSquares[position] = getSquareAt(new SquareLocation(x, y, 1), new SquareLocation(0, 0, 1));
 				position++;
 			}
 		}
@@ -27,7 +27,7 @@ public class CubeUpdater {
 		// Up face.
 		for(int z = -1; z < 2; z++) {
 			for(int x = -1; x < 2; x++) {
-				backupCube[position] = getSquareAt(new SquareLocation(x, 1, z), new SquareLocation(0, 1, 0));
+				updatedSquares[position] = getSquareAt(new SquareLocation(x, 1, z), new SquareLocation(0, 1, 0));
 				position++;
 			}
 		}
@@ -35,7 +35,7 @@ public class CubeUpdater {
 		// Back face.
 		for(int y = 1; y > -2; y--) {
 			for(int x = 1; x > -2; x--) {
-				backupCube[position] = getSquareAt(new SquareLocation(x, y, -1), new SquareLocation(0, 0, -1));
+				updatedSquares[position] = getSquareAt(new SquareLocation(x, y, -1), new SquareLocation(0, 0, -1));
 				position++;
 			}
 		}
@@ -43,7 +43,7 @@ public class CubeUpdater {
 		// Down face.
 		for(int z = 1; z > -2; z--) {
 			for(int x = -1; x < 2; x++) {
-				backupCube[position] = getSquareAt(new SquareLocation(x, -1, z), new SquareLocation(0, -1, 0));
+				updatedSquares[position] = getSquareAt(new SquareLocation(x, -1, z), new SquareLocation(0, -1, 0));
 				position++;
 			}
 		}
@@ -51,7 +51,7 @@ public class CubeUpdater {
 		// Left face.
 		for(int y = 1; y > -2; y--) {
 			for(int z = -1; z < 2; z++) {
-				backupCube[position] = getSquareAt(new SquareLocation(-1, y, z), new SquareLocation(-1, 0, 0));
+				updatedSquares[position] = getSquareAt(new SquareLocation(-1, y, z), new SquareLocation(-1, 0, 0));
 				position++;
 			}
 		}
@@ -59,17 +59,18 @@ public class CubeUpdater {
 		// Right face.
 		for(int y = 1; y > -2; y--) {
 			for(int z = 1; z > -2; z--) {
-				backupCube[position] = getSquareAt(new SquareLocation(1, y, z), new SquareLocation(1, 0, 0));
+				updatedSquares[position] = getSquareAt(new SquareLocation(1, y, z), new SquareLocation(1, 0, 0));
 				position++;
 			}
 		}
 		
-		return backupCube;
+		this.squares = updatedSquares;
+		return this.squares;
 	}
 	
 	
 	public Square getSquareAt(SquareLocation loc, SquareLocation dir) {
-		for(Square square : cube) {
+		for(Square square : this.squares) {
 			int[] getLoc = square.getLocation().getLocationsAsArray();
 			int[] getDir = square.getDirection().getLocationsAsArray();
 			
@@ -82,8 +83,8 @@ public class CubeUpdater {
 		return null;
 	}
 	
-	public Square[] getCube() {
-		return cube;
+	public Square[] getSquares() {
+		return this.squares;
 	}
 	
 }
