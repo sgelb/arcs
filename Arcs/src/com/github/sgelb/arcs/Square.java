@@ -11,6 +11,7 @@ public class Square {
 	public static final String RED = "red";
 	public static final String WHITE = "white";
 	public static final String YELLOW = "yellow";
+	public static final String UNSET_COLOR = "unsetColor";
 	
 	// The color of the Square represented as a string.
 	private String color;

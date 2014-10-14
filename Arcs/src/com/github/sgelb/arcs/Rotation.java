@@ -15,7 +15,7 @@ public class Rotation {
 	
 	
 	/* These constants are used to determine which squares should be
-	 * selected for the rotation. Needed in setUpSquaresForRotation.
+	 * selected for the rotator. Needed in setUpSquaresForRotation.
 	 * Should be given as constants so you know which side you want
 	 * to rotate, don't just call setUpSquaresForRotation(my_integer).
 	 */
@@ -32,10 +32,7 @@ public class Rotation {
 	 */
 	public Square[] cube;
 	
-	// TODO: new squares have to be assigned to cube.
-	
-	/* This List contains all squares that are needed for a rotation.
-	 * 
+	/* This List contains all squares that are needed for a rotator.
 	 */
 	public ArrayList<Square> selectedSquares;
 	
@@ -46,19 +43,8 @@ public class Rotation {
 	 */
 	public ArrayList<Square> squaresForEachFace;
 	
-	// Contains the colors for the squares during the initialization.
-	public String[] colors;
-	
 	public Rotation() {
 		this.cube = new Square[54];
-		
-		colors = new String[6];
-		colors[0] = "yellow";
-		colors[1] = "orange";
-		colors[2] = "green";
-		colors[3] = "white";
-		colors[4] = "blue";
-		colors[5] = "red";
 		initCube();
 	}
 	
@@ -89,7 +75,7 @@ public class Rotation {
 	
 	
 	/* rotateSquare takes a square, an axis (string) and a double value,
-	 * that represents the rotation on the given axis. newSquareLocation is
+	 * that represents the rotator on the given axis. newSquareLocation is
 	 * initialized with null because otherwise one would have to add an
 	 * else statement at the end where it gets initialized, so there is an
 	 * actual SquareLocation to be returned.
@@ -144,7 +130,7 @@ public class Rotation {
 			// This will be the front face.
 			for(int j = -1; j < 2; j++) {
 				for(int k = -1; k < 2; k++) {
-					squaresForEachFace.add(new Square(new SquareLocation(j, k, 1), new SquareLocation(0, 0, 1), colors[i]));
+					squaresForEachFace.add(new Square(new SquareLocation(j, k, 1), new SquareLocation(0, 0, 1), Square.UNSET_COLOR));
 				}
 			}
 			
@@ -186,11 +172,11 @@ public class Rotation {
 	
 
 	/* With this method, all the squares that are needed for a certain
-	 * rotation are selected.
-	 * Example: for a rotation of the left side you will need to select
+	 * rotator are selected.
+	 * Example: for a rotator of the left side you will need to select
 	 * all squares where the x-value of their locations is -1.
 	 * These squares are added to the squares ArrayList and can be used
-	 * in the following actual rotation.
+	 * in the following actual rotator.
 	 * 
 	 * Again, if one wants to call this method, use the constants as parameters.
 	 * setUpSquaresForRotation(ROTATION_FRONT) is much more readable than
@@ -229,7 +215,7 @@ public class Rotation {
 	}
 	
 	
-	/* The rotation methods takes the prepared squares (which had to be set
+	/* The rotator methods takes the prepared squares (which had to be set
 	 * beforehand using the setUpSquaresForRotation-method) and iterates
 	 * over them, rotating each square to their new location.
 	 */

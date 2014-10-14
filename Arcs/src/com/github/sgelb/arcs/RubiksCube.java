@@ -2,48 +2,48 @@ package com.github.sgelb.arcs;
 
 public class RubiksCube {
 	
-	public Rotation rotation;
+	public Rotation rotator;
 	public CubeUpdater updater;
 	public Square[] cube;
 	
 	public RubiksCube() {
-		this.rotation = new Rotation();
+		this.rotator = new Rotation();
 		this.updater = new CubeUpdater();
-		this.cube = rotation.getCube();
+		this.cube = rotator.getCube();
 	}
 	
 	public void rotateFront() {
-		rotation.rotateFront();
+		rotator.rotateFront();
 		update();
 	}
 	
 	public void rotateBack() {
-		rotation.rotateBack();
+		rotator.rotateBack();
 		update();
 	}
 	
 	public void rotateUp() {
-		rotation.rotateUp();
+		rotator.rotateUp();
 		update();
 	}
 	
 	public void rotateDown() {
-		rotation.rotateDown();
+		rotator.rotateDown();
 		update();
 	}
 	
 	public void rotateLeft() {
-		rotation.rotateLeft();
+		rotator.rotateLeft();
 		update();
 	}
 	
 	public void rotateRight() {
-		rotation.rotateRight();
+		rotator.rotateRight();
 		update();
 	}
 
 	public void update() {
-		cube = rotation.getCube();
+		cube = rotator.getCube();
 		cube = updater.updateCube(cube);
 	}
 	
