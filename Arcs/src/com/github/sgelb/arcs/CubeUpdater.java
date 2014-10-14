@@ -12,7 +12,7 @@ public class CubeUpdater {
 	}
 	
 	public Square[] updateCube(Square[] cube) {
-		this.cube = cube.clone();
+		this.cube = cube;
 		int position = 0;
 		Square[] backupCube = new Square[54];
 		

@@ -1,7 +1,6 @@
 package com.github.sgelb.arcs;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Rotation {
 	
@@ -284,7 +283,7 @@ public class Rotation {
 	
 	// Returns all squares.
 	public Square[] getCube() {
-		return cube.clone();
+		return cube;
 	}
 	
 }

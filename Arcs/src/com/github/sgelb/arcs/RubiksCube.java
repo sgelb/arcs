@@ -11,7 +11,7 @@ public class RubiksCube {
 	public RubiksCube() {
 		this.rotation = new Rotation();
 		this.updater = new CubeUpdater();
-		this.cube = rotation.getCube().clone();
+		this.cube = rotation.getCube();
 		this.face = new Square[9];
 	}
 	
@@ -57,7 +57,7 @@ public class RubiksCube {
 	}
 	
 	public Square[] getCube() {
-		return cube.clone();
+		return cube;
 	}
 	
 	/* The getter-methods return an square-array of length 9,
@@ -71,7 +71,7 @@ public class RubiksCube {
 		for(int i = 0; i < 9; i++) {
 			face[i] = cube[i];
 		}
-		return face.clone();
+		return face;
 	}
 	
 	public Square[] getBackFace() {
@@ -79,7 +79,7 @@ public class RubiksCube {
 		for(int i = 0; i < 9; i++) {
 			face[i] = cube[18 + i];
 		}
-		return face.clone();
+		return face;
 	}
 	
 	public Square[] getUpFace() {
@@ -87,7 +87,7 @@ public class RubiksCube {
 		for(int i = 0; i < 9; i++) {
 			face[i] = cube[9 + i];
 		}
-		return face.clone();
+		return face;
 	}
 	
 	public Square[] getDownFace() {
@@ -95,7 +95,7 @@ public class RubiksCube {
 		for(int i = 0; i < 9; i++) {
 			face[i] = cube[27 + i];
 		}
-		return face.clone();
+		return face;
 	}
 	
 	public Square[] getLeftFace() {
@@ -103,7 +103,7 @@ public class RubiksCube {
 		for(int i = 0; i < 9; i++) {
 			face[i] = cube[36 + i];
 		}
-		return face.clone();
+		return face;
 	}
 	
 	public Square[] getRightFace() {
@@ -111,7 +111,7 @@ public class RubiksCube {
 		for(int i = 0; i < 9; i++) {
 			face[i] = cube[45 + i];
 		}
-		return face.clone();
+		return face;
 	}
 	
 	// toString-methods for testing purposes.

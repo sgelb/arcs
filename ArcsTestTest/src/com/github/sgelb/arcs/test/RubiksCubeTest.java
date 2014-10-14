@@ -25,7 +25,7 @@ public class RubiksCubeTest  extends TestCase {
 		locationA = new SquareLocation(1, 1, 1);
 		locationB = new SquareLocation(1, 1, 0);
 		locationC = new SquareLocation(1, 1, -1);
-		cube.rotator.rotateRight();
+		cube.rotateRight();
 		assertTrue(Arrays.equals(locationA.getLocationsAsArray(), cube.getCube()[45].getLocation().getLocationsAsArray()));
 		assertTrue(Arrays.equals(locationB.getLocationsAsArray(), cube.getCube()[46].getLocation().getLocationsAsArray()));
 		assertTrue(Arrays.equals(locationC.getLocationsAsArray(), cube.getCube()[47].getLocation().getLocationsAsArray()));
@@ -83,7 +83,7 @@ public class RubiksCubeTest  extends TestCase {
 	
 	public void testShouldUpdateCube() {
 		Square[] originalFrontFace = cube.getFrontFace();
-		originalFrontFace[0].setColor(Square.RED);
+		originalFrontFace[0].setColor(Square.BLUE);
 		cube.rotateUp();
 		Square[] updatedFrontFace = cube.getFrontFace();
 		assertNotSame(originalFrontFace[0].getColor(), updatedFrontFace[0].getColor());
