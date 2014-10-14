@@ -4,7 +4,6 @@ import java.util.Arrays;
 
 import junit.framework.TestCase;
 
-import com.github.sgelb.arcs.Rotation;
 import com.github.sgelb.arcs.RubiksCube;
 import com.github.sgelb.arcs.Square;
 import com.github.sgelb.arcs.SquareLocation;
@@ -26,8 +25,7 @@ public class RubiksCubeTest  extends TestCase {
 		locationA = new SquareLocation(1, 1, 1);
 		locationB = new SquareLocation(1, 1, 0);
 		locationC = new SquareLocation(1, 1, -1);
-		cube.rotation.setUpSquaresForRotation(Rotation.ROTATION_RIGHT);
-		cube.rotation.rotateRight();
+		cube.rotator.rotateRight();
 		assertTrue(Arrays.equals(locationA.getLocationsAsArray(), cube.getCube()[45].getLocation().getLocationsAsArray()));
 		assertTrue(Arrays.equals(locationB.getLocationsAsArray(), cube.getCube()[46].getLocation().getLocationsAsArray()));
 		assertTrue(Arrays.equals(locationC.getLocationsAsArray(), cube.getCube()[47].getLocation().getLocationsAsArray()));
@@ -84,16 +82,15 @@ public class RubiksCubeTest  extends TestCase {
 	}
 	
 	public void testShouldUpdateCube() {
-		System.out.println(cube.toString());
-		cube.rotateRight();
-		cube.rotateFront();
-		cube.update();
-		System.out.println(cube.toString());
+		Square[] originalFrontFace = cube.getFrontFace();
+		originalFrontFace[0].setColor(Square.RED);
+		cube.rotateUp();
+		Square[] updatedFrontFace = cube.getFrontFace();
+		assertNotSame(originalFrontFace[0].getColor(), updatedFrontFace[0].getColor());
 	}
 	
-//	
 //	public void testGetColors() {
-//		for(Square square : cube.rotation.cube) {
+//		for(Square square : squares.rotation.cube) {
 //			if(square.getLocation().locationX == -1 &&
 //					square.getLocation().locationY == -1 &&
 //					square.getLocation().locationZ == 1) {
@@ -105,7 +102,7 @@ public class RubiksCubeTest  extends TestCase {
 //	public void testShouldReturnFaces() {
 //		testShouldUpdateCube();
 //		for(int i = 0; i < 9; i++) {
-//			System.out.println(cube.getRightFace()[i].getColor());
+//			System.out.println(squares.getRightFace()[i].getColor());
 //		}
 //	}
 
