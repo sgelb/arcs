@@ -101,15 +101,15 @@ public class RubiksCubeTest  extends TestCase {
 		// get front face squares
 		Square[] frontFace = cube.getFace(Rotation.FRONT);
 
-		// rotate upper Face. Red square should be rotated to upper left square on right side,
-		// cube.getFace(Rotation.RIGHT)[0] (aka cube.getCube[9])
+		// rotate upper Face. Red square should be rotated to upper left square on left side,
+		// cube.getFace(Rotation.LEFT)[0] (aka cube.getCube[27])
 		cube.rotateUp();
 
-		Square[] rightFace = cube.getFace(Rotation.RIGHT);
+		Square[] leftFace = cube.getFace(Rotation.LEFT);
 
 		// fails. in fact, the red square can be found on frontFace[6] or
 		// cube.getCube()[6]
-		assertSame(frontFace[0].getColor(), rightFace[0].getColor());
+		assertSame(frontFace[0].getColor(), leftFace[0].getColor());
 	}
 
 	public void testGetColors() {
