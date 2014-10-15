@@ -106,70 +106,55 @@ public class RubiksCubeTest  extends TestCase {
 			assertEquals(Square.UNSET_COLOR, square.getColor());
 		}
 	}
-	
-	public void testShouldRotateAndUpdateCube() {
-		// new cube, all squares' colors are unset
+
+	public void testShouldRotateFrontAndUpdateCube() {
 		cube = new RubiksCube();
-
-		// set upper left square on front face to red
 		cube.getFace(Rotation.FRONT)[0].setColor(Square.BLUE);
-		
-		// debug: show blue square before rotation
-		Square[] squares = cube.getCube();
-		for (int i=0; i < squares.length; i++) {
-			if (squares[i].getColor() == Square.BLUE) {
-				Log.d("DEBUG", "Blue before: " + i);
-				
-				// location is wrong. y is -1, should be 1
-				Log.d("DEBUG", "Pos: " + squares[i].getLocation().locationX +
-						", " + squares[i].getLocation().locationY +
-						", " + squares[i].getLocation().locationZ
-						);
-				
-				// direction seem ok
-				Log.d("DEBUG", "Dir: " + squares[i].getDirection().locationX + 
-						", " + squares[i].getDirection().locationY +
-						", " + squares[i].getDirection().locationZ
-						);
-			}
-		}
-		
-		// get front face squares
+		cube.rotateFront();
 		Square[] frontFace = cube.getFace(Rotation.FRONT);
-
-		// rotate upper Face. Red square should be rotated to upper left square on left side,
-		// cube.getFace(Rotation.LEFT)[0] (aka cube.getCube[27])
-		cube.rotateUp();
-
-		Square[] rightFace = cube.getFace(Rotation.RIGHT);
-
-		// debug: show blue square after rotation
-		squares = cube.getCube();
-		for (int i=0; i < squares.length; i++) {
-			if (squares[i].getColor() == Square.BLUE) {
-
-				// i should be 9, is 6.
-				Log.d("DEBUG", "Blue after: " + i);
-				
-				// unchanged, wrong.
-				Log.d("DEBUG", "Pos: " + squares[i].getLocation().locationX +
-						", " + squares[i].getLocation().locationY +
-						", " + squares[i].getLocation().locationZ
-						);
-				
-				// unchanged, wrong.
-				Log.d("DEBUG", "Dir: " + squares[i].getDirection().locationX + 
-						", " + squares[i].getDirection().locationY +
-						", " + squares[i].getDirection().locationZ
-						);
-			}
-		}
-		
-		// fails. in fact, the red square can be found on frontFace[6] or
-		// cube.getCube()[6], which is wrong
-		assertSame(frontFace[0].getColor(), rightFace[0].getColor());
+		assertSame(frontFace[2].getColor(), Square.BLUE);
 	}
-
+	
+	public void testShouldRotateRightAndUpdateCube() {
+		cube = new RubiksCube();
+		cube.getFace(Rotation.FRONT)[2].setColor(Square.BLUE);
+		cube.rotateRight();
+		Square[] upperFace = cube.getFace(Rotation.UP);
+		assertSame(upperFace[2].getColor(), Square.BLUE);
+	}
+	
+	public void testShouldRotateBackAndUpdateCube() {
+		cube = new RubiksCube();
+		cube.getFace(Rotation.UP)[0].setColor(Square.BLUE);
+		cube.rotateBack();
+		Square[] leftFace = cube.getFace(Rotation.LEFT);
+		assertSame(leftFace[6].getColor(), Square.BLUE);
+	}
+	
+	public void testShouldRotateLeftAndUpdateCube() {
+		cube = new RubiksCube();
+		cube.getFace(Rotation.FRONT)[0].setColor(Square.BLUE);
+		cube.rotateLeft();
+		Square[] downFace = cube.getFace(Rotation.DOWN);
+		assertSame(downFace[0].getColor(), Square.BLUE);
+	}
+	
+	public void testShouldRotateDownAndUpdateCube() {
+		cube = new RubiksCube();
+		cube.getFace(Rotation.FRONT)[6].setColor(Square.BLUE);
+		cube.rotateDown();
+		Square[] rightFace = cube.getFace(Rotation.RIGHT);
+		assertSame(rightFace[6].getColor(), Square.BLUE);
+	}
+	
+	public void testShouldRotateUpAndUpdateCube() {
+		cube = new RubiksCube();
+		cube.getFace(Rotation.FRONT)[0].setColor(Square.BLUE);
+		cube.rotateUp();
+		Square[] leftFace = cube.getFace(Rotation.LEFT);
+		assertSame(leftFace[0].getColor(), Square.BLUE);
+	}
+	
 	public void testGetColors() {
 		Square[] face = cube.getFace(Rotation.FRONT);
 		face[0].setColor(Square.BLUE);

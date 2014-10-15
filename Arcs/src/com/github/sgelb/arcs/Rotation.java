@@ -118,8 +118,8 @@ public class Rotation {
 			squaresForEachFace = new ArrayList<Square>();
 			
 			// This will be the front face.
-			for (int xAxis = -1; xAxis < 2; xAxis++) {
-				for (int yAxis = -1; yAxis < 2; yAxis++) {
+			for (int yAxis = 1; yAxis > -2; yAxis--) {
+				for (int xAxis = -1; xAxis < 2; xAxis++) {
 					squaresForEachFace.add(new Square(new SquareLocation(xAxis, yAxis, 1),
 							new SquareLocation(0, 0, 1), Square.UNSET_COLOR));
 				}
