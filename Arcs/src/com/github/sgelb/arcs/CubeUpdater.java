@@ -25,15 +25,15 @@ public class CubeUpdater {
 			}
 		}
 		
-		// Up face.
-		for(int z = -1; z < 2; z++) {
-			for(int x = -1; x < 2; x++) {
-				updatedSquares[position] = getSquareAt(new SquareLocation(x, 1, z),
-						new SquareLocation(0, 1, 0));
+		// Right face.
+		for(int y = 1; y > -2; y--) {
+			for(int z = 1; z > -2; z--) {
+				updatedSquares[position] = getSquareAt(new SquareLocation(1, y, z),
+						new SquareLocation(1, 0, 0));
 				position++;
 			}
 		}
-		
+
 		// Back face.
 		for(int y = 1; y > -2; y--) {
 			for(int x = 1; x > -2; x--) {
@@ -42,6 +42,16 @@ public class CubeUpdater {
 				position++;
 			}
 		}
+
+		// Left face.
+		for(int y = 1; y > -2; y--) {
+			for(int z = -1; z < 2; z++) {
+				updatedSquares[position] = getSquareAt(new SquareLocation(-1, y, z),
+						new SquareLocation(-1, 0, 0));
+				position++;
+			}
+		}
+				
 		
 		// Down face.
 		for(int z = 1; z > -2; z--) {
@@ -52,20 +62,11 @@ public class CubeUpdater {
 			}
 		}
 		
-		// Left face.
-		for(int y = 1; y > -2; y--) {
-			for(int z = -1; z < 2; z++) {
-				updatedSquares[position] = getSquareAt(new SquareLocation(-1, y, z),
-						new SquareLocation(-1, 0, 0));
-				position++;
-			}
-		}
-		
-		// Right face.
-		for(int y = 1; y > -2; y--) {
-			for(int z = 1; z > -2; z--) {
-				updatedSquares[position] = getSquareAt(new SquareLocation(1, y, z),
-						new SquareLocation(1, 0, 0));
+		// Up face.
+		for(int z = -1; z < 2; z++) {
+			for(int x = -1; x < 2; x++) {
+				updatedSquares[position] = getSquareAt(new SquareLocation(x, 1, z),
+						new SquareLocation(0, 1, 0));
 				position++;
 			}
 		}
