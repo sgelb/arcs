@@ -118,9 +118,9 @@ public class Rotation {
 			squaresForEachFace = new ArrayList<Square>();
 			
 			// This will be the front face.
-			for (int j = -1; j < 2; j++) {
-				for (int k = -1; k < 2; k++) {
-					squaresForEachFace.add(new Square(new SquareLocation(j, k, 1),
+			for (int xAxis = -1; xAxis < 2; xAxis++) {
+				for (int yAxis = -1; yAxis < 2; yAxis++) {
+					squaresForEachFace.add(new Square(new SquareLocation(xAxis, yAxis, 1),
 							new SquareLocation(0, 0, 1), Square.UNSET_COLOR));
 				}
 			}
@@ -129,7 +129,7 @@ public class Rotation {
 
 			// Front
 			if (face == FRONT) {
-				// we do not neet to rotate for front face
+				// we do not need to rotate for front face
 			// Right
 			} else if (face == RIGHT) {
 				for(Square square : squaresForEachFace) {
@@ -158,8 +158,8 @@ public class Rotation {
 			}
 			
 			// Here the squares that just got initialized are assigned onto the squares.
-			for(int j = 0; j < 9; j++) {
-				squares[face * 9 + j] = squaresForEachFace.get(j);
+			for(int squareOnFaceIndex = 0; squareOnFaceIndex < 9; squareOnFaceIndex++) {
+				squares[face * 9 + squareOnFaceIndex] = squaresForEachFace.get(squareOnFaceIndex);
 			}
 			
 		}

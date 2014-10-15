@@ -90,6 +90,28 @@ public class RubiksCubeTest  extends TestCase {
 		assertNotSame(originalFrontFace[0].getColor(), updatedFrontFace[0].getColor());
 	}
 	
+	public void testShouldRotateAndUpdateCube() {
+
+		// new cube, all squares' colors are unset
+		cube = new RubiksCube();
+
+		// set upper left square on front face to red
+		cube.getFace(Rotation.FRONT)[0].setColor(Square.BLUE);
+
+		// get front face squares
+		Square[] frontFace = cube.getFace(Rotation.FRONT);
+
+		// rotate upper Face. Red square should be rotated to upper left square on right side,
+		// cube.getFace(Rotation.RIGHT)[0] (aka cube.getCube[9])
+		cube.rotateUp();
+
+		Square[] rightFace = cube.getFace(Rotation.RIGHT);
+
+		// fails. in fact, the red square can be found on frontFace[6] or
+		// cube.getCube()[6]
+		assertSame(frontFace[0].getColor(), rightFace[0].getColor());
+	}
+
 	public void testGetColors() {
 		Square[] face = cube.getFace(Rotation.FRONT);
 		face[0].setColor(Square.BLUE);
