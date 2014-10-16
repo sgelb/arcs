@@ -52,6 +52,10 @@ public class Square {
 		return location;
 	}
 	
+	public int[] getLocationsAsArray() {
+		return location.getLocation();
+	}
+	
 	public int getDirectionX() {
 		return direction.getLocationX();
 	}
