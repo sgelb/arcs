@@ -3,7 +3,6 @@ package com.github.sgelb.arcs.test;
 import java.util.Arrays;
 
 import junit.framework.TestCase;
-import android.util.Log;
 
 import com.github.sgelb.arcs.Rotation;
 import com.github.sgelb.arcs.RubiksCube;
@@ -29,9 +28,9 @@ public class RubiksCubeTest  extends TestCase {
 		locationB = new SquareLocation(0, 1, 1);
 		locationC = new SquareLocation(1, 1, 1);
 		cube.rotateFront();
-		assertTrue(Arrays.equals(locationA.getLocationsAsArray(), cube.getCube()[0].getLocation().getLocationsAsArray()));
-		assertTrue(Arrays.equals(locationB.getLocationsAsArray(), cube.getCube()[1].getLocation().getLocationsAsArray()));
-		assertTrue(Arrays.equals(locationC.getLocationsAsArray(), cube.getCube()[2].getLocation().getLocationsAsArray()));
+		assertTrue(Arrays.equals(locationA.getLocation(), cube.getCube()[0].getLocation()));
+		assertTrue(Arrays.equals(locationB.getLocation(), cube.getCube()[1].getLocation()));
+		assertTrue(Arrays.equals(locationC.getLocation(), cube.getCube()[2].getLocation()));
 	}
 	
 	public void testShouldRotateRight() {
@@ -40,9 +39,9 @@ public class RubiksCubeTest  extends TestCase {
 		locationB = new SquareLocation(1, 1, 0);
 		locationC = new SquareLocation(1, 1, -1);
 		cube.rotateRight();
-		assertTrue(Arrays.equals(locationA.getLocationsAsArray(), cube.getCube()[9].getLocation().getLocationsAsArray()));
-		assertTrue(Arrays.equals(locationB.getLocationsAsArray(), cube.getCube()[10].getLocation().getLocationsAsArray()));
-		assertTrue(Arrays.equals(locationC.getLocationsAsArray(), cube.getCube()[11].getLocation().getLocationsAsArray()));
+		assertTrue(Arrays.equals(locationA.getLocation(), cube.getCube()[9].getLocation()));
+		assertTrue(Arrays.equals(locationB.getLocation(), cube.getCube()[10].getLocation()));
+		assertTrue(Arrays.equals(locationC.getLocation(), cube.getCube()[11].getLocation()));
 	}
 	
 
@@ -52,9 +51,9 @@ public class RubiksCubeTest  extends TestCase {
 		locationB = new SquareLocation(1, 0, -1);
 		locationC = new SquareLocation(1, -1, -1);
 		cube.rotateBack();
-		assertTrue(Arrays.equals(locationA.getLocationsAsArray(), cube.getCube()[18].getLocation().getLocationsAsArray()));
-		assertTrue(Arrays.equals(locationB.getLocationsAsArray(), cube.getCube()[21].getLocation().getLocationsAsArray()));
-		assertTrue(Arrays.equals(locationC.getLocationsAsArray(), cube.getCube()[24].getLocation().getLocationsAsArray()));
+		assertTrue(Arrays.equals(locationA.getLocation(), cube.getCube()[18].getLocation()));
+		assertTrue(Arrays.equals(locationB.getLocation(), cube.getCube()[21].getLocation()));
+		assertTrue(Arrays.equals(locationC.getLocation(), cube.getCube()[24].getLocation()));
 	}
 	
 	
@@ -64,9 +63,9 @@ public class RubiksCubeTest  extends TestCase {
 		locationB = new SquareLocation(-1, 1, 0);
 		locationC = new SquareLocation(-1, 1, 1);
 		cube.rotateLeft();
-		assertTrue(Arrays.equals(locationA.getLocationsAsArray(), cube.getCube()[27].getLocation().getLocationsAsArray()));
-		assertTrue(Arrays.equals(locationB.getLocationsAsArray(), cube.getCube()[28].getLocation().getLocationsAsArray()));
-		assertTrue(Arrays.equals(locationC.getLocationsAsArray(), cube.getCube()[29].getLocation().getLocationsAsArray()));
+		assertTrue(Arrays.equals(locationA.getLocation(), cube.getCube()[27].getLocation()));
+		assertTrue(Arrays.equals(locationB.getLocation(), cube.getCube()[28].getLocation()));
+		assertTrue(Arrays.equals(locationC.getLocation(), cube.getCube()[29].getLocation()));
 	}
 	
 	public void testShouldRotateDown() {
@@ -75,9 +74,9 @@ public class RubiksCubeTest  extends TestCase {
 		locationB = new SquareLocation(1, -1, 0);
 		locationC = new SquareLocation(1, -1, -1);
 		cube.rotateDown();
-		assertTrue(Arrays.equals(locationA.getLocationsAsArray(), cube.getCube()[38].getLocation().getLocationsAsArray()));
-		assertTrue(Arrays.equals(locationB.getLocationsAsArray(), cube.getCube()[41].getLocation().getLocationsAsArray()));
-		assertTrue(Arrays.equals(locationC.getLocationsAsArray(), cube.getCube()[44].getLocation().getLocationsAsArray()));
+		assertTrue(Arrays.equals(locationA.getLocation(), cube.getCube()[38].getLocation()));
+		assertTrue(Arrays.equals(locationB.getLocation(), cube.getCube()[41].getLocation()));
+		assertTrue(Arrays.equals(locationC.getLocation(), cube.getCube()[44].getLocation()));
 	}
 	
 	public void testShouldRotateUp() {
@@ -86,9 +85,9 @@ public class RubiksCubeTest  extends TestCase {
 		locationB = new SquareLocation(-1, 1, 0);
 		locationC = new SquareLocation(-1, 1, 1);
 		cube.rotateUp();
-		assertTrue(Arrays.equals(locationA.getLocationsAsArray(), cube.getCube()[45].getLocation().getLocationsAsArray()));
-		assertTrue(Arrays.equals(locationB.getLocationsAsArray(), cube.getCube()[48].getLocation().getLocationsAsArray()));
-		assertTrue(Arrays.equals(locationC.getLocationsAsArray(), cube.getCube()[51].getLocation().getLocationsAsArray()));
+		assertTrue(Arrays.equals(locationA.getLocation(), cube.getCube()[45].getLocation()));
+		assertTrue(Arrays.equals(locationB.getLocation(), cube.getCube()[48].getLocation()));
+		assertTrue(Arrays.equals(locationC.getLocation(), cube.getCube()[51].getLocation()));
 	}
 	
 	

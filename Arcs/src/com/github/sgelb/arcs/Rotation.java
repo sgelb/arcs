@@ -42,23 +42,23 @@ public class Rotation {
 	 * the altered location.
 	 */
 	private SquareLocation rotateOnXAxis(SquareLocation loc, double degree) {
-		int x = (int) loc.locationX;
-		int y = (int) Math.round(loc.locationY * Math.cos(degree) - loc.locationZ * Math.sin(degree));
-		int z = (int) Math.round(loc.locationY * Math.sin(degree) + loc.locationZ * Math.cos(degree));
+		int x = loc.getLocationX();
+		int y = (int) Math.round(loc.getLocationY() * Math.cos(degree) - loc.getLocationZ() * Math.sin(degree));
+		int z = (int) Math.round(loc.getLocationY() * Math.sin(degree) + loc.getLocationZ() * Math.cos(degree));
 		return new SquareLocation(x, y, z);
 	}
 	
 	private SquareLocation rotateOnYAxis(SquareLocation loc, double degree) {
-		int x = (int) Math.round(loc.locationZ * Math.sin(degree) + loc.locationX * Math.cos(degree));
-		int y = (int) loc.locationY;
-		int z = (int) Math.round(loc.locationZ * Math.cos(degree) - loc.locationX * Math.sin(degree));
+		int x = (int) Math.round(loc.getLocationZ() * Math.sin(degree) + loc.getLocationX() * Math.cos(degree));
+		int y = (int) loc.getLocationY();
+		int z = (int) Math.round(loc.getLocationZ() * Math.cos(degree) - loc.getLocationX() * Math.sin(degree));
 		return new SquareLocation(x, y, z);
 	}
 	
 	private SquareLocation rotateOnZAxis(SquareLocation loc, double degree) {
-		int x = (int) Math.round(loc.locationX * Math.cos(degree) - loc.locationY * Math.sin(degree));
-		int y = (int) Math.round(loc.locationX * Math.sin(degree) + loc.locationY * Math.cos(degree));
-		int z = (int) loc.locationZ;
+		int x = (int) Math.round(loc.getLocationX() * Math.cos(degree) - loc.getLocationY() * Math.sin(degree));
+		int y = (int) Math.round(loc.getLocationX() * Math.sin(degree) + loc.getLocationY() * Math.cos(degree));
+		int z = (int) loc.getLocationZ();
 		return new SquareLocation(x, y, z);
 	}
 	
@@ -181,27 +181,27 @@ public class Rotation {
 		for(Square square : getCube()) {
 			
 			if(facename == FRONT) {
-				if(square.getLocation().locationZ == 1) {
+				if(square.getLocationZ() == 1) {
 					selectedSquares.add(square);
 				}
 			} else if(facename == RIGHT) {
-				if(square.getLocation().locationX == 1) {
+				if(square.getLocationX() == 1) {
 					selectedSquares.add(square);
 				}
 			} else if(facename == BACK) {
-				if(square.getLocation().locationZ == -1) {
+				if(square.getLocationZ() == -1) {
 					selectedSquares.add(square);
 				}
 			} else if(facename == LEFT) {
-				if(square.getLocation().locationX == -1) {
+				if(square.getLocationX() == -1) {
 					selectedSquares.add(square);
 				}
 			} else if(facename == DOWN) {
-				if(square.getLocation().locationY == -1) {
+				if(square.getLocationY() == -1) {
 					selectedSquares.add(square);
 				}
 			} else if(facename == UP) {
-				if(square.getLocation().locationY == 1) {
+				if(square.getLocationY() == 1) {
 					selectedSquares.add(square);
 				}
 			}

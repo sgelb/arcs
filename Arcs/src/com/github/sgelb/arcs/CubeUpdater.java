@@ -78,11 +78,11 @@ public class CubeUpdater {
 	
 	private Square getSquareAt(SquareLocation loc, SquareLocation dir) {
 		for(Square square : this.squares) {
-			int[] getLoc = square.getLocation().getLocationsAsArray();
-			int[] getDir = square.getDirection().getLocationsAsArray();
+			int[] getLoc = square.getLocation().getLocation();
+			int[] getDir = square.getDirection().getLocation();
 			
-			if(Arrays.equals(loc.getLocationsAsArray(), getLoc)) {
-				if(Arrays.equals(dir.getLocationsAsArray(), getDir)) {
+			if(Arrays.equals(loc.getLocation(), getLoc)) {
+				if(Arrays.equals(dir.getLocation(), getDir)) {
 					return square;
 				}
 			}

@@ -36,8 +36,36 @@ public class Square {
 	}
 	
 	// getter and setter-methods
+	public int getLocationX() {
+		return location.getLocationX();
+	}
+	
+	public int getLocationY() {
+		return location.getLocationY();
+	}
+	
+	public int getLocationZ() {
+		return location.getLocationZ();
+	}
+	
 	public SquareLocation getLocation() {
 		return location;
+	}
+	
+	public int getDirectionX() {
+		return direction.getLocationX();
+	}
+	
+	public int getDirectionY() {
+		return direction.getLocationY();
+	}
+	
+	public int getDirectionZ() {
+		return direction.getLocationZ();
+	}
+	
+	public int[] getDirectionsAsArray() {
+		return direction.getLocation();
 	}
 	
 	public SquareLocation getDirection() {
@@ -47,6 +75,7 @@ public class Square {
 	public String getColor() {
 		return color;
 	}
+	
 	
 	public void setLocation(SquareLocation newLocation) {
 		this.location = newLocation;
