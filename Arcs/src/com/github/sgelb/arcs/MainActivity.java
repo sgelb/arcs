@@ -93,13 +93,6 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 		// Use front camera
 		mOpenCvCameraView.setCameraIndex(1);
 		mOpenCvCameraView.setCvCameraViewListener(this);
-		
-//		TextView text = (TextView) findViewById(R.id.instructionContentText);
-//		int numberOfUnsetSquares = cube.getNumberOfUnsetSquares();
-//		cube.setSquares(cubeInputMethod.getSquares());
-//		numberOfUnsetSquares = cube.getNumberOfUnsetSquares();
-//		text.setText(Integer.toString(numberOfUnsetSquares));
-//		// solve cube
 	}
 
 	@Override
@@ -203,9 +196,10 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 	}
 
 	@Override
-	public void update(Observable observable, Object data) {
-		Log.d(TAG, "Set square #" +  (int) data);
-		instructionContentText.setText(Integer.toString((int) data));
+	public void update(Observable observable, Object squares) {
+		// got all-set squares from CubeInputMethod. 
+		squares = (Square[]) squares;
+		// start solving
 	}
 
 }

@@ -157,7 +157,7 @@ public class RubiksCubeTest  extends TestCase {
 	public void testGetColors() {
 		Square[] face = cube.getFace(Rotation.FRONT);
 		face[0].setColor(Square.BLUE);
-		String color = face[0].getColor();
+		int color = face[0].getColor();
 		assertEquals(Square.BLUE, color);
 	}
 
