@@ -178,7 +178,7 @@ public class Rotation {
 	 */
 	private void setUpSquaresForRotation(int facename) {
 		selectedSquares = new ArrayList<Square>();
-		for(Square square : getCube()) {
+		for(Square square : getSquares()) {
 			
 			if(facename == FRONT) {
 				if(square.getLocationZ() == 1) {
@@ -268,7 +268,7 @@ public class Rotation {
 	}
 	
 	// Returns all squares.
-	public Square[] getCube() {
+	public Square[] getSquares() {
 		return this.squares;
 	}
 	

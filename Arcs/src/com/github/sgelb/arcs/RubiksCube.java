@@ -4,12 +4,12 @@ public class RubiksCube {
 	
 	private Rotation rotator;
 	private CubeUpdater updater;
-	private Square[] cube;
+	private Square[] squares;
 	
 	public RubiksCube() {
 		this.rotator = new Rotation();
 		this.updater = new CubeUpdater();
-		this.cube = rotator.getCube();
+		this.squares = rotator.getSquares();
 	}
 	
 	public void rotateFront() {
@@ -43,12 +43,16 @@ public class RubiksCube {
 	}
 
 	public void update() {
-		cube = rotator.getCube();
-		cube = updater.updateSquares(cube);
+		squares = rotator.getSquares();
+		squares = updater.updateSquares(squares);
 	}
 	
-	public Square[] getCube() {
-		return cube;
+	public Square[] getSquares() {
+		return squares;
+	}
+	
+	public void setSquares(Square[] squares) {
+		this.squares = squares;
 	}
 	
 	/* Returns all squares of the desired face.
@@ -58,9 +62,19 @@ public class RubiksCube {
 	public Square[] getFace(int facename) {
 		Square[] face = new Square[9];
 		for(int i = 0; i < 9; i++) {
-			face[i] = cube[9*facename + i];
+			face[i] = squares[9*facename + i];
 		}
 		return face;
+	}
+	
+	public int getNumberOfUnsetSquares() {
+		int numberOfUnsetSquares = 0;
+		for (Square square : squares) {
+			if (square.getColor() == Square.UNSET_COLOR) {
+				numberOfUnsetSquares++;
+			}
+		}
+		return numberOfUnsetSquares;
 	}
 	
 	// toString-methods for testing purposes.
@@ -68,8 +82,8 @@ public class RubiksCube {
 	@Override
 	public String toString() {
 		String string = "";
-		for(int i = 0; i < cube.length; i += 3) {
-			string += cube[i].getColor() + " " + cube[i + 1].getColor() + " " + cube[i + 2].getColor() + "\n";
+		for(int i = 0; i < squares.length; i += 3) {
+			string += squares[i].getColor() + " " + squares[i + 1].getColor() + " " + squares[i + 2].getColor() + "\n";
 		}
 		return string;
 	}
@@ -77,7 +91,7 @@ public class RubiksCube {
 	public String getPositions() {
 		String string = "";
 		for(int i = 0; i < 9; i++) {
-			string += "Color: " + cube[i].getColor() + ", " + cube[i].getLocation().toString();
+			string += "Color: " + squares[i].getColor() + ", " + squares[i].getLocation().toString();
 		}
 		return string;
 	}

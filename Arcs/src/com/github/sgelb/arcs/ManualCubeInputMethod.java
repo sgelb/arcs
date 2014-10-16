@@ -1,6 +1,7 @@
 package com.github.sgelb.arcs;
 
 import java.util.ArrayList;
+import java.util.Observable;
 
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -14,16 +15,16 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.view.MotionEvent;
 
-public class ManualCubeInputMethod implements CubeInputMethod {
+public class ManualCubeInputMethod extends Observable implements CubeInputMethod {
 
 	private static final String TAG = "ARCS::ManualCubeInputActivity";
-	private static final Scalar UNSET = new Scalar(0, 0, 0);
-	private static final Scalar BLUE = new Scalar(0, 0, 255);
-	private static final Scalar GREEN = new Scalar(0, 255, 0);
-	private static final Scalar ORANGE = new Scalar(255, 165, 0);
-	private static final Scalar RED = new Scalar(255, 0, 0);
-	private static final Scalar WHITE = new Scalar(255, 255, 255);
-	private static final Scalar YELLOW = new Scalar(255, 255, 0);
+	private Scalar unsetColor = new Scalar(0, 0, 0);
+	private Scalar blue = new Scalar(0, 0, 255);
+	private Scalar green = new Scalar(0, 255, 0);
+	private Scalar orange = new Scalar(255, 165, 0);
+	private Scalar red = new Scalar(255, 0, 0);
+	private Scalar white = new Scalar(255, 255, 255);
+	private Scalar yellow = new Scalar(255, 255, 0);
 	private ArrayList<Scalar> colorChoices;
 	
 	private Context mContext;
@@ -33,6 +34,7 @@ public class ManualCubeInputMethod implements CubeInputMethod {
 	// Array holding coordinates of rectangle overlays
     private ArrayList<Rect> rectangles;
     private ArrayList<Scalar> rectColors;
+    private Square[] squares;
 
 
 	public ManualCubeInputMethod(Context mContext) {
@@ -45,12 +47,12 @@ public class ManualCubeInputMethod implements CubeInputMethod {
 	@Override
 	public void init(int width, int height) {
 		this.width = width;
-		colorChoices.add(BLUE);
-		colorChoices.add(GREEN);
-		colorChoices.add(ORANGE);
-		colorChoices.add(RED);
-		colorChoices.add(WHITE);
-		colorChoices.add(YELLOW);
+		colorChoices.add(blue);
+		colorChoices.add(green);
+		colorChoices.add(orange);
+		colorChoices.add(red);
+		colorChoices.add(white);
+		colorChoices.add(yellow);
 		if (rectangles.isEmpty()) {
     		rectangles = calculateRectanglesCoordinates(width, height);
     	}
@@ -60,7 +62,7 @@ public class ManualCubeInputMethod implements CubeInputMethod {
 	public void drawOverlay(Mat frame) {
 		for (int i=0; i<rectangles.size(); i++) {
 			int strokewidth = 2;
-			if (rectColors.get(i) != UNSET) {
+			if (rectColors.get(i) != unsetColor) {
 				strokewidth = 5;
 			}
 			Core.rectangle(frame, rectangles.get(i).tl(), rectangles.get(i).br(), 
@@ -152,7 +154,7 @@ public class ManualCubeInputMethod implements CubeInputMethod {
 		for (int row=0; row < 3; row++) {
 			for (int col=0; col < 3; col++) {
 				tmpRect.add(getNextRectInRow(topLeft, bottomRight, rectDistance, col));
-				rectColors.add(UNSET);
+				rectColors.add(unsetColor);
 			}
 			// move to next row
 			topLeft = movePointVertically(topLeft, rectDistance);
@@ -169,10 +171,17 @@ public class ManualCubeInputMethod implements CubeInputMethod {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				rectColors.set(position, colorChoices.get(which));
+				setChanged();
+				notifyObservers(position);
 			}
 		});
 		AlertDialog alertDialog = alert.create();
 		alertDialog.show();
 	}
+	
+	public Square[] getSquares() {
+		return squares;
+	}
+	
 	
 }

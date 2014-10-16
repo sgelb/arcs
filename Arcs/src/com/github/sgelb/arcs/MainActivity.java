@@ -1,5 +1,8 @@
 package com.github.sgelb.arcs;
 
+import java.util.Observable;
+import java.util.Observer;
+
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.CameraBridgeViewBase.CvCameraViewFrame;
@@ -27,7 +30,7 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class MainActivity extends Activity implements CvCameraViewListener2 {
+public class MainActivity extends Activity implements CvCameraViewListener2, Observer {
 
 	private static final String TAG = "ARCS::MainActivity";
 
@@ -35,12 +38,14 @@ public class MainActivity extends Activity implements CvCameraViewListener2 {
 
 	private Mat frame;
 	private CameraBridgeViewBase mOpenCvCameraView;
-	private CubeInputMethod inputView = null;
+	private CubeInputMethod cubeInputMethod = null;
 	private SharedPreferences prefs;
+	private RubiksCube cube;
 
 	private int width;
 	private int height;
 	private static Context context;
+	private TextView instructionContentText;
 
 	private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
 		@Override
@@ -61,7 +66,8 @@ public class MainActivity extends Activity implements CvCameraViewListener2 {
 
 	public MainActivity() {
 		Log.i(TAG, "Instantiated new " + this.getClass());
-		this.inputView = new ManualCubeInputMethod(this);
+		this.cubeInputMethod = new ManualCubeInputMethod(this);
+		this.cube = new RubiksCube();
 	}
 
 	public static Context getContext() {
@@ -77,15 +83,23 @@ public class MainActivity extends Activity implements CvCameraViewListener2 {
 
 		MainActivity.context = getApplicationContext();
 		setContentView(R.layout.main_activity);
+		instructionContentText = (TextView) findViewById(R.id.instructionContentText);
 
 		prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		setCubeInputMethod();
-
+		
 		mOpenCvCameraView = (CameraBridgeViewBase) findViewById(R.id.java_camera_view);
 		mOpenCvCameraView.setVisibility(SurfaceView.VISIBLE);
 		// Use front camera
 		mOpenCvCameraView.setCameraIndex(1);
 		mOpenCvCameraView.setCvCameraViewListener(this);
+		
+//		TextView text = (TextView) findViewById(R.id.instructionContentText);
+//		int numberOfUnsetSquares = cube.getNumberOfUnsetSquares();
+//		cube.setSquares(cubeInputMethod.getSquares());
+//		numberOfUnsetSquares = cube.getNumberOfUnsetSquares();
+//		text.setText(Integer.toString(numberOfUnsetSquares));
+//		// solve cube
 	}
 
 	@Override
@@ -135,8 +149,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2 {
 	public void onCameraViewStarted(int width, int height) {
 		this.width = width;
 		this.height = height;
-		// TODO: load inputView from Settings
-		inputView.init(width, height);
+		cubeInputMethod.init(width, height);
 		positionViews();
 	}
 
@@ -146,7 +159,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2 {
 	public Mat onCameraFrame(CvCameraViewFrame inputFrame) {
 		frame = inputFrame.rgba();
 
-		inputView.drawOverlay(frame);
+		cubeInputMethod.drawOverlay(frame);
 		drawViewBackground();
 
 		// Flip frame to revert mirrored front camera image
@@ -156,20 +169,20 @@ public class MainActivity extends Activity implements CvCameraViewListener2 {
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		return inputView.onTouchEvent(event);
+		return cubeInputMethod.onTouchEvent(event);
 	}
 
 	private void drawViewBackground() {
 		// draw solid rect as background for text/button on right side of layout 
-		Core.rectangle(frame, new Point(width - inputView.getXOffset() + inputView.getPadding()/2, 0), 
+		Core.rectangle(frame, new Point(width - cubeInputMethod.getXOffset() + cubeInputMethod.getPadding()/2, 0), 
 				new Point(0, height), BGCOLOR, -1);
 	}
 
 
 	private void positionViews() {
 		// Position views according to calculated size of rectangles
-		int xOffset = inputView.getXOffset();
-		int padding = inputView.getPadding();
+		int xOffset = cubeInputMethod.getXOffset();
+		int padding = cubeInputMethod.getPadding();
 
 		LinearLayout layout = (LinearLayout) findViewById(R.id.linearView);
 		layout.setPadding(xOffset, padding, padding, padding);
@@ -182,11 +195,17 @@ public class MainActivity extends Activity implements CvCameraViewListener2 {
 	private void setCubeInputMethod() {
 		switch (prefs.getString("cube_input_method", "manual")) {
 		case "manual":			
-			this.inputView = new ManualCubeInputMethod(this);
+			this.cubeInputMethod = new ManualCubeInputMethod(this);
 			break;
 		default:
-			this.inputView = new ManualCubeInputMethod(this);
+			this.cubeInputMethod = new ManualCubeInputMethod(this);
 		}
+	}
+
+	@Override
+	public void update(Observable observable, Object data) {
+		Log.d(TAG, "Set square #" +  (int) data);
+		instructionContentText.setText(Integer.toString((int) data));
 	}
 
 }
