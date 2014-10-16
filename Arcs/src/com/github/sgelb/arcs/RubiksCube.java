@@ -2,116 +2,65 @@ package com.github.sgelb.arcs;
 
 public class RubiksCube {
 	
-	public Rotation rotation;
-	public CubeUpdater updater;
-	public Square[] cube;
-	
-	public Square[] face;
+	private Rotation rotator;
+	private CubeUpdater updater;
+	private Square[] cube;
 	
 	public RubiksCube() {
-		this.rotation = new Rotation();
+		this.rotator = new Rotation();
 		this.updater = new CubeUpdater();
-		this.cube = rotation.getCube().clone();
-		this.face = new Square[9];
+		this.cube = rotator.getCube();
 	}
 	
 	public void rotateFront() {
-		rotation.setUpSquaresForRotation(Rotation.ROTATION_FRONT);
-		rotation.rotateFront();
+		rotator.rotateFront();
 		update();
 	}
 	
 	public void rotateBack() {
-		rotation.setUpSquaresForRotation(Rotation.ROTATION_BACK);
-		rotation.rotateBack();
+		rotator.rotateBack();
 		update();
 	}
 	
 	public void rotateUp() {
-		rotation.setUpSquaresForRotation(Rotation.ROTATION_UP);
-		rotation.rotateUp();
+		rotator.rotateUp();
 		update();
 	}
 	
 	public void rotateDown() {
-		rotation.setUpSquaresForRotation(Rotation.ROTATION_DOWN);
-		rotation.rotateDown();
+		rotator.rotateDown();
 		update();
 	}
 	
 	public void rotateLeft() {
-		rotation.setUpSquaresForRotation(Rotation.ROTATION_LEFT);
-		rotation.rotateLeft();
+		rotator.rotateLeft();
 		update();
 	}
 	
 	public void rotateRight() {
-		rotation.setUpSquaresForRotation(Rotation.ROTATION_RIGHT);
-		rotation.rotateRight();
+		rotator.rotateRight();
 		update();
 	}
 
 	public void update() {
-		cube = rotation.getCube();
-		cube = updater.updateCube(cube);
+		cube = rotator.getCube();
+		cube = updater.updateSquares(cube);
 	}
 	
 	public Square[] getCube() {
-		return cube.clone();
+		return cube;
 	}
 	
-	/* The getter-methods return an square-array of length 9,
-	 * which contains all squares of the desired face.
-	 * The squares can be accessed to get or set their color
-	 * (square.getColor() or square.setColor(String newColor).
+	/* Returns all squares of the desired face.
+	 * facename is defined as an public final static variable in Rotation.java:
+	 * Rotation.FRONT, Rotation.RIGHT, ...
 	 */
-	
-	public Square[] getFrontFace() {
+	public Square[] getFace(int facename) {
 		Square[] face = new Square[9];
 		for(int i = 0; i < 9; i++) {
-			face[i] = cube[i];
+			face[i] = cube[9*facename + i];
 		}
-		return face.clone();
-	}
-	
-	public Square[] getBackFace() {
-		Square[] face = new Square[9];
-		for(int i = 0; i < 9; i++) {
-			face[i] = cube[18 + i];
-		}
-		return face.clone();
-	}
-	
-	public Square[] getUpFace() {
-		Square[] face = new Square[9];
-		for(int i = 0; i < 9; i++) {
-			face[i] = cube[9 + i];
-		}
-		return face.clone();
-	}
-	
-	public Square[] getDownFace() {
-		Square[] face = new Square[9];
-		for(int i = 0; i < 9; i++) {
-			face[i] = cube[27 + i];
-		}
-		return face.clone();
-	}
-	
-	public Square[] getLeftFace() {
-		Square[] face = new Square[9];
-		for(int i = 0; i < 9; i++) {
-			face[i] = cube[36 + i];
-		}
-		return face.clone();
-	}
-	
-	public Square[] getRightFace() {
-		Square[] face = new Square[9];
-		for(int i = 0; i < 9; i++) {
-			face[i] = cube[45 + i];
-		}
-		return face.clone();
+		return face;
 	}
 	
 	// toString-methods for testing purposes.

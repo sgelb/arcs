@@ -2,26 +2,37 @@ package com.github.sgelb.arcs;
 
 public class SquareLocation {
 	
-	// might have to be double values.
-	public double locationX;
-	public double locationY;
-	public double locationZ;
+	private int locationX;
+	private int locationY;
+	private int locationZ;
 	
-	public SquareLocation(double x, double y, double z) {
+	public SquareLocation(int x, int y, int z) {
 		this.locationX = x;
 		this.locationY = y;
 		this.locationZ = z;
 	}
 	
-	public void setLocation(double x, double y, double z) {
+	public void setLocation(int x, int y, int z) {
 		this.locationX = x;
 		this.locationY = y;
 		this.locationZ = z;
+	}
+	
+	public int getLocationX() {
+		return locationX;
+	}
+
+	public int getLocationY() {
+		return locationY;
+	}
+
+	public int getLocationZ() {
+		return locationZ;
 	}
 	
 	// For test purposes.
-	public int[] getLocationsAsArray() {
-		return new int[]{(int) locationX, (int) locationY, (int) locationZ};
+	public int[] getLocation() {
+		return new int[]{locationX, locationY, locationZ};
 	}
 	
 	@Override
