@@ -1,10 +1,12 @@
 package com.github.sgelb.arcs;
 
+import java.util.ArrayList;
+
 import org.opencv.core.Mat;
 
 import android.view.MotionEvent;
 
-public interface CubeInputMethod {
+public interface FaceInputMethod {
 	
 	public void init(int width, int height);
 	public void drawOverlay(Mat frame);
@@ -13,5 +15,5 @@ public interface CubeInputMethod {
 	public int getPadding();
 	public String getInstructionText(Integer faceId);
 	public String getInstructionTitle(Integer faceId);
-	public Square[] getSquares();
+	public ArrayList<Integer> getFace();
 }

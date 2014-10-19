@@ -28,6 +28,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -39,7 +40,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 
 	private Mat frame;
 	private CameraBridgeViewBase mOpenCvCameraView;
-	private CubeInputMethod cubeInputMethod = null;
+	private FaceInputMethod faceInputMethod = null;
 	private SharedPreferences prefs;
 
 	private int width;
@@ -47,6 +48,9 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 	private static Context context;
 	private TextView instructionContent;
 	private TextView instructionTitle;
+	private Button nextBtn;
+	
+	private int currentFace;
 
 	private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
 		@Override
@@ -67,7 +71,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 
 	public MainActivity() {
 		Log.i(TAG, "Instantiated new " + this.getClass());
-		this.cubeInputMethod = new ManualCubeInputMethod(this);
+		this.faceInputMethod = new ManualFaceInputMethod(this);
 	}
 
 	public static Context getContext() {
@@ -83,10 +87,24 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 
 		MainActivity.context = getApplicationContext();
 		setContentView(R.layout.main_activity);
-		instructionContent = (TextView) findViewById(R.id.instructionContentText);
+
+		currentFace = Rotation.FRONT;
+		
 		instructionTitle = (TextView) findViewById(R.id.instructionTitleText);
-		instructionTitle.setText(cubeInputMethod.getInstructionTitle(0));
-		instructionContent.setText(cubeInputMethod.getInstructionText(0));
+		instructionTitle.setText(faceInputMethod.getInstructionTitle(0));
+		
+		instructionContent = (TextView) findViewById(R.id.instructionContentText);
+		instructionContent.setText(faceInputMethod.getInstructionText(0));
+		
+		nextBtn = (Button) findViewById(R.id.nextBtn);
+		nextBtn.setEnabled(false);
+		nextBtn.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				currentFace++;
+				//faceInputMethod.nextFace(currentFace);
+			}
+		});
 
 		prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		setCubeInputMethod();
@@ -145,7 +163,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 	public void onCameraViewStarted(int width, int height) {
 		this.width = width;
 		this.height = height;
-		cubeInputMethod.init(width, height);
+		faceInputMethod.init(width, height);
 		positionViews();
 	}
 
@@ -155,7 +173,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 	public Mat onCameraFrame(CvCameraViewFrame inputFrame) {
 		frame = inputFrame.rgba();
 
-		cubeInputMethod.drawOverlay(frame);
+		faceInputMethod.drawOverlay(frame);
 		drawViewBackground();
 
 		// Flip frame to revert mirrored front camera image
@@ -165,20 +183,19 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		return cubeInputMethod.onTouchEvent(event);
+		return faceInputMethod.onTouchEvent(event);
 	}
 
 	private void drawViewBackground() {
 		// draw solid rect as background for text/button on right side of layout 
-		Core.rectangle(frame, new Point(width - cubeInputMethod.getXOffset() + cubeInputMethod.getPadding()/2, 0), 
+		Core.rectangle(frame, new Point(width - faceInputMethod.getXOffset() + faceInputMethod.getPadding()/2, 0), 
 				new Point(0, height), BGCOLOR, -1);
 	}
 
-
 	private void positionViews() {
 		// Position views according to calculated size of rectangles
-		int xOffset = cubeInputMethod.getXOffset();
-		int padding = cubeInputMethod.getPadding();
+		int xOffset = faceInputMethod.getXOffset();
+		int padding = faceInputMethod.getPadding();
 
 		LinearLayout layout = (LinearLayout) findViewById(R.id.linearView);
 		layout.setPadding(xOffset, padding, padding, padding);
@@ -190,24 +207,24 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 	private void setCubeInputMethod() {
 		switch (prefs.getString("cube_input_method", "manual")) {
 		case "manual":			
-			this.cubeInputMethod = new ManualCubeInputMethod(this);
+			this.faceInputMethod = new ManualFaceInputMethod(this);
 			break;
 		default:
-			this.cubeInputMethod = new ManualCubeInputMethod(this);
+			this.faceInputMethod = new ManualFaceInputMethod(this);
 		}
 	}
 
 	@Override
 	public void update(Observable observable, Object data) {
-		if (observable instanceof ManualCubeInputMethod) {
+		if (observable instanceof ManualFaceInputMethod) {
 			if (data instanceof Integer) {
 				// nextBtn clicked. data contains next face, update text
 				Integer faceId = (Integer) data;
-				instructionTitle.setText(cubeInputMethod.getInstructionTitle(faceId));
-				instructionContent.setText(cubeInputMethod.getInstructionText(faceId));
+				instructionTitle.setText(faceInputMethod.getInstructionTitle(faceId));
+				instructionContent.setText(faceInputMethod.getInstructionText(faceId));
 
 			} else if (data instanceof Square[]) {
-				// got all-set squares from CubeInputMethod, start solving
+				// got all-set squares from FaceInputMethod, start solving
 				instructionTitle.setText("Done!");
 				instructionContent.setVisibility(View.INVISIBLE);
 			}

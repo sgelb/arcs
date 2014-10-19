@@ -17,7 +17,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.view.MotionEvent;
 
-public class ManualCubeInputMethod extends Observable implements CubeInputMethod {
+public class ManualFaceInputMethod extends Observable implements FaceInputMethod {
 
 	private static final String TAG = "ARCS::ManualCubeInputActivity";
 	private Scalar unsetColor = new Scalar(0, 0, 0);
@@ -36,23 +36,19 @@ public class ManualCubeInputMethod extends Observable implements CubeInputMethod
 	
 	// Array holding coordinates of rectangle overlays
     private ArrayList<Rect> rectangles;
-    private ArrayList<Scalar> rectColors;
 
-    // the cube/squares whose colors we want to set
-    private RubiksCube cube;
-    private Square[] squares;
-    // we get colors for one face at a time. 
+    // We are only interested in colors, so face is just an array of 
+    // ints aka ColorSquare.COLOR
+    private ArrayList<Integer> face;
+
     private int currentFace;
 
 
-	public ManualCubeInputMethod(Context mContext) {
+	public ManualFaceInputMethod(Context mContext) {
 		this.mContext = mContext;
 		this.rectangles = new ArrayList<Rect>(9);
-		this.colorChoices = new ArrayList<Scalar>(6);
-		this.cube = new RubiksCube();
-		this.squares = cube.getSquares();
 		// remembers chosen colors for rectangles 
-		this.rectColors = new ArrayList<Scalar>(9);
+		this.colorChoices = new ArrayList<Scalar>(6);
 	}
 
 	@Override
@@ -64,9 +60,10 @@ public class ManualCubeInputMethod extends Observable implements CubeInputMethod
 		colorChoices.add(green);
 		colorChoices.add(white);
 		colorChoices.add(yellow);
-   		rectangles = calculateRectanglesCoordinates(width, height);
-		addObserver((Observer) mContext);
 		currentFace = Rotation.FRONT;
+		face = new ArrayList<Integer>(Collections.nCopies(9, SquareColor.UNSET_COLOR));
+		rectangles = calculateRectanglesCoordinates(width, height);
+		addObserver((Observer) mContext);
 		setMiddleSquare();
 	}
 
@@ -74,12 +71,14 @@ public class ManualCubeInputMethod extends Observable implements CubeInputMethod
 	public void drawOverlay(Mat frame) {
 		for (int i=0; i<rectangles.size(); i++) {
 			int strokewidth = 2;
+			Scalar color = unsetColor;
 			
-			if (rectColors.get(i) != unsetColor) {
+			if (face.get(i) > SquareColor.UNSET_COLOR) {
 				strokewidth = 5;
+				color = colorChoices.get(face.get(i));
 			}
 			Core.rectangle(frame, rectangles.get(i).tl(), rectangles.get(i).br(), 
-					rectColors.get(i), strokewidth);
+					color, strokewidth);
 		}
 	}
 
@@ -90,7 +89,8 @@ public class ManualCubeInputMethod extends Observable implements CubeInputMethod
 		int touchY = (int) event.getY();
 		if (event.getAction() == MotionEvent.ACTION_DOWN) {
 			for (int i=0; i < rectangles.size(); i++) {
-				if (rectangles.get(i).contains(new Point(touchX, touchY))) {
+				// skip middle square as its color is already set
+				if (i != 4 && rectangles.get(i).contains(new Point(touchX, touchY))) {
 					setColorDialog(i);
 				}
 			}
@@ -167,7 +167,6 @@ public class ManualCubeInputMethod extends Observable implements CubeInputMethod
 		for (int row=0; row < 3; row++) {
 			for (int col=0; col < 3; col++) {
 				tmpRect.add(getNextRectInRow(topLeft, bottomRight, rectDistance, col));
-				this.rectColors.add(unsetColor);
 			}
 			// move to next row
 			topLeft = movePointVertically(topLeft, rectDistance);
@@ -183,11 +182,8 @@ public class ManualCubeInputMethod extends Observable implements CubeInputMethod
 		alert.setItems(R.array.colors, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int colorChoice) {
-				// set color on overlay
-				rectColors.set(position, colorChoices.get(colorChoice));
 				
-				// set square
-				squares[currentFace*9 + position].setColor(colorChoice);
+				face.set(position, colorChoice);
 				
 				// test if all squares on face are set
 				// and get next face
@@ -201,8 +197,8 @@ public class ManualCubeInputMethod extends Observable implements CubeInputMethod
 	}
 	
 	private boolean currentFaceHasUnsetSquares() {
-		for (int idx=0; idx<9; idx++) {
-			if (squares[currentFace*9 + idx].getColor() == SquareColor.UNSET_COLOR) {
+		for (Integer color : face) {
+			if (color == SquareColor.UNSET_COLOR) {
 				return true;
 			}
 		}
@@ -216,17 +212,17 @@ public class ManualCubeInputMethod extends Observable implements CubeInputMethod
 		if (currentFace == -1) {
 			// all faces are set, so we hand over all-set "squares" to MainActivity.
 			// We're done here.
-			notifyObservers(squares);
+			notifyObservers(face);
 		} else {
 			// reset overview
 			notifyObservers(Integer.valueOf(currentFace));
-			this.rectColors = new ArrayList<Scalar>(Collections.nCopies(9, unsetColor));
+			face = new ArrayList<Integer>(Collections.nCopies(9, SquareColor.UNSET_COLOR));
 			setMiddleSquare();
 		}
 	}
 	
-	public Square[] getSquares() {
-		return squares;
+	public ArrayList<Integer> getFace() {
+		return face;
 	}
 
 	@Override
@@ -274,10 +270,8 @@ public class ManualCubeInputMethod extends Observable implements CubeInputMethod
 	}
 	
 	private void setMiddleSquare() {
-		// set middle rect color
-		rectColors.set(4, colorChoices.get(currentFace));
 		// set color of middle squares
-		squares[currentFace*9+4].setColor(currentFace);
+		face.set(4, currentFace);
 	}
 	
 }
