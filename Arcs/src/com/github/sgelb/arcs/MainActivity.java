@@ -1,5 +1,8 @@
 package com.github.sgelb.arcs;
 
+import java.util.Observable;
+import java.util.Observer;
+
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.CameraBridgeViewBase.CvCameraViewFrame;
@@ -13,17 +16,22 @@ import org.opencv.core.Scalar;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class MainActivity extends Activity implements CvCameraViewListener2 {
+public class MainActivity extends Activity implements CvCameraViewListener2, Observer {
 
 	private static final String TAG = "ARCS::MainActivity";
 
@@ -31,11 +39,14 @@ public class MainActivity extends Activity implements CvCameraViewListener2 {
 
 	private Mat frame;
 	private CameraBridgeViewBase mOpenCvCameraView;
-	private CubeInputView inputView = null;
+	private CubeInputMethod cubeInputMethod = null;
+	private SharedPreferences prefs;
 
 	private int width;
 	private int height;
 	private static Context context;
+	private TextView instructionContent;
+	private TextView instructionTitle;
 
 	private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
 		@Override
@@ -56,7 +67,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2 {
 
 	public MainActivity() {
 		Log.i(TAG, "Instantiated new " + this.getClass());
-		this.inputView = new ManualCubeInputView();
+		this.cubeInputMethod = new ManualCubeInputMethod(this);
 	}
 
 	public static Context getContext() {
@@ -72,7 +83,14 @@ public class MainActivity extends Activity implements CvCameraViewListener2 {
 
 		MainActivity.context = getApplicationContext();
 		setContentView(R.layout.main_activity);
+		instructionContent = (TextView) findViewById(R.id.instructionContentText);
+		instructionTitle = (TextView) findViewById(R.id.instructionTitleText);
+		instructionTitle.setText(cubeInputMethod.getInstructionTitle(0));
+		instructionContent.setText(cubeInputMethod.getInstructionText(0));
 
+		prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		setCubeInputMethod();
+		
 		mOpenCvCameraView = (CameraBridgeViewBase) findViewById(R.id.java_camera_view);
 		mOpenCvCameraView.setVisibility(SurfaceView.VISIBLE);
 		// Use front camera
@@ -104,19 +122,30 @@ public class MainActivity extends Activity implements CvCameraViewListener2 {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		return true;
+		// Inflate the menu; this adds items to the action bar if it is present.
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.main_activity_actions, menu);
+		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		return true;
+		// Handle action bar item clicks here. The action bar will
+		// automatically handle clicks on the Home/Up button, so long
+		// as you specify a parent activity in AndroidManifest.xml.
+		switch (item.getItemId()) {
+		case R.id.action_settings:
+			Intent settingsIntent = new Intent(this, SettingsActivity.class);
+			startActivity(settingsIntent);
+		default:
+			return super.onOptionsItemSelected(item);
+		}
 	}
 
 	public void onCameraViewStarted(int width, int height) {
 		this.width = width;
 		this.height = height;
-		// TODO: load inputView from Settings
-		inputView.init(width, height);
+		cubeInputMethod.init(width, height);
 		positionViews();
 	}
 
@@ -126,7 +155,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2 {
 	public Mat onCameraFrame(CvCameraViewFrame inputFrame) {
 		frame = inputFrame.rgba();
 
-		inputView.drawOverlay(frame);
+		cubeInputMethod.drawOverlay(frame);
 		drawViewBackground();
 
 		// Flip frame to revert mirrored front camera image
@@ -136,27 +165,53 @@ public class MainActivity extends Activity implements CvCameraViewListener2 {
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		return inputView.onTouchEvent(event);
+		return cubeInputMethod.onTouchEvent(event);
 	}
 
 	private void drawViewBackground() {
 		// draw solid rect as background for text/button on right side of layout 
-		Core.rectangle(frame, new Point(width - inputView.getXOffset() + inputView.getPadding()/2, 0), 
+		Core.rectangle(frame, new Point(width - cubeInputMethod.getXOffset() + cubeInputMethod.getPadding()/2, 0), 
 				new Point(0, height), BGCOLOR, -1);
 	}
 
 
 	private void positionViews() {
 		// Position views according to calculated size of rectangles
-		int xOffset = inputView.getXOffset();
-		int padding = inputView.getPadding();
+		int xOffset = cubeInputMethod.getXOffset();
+		int padding = cubeInputMethod.getPadding();
 
 		LinearLayout layout = (LinearLayout) findViewById(R.id.linearView);
 		layout.setPadding(xOffset, padding, padding, padding);
 
-		TextView text = (TextView) findViewById(R.id.instructionContentText);
-		text.setMaxWidth(width - padding - xOffset);
-		text.setMinWidth(width - padding - xOffset);
+		instructionContent.setMaxWidth(width - padding - xOffset);
+		instructionContent.setMinWidth(width - padding - xOffset);
+	}
+	
+	private void setCubeInputMethod() {
+		switch (prefs.getString("cube_input_method", "manual")) {
+		case "manual":			
+			this.cubeInputMethod = new ManualCubeInputMethod(this);
+			break;
+		default:
+			this.cubeInputMethod = new ManualCubeInputMethod(this);
+		}
+	}
+
+	@Override
+	public void update(Observable observable, Object data) {
+		if (observable instanceof ManualCubeInputMethod) {
+			if (data instanceof Integer) {
+				// nextBtn clicked. data contains next face, update text
+				Integer faceId = (Integer) data;
+				instructionTitle.setText(cubeInputMethod.getInstructionTitle(faceId));
+				instructionContent.setText(cubeInputMethod.getInstructionText(faceId));
+
+			} else if (data instanceof Square[]) {
+				// got all-set squares from CubeInputMethod, start solving
+				instructionTitle.setText("Done!");
+				instructionContent.setVisibility(View.INVISIBLE);
+			}
+		}
 	}
 
 }

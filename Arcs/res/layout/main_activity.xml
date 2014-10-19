@@ -24,6 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/instructionTitle"
+            android:textStyle="bold"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <TextView
@@ -31,14 +32,15 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="3"
-            android:text="@string/instructionContent" />
+            android:text="@string/instructionContent" 
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <Button
-            android:id="@+id/button1"
+            android:id="@+id/nextBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:text="@string/instructionBtn" />
+            android:text="@string/nextBtn" />
     </LinearLayout>
 
 </RelativeLayout>
