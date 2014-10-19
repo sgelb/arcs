@@ -70,7 +70,7 @@ public class RubiksCube {
 	public int getNumberOfUnsetSquares() {
 		int numberOfUnsetSquares = 0;
 		for (Square square : squares) {
-			if (square.getColor() == Square.UNSET_COLOR) {
+			if (square.getColor() == SquareColor.UNSET_COLOR) {
 				numberOfUnsetSquares++;
 			}
 		}

@@ -15,17 +15,16 @@ import org.opencv.core.Size;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.util.Log;
 import android.view.MotionEvent;
 
 public class ManualCubeInputMethod extends Observable implements CubeInputMethod {
 
 	private static final String TAG = "ARCS::ManualCubeInputActivity";
 	private Scalar unsetColor = new Scalar(0, 0, 0);
-	private Scalar blue = new Scalar(0, 0, 255);
-	private Scalar green = new Scalar(0, 255, 0);
 	private Scalar orange = new Scalar(255, 165, 0);
+	private Scalar blue = new Scalar(0, 0, 255);
 	private Scalar red = new Scalar(255, 0, 0);
+	private Scalar green = new Scalar(0, 255, 0);
 	private Scalar white = new Scalar(255, 255, 255);
 	private Scalar yellow = new Scalar(255, 255, 0);
 	private ArrayList<Scalar> colorChoices;
@@ -59,15 +58,16 @@ public class ManualCubeInputMethod extends Observable implements CubeInputMethod
 	@Override
 	public void init(int width, int height) {
 		this.width = width;
-		colorChoices.add(blue);
-		colorChoices.add(green);
 		colorChoices.add(orange);
+		colorChoices.add(blue);
 		colorChoices.add(red);
+		colorChoices.add(green);
 		colorChoices.add(white);
 		colorChoices.add(yellow);
    		rectangles = calculateRectanglesCoordinates(width, height);
 		addObserver((Observer) mContext);
 		currentFace = Rotation.FRONT;
+		setMiddleSquare();
 	}
 
 	@Override
@@ -202,7 +202,7 @@ public class ManualCubeInputMethod extends Observable implements CubeInputMethod
 	
 	private boolean currentFaceHasUnsetSquares() {
 		for (int idx=0; idx<9; idx++) {
-			if (squares[currentFace*9 + idx].getColor() == Square.UNSET_COLOR) {
+			if (squares[currentFace*9 + idx].getColor() == SquareColor.UNSET_COLOR) {
 				return true;
 			}
 		}
@@ -212,19 +212,72 @@ public class ManualCubeInputMethod extends Observable implements CubeInputMethod
 	private void nextFace() {
 		// get next face or hand over squares if all faces are set
 		currentFace = Rotation.nextFace(currentFace);
+		setChanged();
 		if (currentFace == -1) {
-			// all faces are set, so we hand over all-set "squares" to MainActivity
-			// we're done here.
-			setChanged();
+			// all faces are set, so we hand over all-set "squares" to MainActivity.
+			// We're done here.
 			notifyObservers(squares);
 		} else {
 			// reset overview
+			notifyObservers(Integer.valueOf(currentFace));
 			this.rectColors = new ArrayList<Scalar>(Collections.nCopies(9, unsetColor));
+			setMiddleSquare();
 		}
 	}
 	
 	public Square[] getSquares() {
 		return squares;
+	}
+
+	@Override
+	public String getInstructionText(Integer faceId) {
+		// we read the faces in the following order. a face's color is defined by its middle square.
+		// 1. face: orange - front
+		// 2. face: blue - right
+		// 3. face: red - back
+		// 4. face: green - left
+		// 5. face: white - down
+		// 6. face: yellow - up
+		
+		String colorFacingUser = SquareColor.getString(faceId);
+		String colorFacingUp = SquareColor.getString(SquareColor.UNSET_COLOR);
+		
+		// decide how to twist the cube to read next face in correct orientation
+		if (faceId < 4) {
+			colorFacingUp = SquareColor.getString(SquareColor.YELLOW);
+		} else if (faceId == SquareColor.WHITE) {
+			colorFacingUp = SquareColor.getString(SquareColor.ORANGE);
+		} else if (faceId == SquareColor.YELLOW) {
+			colorFacingUp = SquareColor.getString(SquareColor.RED);
+		}
+		
+		return String.format(mContext.getString(R.string.manualInstructionContent), 
+				colorFacingUser.toUpperCase(), colorFacingUp.toUpperCase());
+	}
+
+	@Override
+	public String getInstructionTitle(Integer faceId) {
+		faceId++;
+		String ordinalAppendix = null;
+		if (faceId == 1) {
+			ordinalAppendix = "st";
+		} else if (faceId == 2) {
+			ordinalAppendix = "nd";
+		} else if (faceId == 3) {
+			ordinalAppendix = "rd";
+		} else {
+			ordinalAppendix = "th";
+		}
+		
+		String msg = String.valueOf(faceId) + ordinalAppendix;
+		return mContext.getString(R.string.instructionTitle, msg);
+	}
+	
+	private void setMiddleSquare() {
+		// set middle rect color
+		rectColors.set(4, colorChoices.get(currentFace));
+		// set color of middle squares
+		squares[currentFace*9+4].setColor(currentFace);
 	}
 	
 }

@@ -5,14 +5,6 @@ public class Square {
 	/* A square represents one rectangle on the Cube.
 	 */
 	
-	public static final int BLUE = 1;
-	public static final int GREEN = 2;
-	public static final int ORANGE = 3;
-	public static final int RED = 4;
-	public static final int WHITE = 5;
-	public static final int YELLOW = 6;
-	public static final int UNSET_COLOR = 7;
-	
 	// The square color represented
 	private int color;
 	

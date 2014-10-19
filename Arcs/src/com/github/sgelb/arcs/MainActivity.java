@@ -26,6 +26,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -40,12 +41,12 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 	private CameraBridgeViewBase mOpenCvCameraView;
 	private CubeInputMethod cubeInputMethod = null;
 	private SharedPreferences prefs;
-	private RubiksCube cube;
 
 	private int width;
 	private int height;
 	private static Context context;
-	private TextView instructionContentText;
+	private TextView instructionContent;
+	private TextView instructionTitle;
 
 	private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
 		@Override
@@ -67,7 +68,6 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 	public MainActivity() {
 		Log.i(TAG, "Instantiated new " + this.getClass());
 		this.cubeInputMethod = new ManualCubeInputMethod(this);
-		this.cube = new RubiksCube();
 	}
 
 	public static Context getContext() {
@@ -83,7 +83,10 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 
 		MainActivity.context = getApplicationContext();
 		setContentView(R.layout.main_activity);
-		instructionContentText = (TextView) findViewById(R.id.instructionContentText);
+		instructionContent = (TextView) findViewById(R.id.instructionContentText);
+		instructionTitle = (TextView) findViewById(R.id.instructionTitleText);
+		instructionTitle.setText(cubeInputMethod.getInstructionTitle(0));
+		instructionContent.setText(cubeInputMethod.getInstructionText(0));
 
 		prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		setCubeInputMethod();
@@ -180,9 +183,8 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 		LinearLayout layout = (LinearLayout) findViewById(R.id.linearView);
 		layout.setPadding(xOffset, padding, padding, padding);
 
-		TextView text = (TextView) findViewById(R.id.instructionContentText);
-		text.setMaxWidth(width - padding - xOffset);
-		text.setMinWidth(width - padding - xOffset);
+		instructionContent.setMaxWidth(width - padding - xOffset);
+		instructionContent.setMinWidth(width - padding - xOffset);
 	}
 	
 	private void setCubeInputMethod() {
@@ -196,10 +198,20 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 	}
 
 	@Override
-	public void update(Observable observable, Object squares) {
-		// got all-set squares from CubeInputMethod. 
-		squares = (Square[]) squares;
-		// start solving
+	public void update(Observable observable, Object data) {
+		if (observable instanceof ManualCubeInputMethod) {
+			if (data instanceof Integer) {
+				// nextBtn clicked. data contains next face, update text
+				Integer faceId = (Integer) data;
+				instructionTitle.setText(cubeInputMethod.getInstructionTitle(faceId));
+				instructionContent.setText(cubeInputMethod.getInstructionText(faceId));
+
+			} else if (data instanceof Square[]) {
+				// got all-set squares from CubeInputMethod, start solving
+				instructionTitle.setText("Done!");
+				instructionContent.setVisibility(View.INVISIBLE);
+			}
+		}
 	}
 
 }

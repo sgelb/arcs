@@ -7,6 +7,7 @@ import junit.framework.TestCase;
 import com.github.sgelb.arcs.Rotation;
 import com.github.sgelb.arcs.RubiksCube;
 import com.github.sgelb.arcs.Square;
+import com.github.sgelb.arcs.SquareColor;
 import com.github.sgelb.arcs.SquareLocation;
 
 
@@ -93,7 +94,7 @@ public class RubiksCubeTest  extends TestCase {
 	
 	public void testShouldUpdateCube() {
 		Square[] originalFrontFace = cube.getFace(Rotation.FRONT);
-		originalFrontFace[0].setColor(Square.BLUE);
+		originalFrontFace[0].setColor(SquareColor.BLUE);
 		cube.rotateUp();
 		Square[] updatedFrontFace = cube.getFace(Rotation.FRONT);
 		assertNotSame(originalFrontFace[0].getColor(), updatedFrontFace[0].getColor());
@@ -102,63 +103,63 @@ public class RubiksCubeTest  extends TestCase {
 	public void testInitialCube() {
 		cube = new RubiksCube();
 		for (Square square : cube.getSquares()) {
-			assertEquals(Square.UNSET_COLOR, square.getColor());
+			assertEquals(SquareColor.UNSET_COLOR, square.getColor());
 		}
 	}
 
 	public void testShouldRotateFrontAndUpdateCube() {
 		cube = new RubiksCube();
-		cube.getFace(Rotation.FRONT)[0].setColor(Square.BLUE);
+		cube.getFace(Rotation.FRONT)[0].setColor(SquareColor.BLUE);
 		cube.rotateFront();
 		Square[] frontFace = cube.getFace(Rotation.FRONT);
-		assertSame(frontFace[2].getColor(), Square.BLUE);
+		assertSame(frontFace[2].getColor(), SquareColor.BLUE);
 	}
 	
 	public void testShouldRotateRightAndUpdateCube() {
 		cube = new RubiksCube();
-		cube.getFace(Rotation.FRONT)[2].setColor(Square.BLUE);
+		cube.getFace(Rotation.FRONT)[2].setColor(SquareColor.BLUE);
 		cube.rotateRight();
 		Square[] upperFace = cube.getFace(Rotation.UP);
-		assertSame(upperFace[2].getColor(), Square.BLUE);
+		assertSame(upperFace[2].getColor(), SquareColor.BLUE);
 	}
 	
 	public void testShouldRotateBackAndUpdateCube() {
 		cube = new RubiksCube();
-		cube.getFace(Rotation.UP)[0].setColor(Square.BLUE);
+		cube.getFace(Rotation.UP)[0].setColor(SquareColor.BLUE);
 		cube.rotateBack();
 		Square[] leftFace = cube.getFace(Rotation.LEFT);
-		assertSame(leftFace[6].getColor(), Square.BLUE);
+		assertSame(leftFace[6].getColor(), SquareColor.BLUE);
 	}
 	
 	public void testShouldRotateLeftAndUpdateCube() {
 		cube = new RubiksCube();
-		cube.getFace(Rotation.FRONT)[0].setColor(Square.BLUE);
+		cube.getFace(Rotation.FRONT)[0].setColor(SquareColor.BLUE);
 		cube.rotateLeft();
 		Square[] downFace = cube.getFace(Rotation.DOWN);
-		assertSame(downFace[0].getColor(), Square.BLUE);
+		assertSame(downFace[0].getColor(), SquareColor.BLUE);
 	}
 	
 	public void testShouldRotateDownAndUpdateCube() {
 		cube = new RubiksCube();
-		cube.getFace(Rotation.FRONT)[6].setColor(Square.BLUE);
+		cube.getFace(Rotation.FRONT)[6].setColor(SquareColor.BLUE);
 		cube.rotateDown();
 		Square[] rightFace = cube.getFace(Rotation.RIGHT);
-		assertSame(rightFace[6].getColor(), Square.BLUE);
+		assertSame(rightFace[6].getColor(), SquareColor.BLUE);
 	}
 	
 	public void testShouldRotateUpAndUpdateCube() {
 		cube = new RubiksCube();
-		cube.getFace(Rotation.FRONT)[0].setColor(Square.BLUE);
+		cube.getFace(Rotation.FRONT)[0].setColor(SquareColor.BLUE);
 		cube.rotateUp();
 		Square[] leftFace = cube.getFace(Rotation.LEFT);
-		assertSame(leftFace[0].getColor(), Square.BLUE);
+		assertSame(leftFace[0].getColor(), SquareColor.BLUE);
 	}
 	
 	public void testGetColors() {
 		Square[] face = cube.getFace(Rotation.FRONT);
-		face[0].setColor(Square.BLUE);
+		face[0].setColor(SquareColor.BLUE);
 		int color = face[0].getColor();
-		assertEquals(Square.BLUE, color);
+		assertEquals(SquareColor.BLUE, color);
 	}
 
 //	public void testShouldReturnFaces() {

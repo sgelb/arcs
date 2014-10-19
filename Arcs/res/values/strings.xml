@@ -4,9 +4,11 @@
     <string name="title_settings_activity">Settings</string>
     <string name="action_settings">Settings</string>
     
-    <string name="instructionTitle">Title</string>
-    <string name="instructionContent">Content</string>
-    <string name="instructionBtn">Next</string>
+    <string name="instructionTitle">Set colors on %1$s face</string>
+    <string name="manualInstructionContent">Twist the cube with the %1$s colored middle piece 
+        facing you and the %2$s colored middle piece pointing up.\n\nEnter the corresponding colors.</string>
+    <string name="instructionContent"></string>
+    <string name="nextBtn">Next</string>
     
      <string name="dialog_title_cube_input_method_prefs">Cube Input Method</string>
      <string-array name="entries_cube_input_method_prefs">
