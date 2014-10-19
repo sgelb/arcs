@@ -1,5 +1,6 @@
 package com.github.sgelb.arcs;
 
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -50,7 +51,8 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 	private TextView instructionTitle;
 	private Button nextBtn;
 	
-	private int currentFace;
+	private RubiksCube cube;
+	private Integer currentFace;
 
 	private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
 		@Override
@@ -88,6 +90,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 		MainActivity.context = getApplicationContext();
 		setContentView(R.layout.main_activity);
 
+		cube = new RubiksCube();
 		currentFace = Rotation.FRONT;
 		
 		instructionTitle = (TextView) findViewById(R.id.instructionTitleText);
@@ -102,7 +105,10 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 			@Override
 			public void onClick(View v) {
 				currentFace++;
-				//faceInputMethod.nextFace(currentFace);
+				instructionTitle.setText(faceInputMethod.getInstructionTitle(currentFace));
+				instructionContent.setText(faceInputMethod.getInstructionText(currentFace));
+				faceInputMethod.nextFace(currentFace);
+				nextBtn.setEnabled(false);
 			}
 		});
 
@@ -217,16 +223,20 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 	@Override
 	public void update(Observable observable, Object data) {
 		if (observable instanceof ManualFaceInputMethod) {
-			if (data instanceof Integer) {
-				// nextBtn clicked. data contains next face, update text
-				Integer faceId = (Integer) data;
-				instructionTitle.setText(faceInputMethod.getInstructionTitle(faceId));
-				instructionContent.setText(faceInputMethod.getInstructionText(faceId));
 
-			} else if (data instanceof Square[]) {
-				// got all-set squares from FaceInputMethod, start solving
-				instructionTitle.setText("Done!");
-				instructionContent.setVisibility(View.INVISIBLE);
+			// got face
+			if (data instanceof ArrayList<?>) {
+				// checked cast for type safety
+				ArrayList<Integer> face = new ArrayList<Integer>();
+				for (int i=0; i<((ArrayList<?>) data).size(); i++) {
+					Object item = ((ArrayList<?>) data).get(i);
+					if (item instanceof Integer) {
+						face.add((Integer) item);
+					}
+				}
+				// set face
+				cube.setFaceColor(currentFace, face);
+				nextBtn.setEnabled(true);
 			}
 		}
 	}

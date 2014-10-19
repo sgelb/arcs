@@ -1,5 +1,7 @@
 package com.github.sgelb.arcs;
 
+import java.util.ArrayList;
+
 public class RubiksCube {
 	
 	private Rotation rotator;
@@ -65,6 +67,12 @@ public class RubiksCube {
 			face[i] = squares[9*facename + i];
 		}
 		return face;
+	}
+	
+	public void setFaceColor(int facename, ArrayList<Integer> face) {
+		for(int i = 0; i < 9; i++) {
+			squares[9*facename + i].setColor(face.get(i));
+		}
 	}
 	
 	public int getNumberOfUnsetSquares() {

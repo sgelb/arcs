@@ -2,6 +2,7 @@ package com.github.sgelb.arcs;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -41,7 +42,7 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
     // ints aka ColorSquare.COLOR
     private ArrayList<Integer> face;
 
-    private int currentFace;
+    private Integer currentFace;
 
 
 	public ManualFaceInputMethod(Context mContext) {
@@ -188,8 +189,10 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 				// test if all squares on face are set
 				// and get next face
 				if (!currentFaceHasUnsetSquares()) {
-					nextFace();
+					setChanged();
+					notifyObservers(face);
 				}
+					
 			}
 		});
 		AlertDialog alertDialog = alert.create();
@@ -205,20 +208,11 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 		return false;
 	}
 	
-	private void nextFace() {
-		// get next face or hand over squares if all faces are set
-		currentFace = Rotation.nextFace(currentFace);
-		setChanged();
-		if (currentFace == -1) {
-			// all faces are set, so we hand over all-set "squares" to MainActivity.
-			// We're done here.
-			notifyObservers(face);
-		} else {
-			// reset overview
-			notifyObservers(Integer.valueOf(currentFace));
-			face = new ArrayList<Integer>(Collections.nCopies(9, SquareColor.UNSET_COLOR));
-			setMiddleSquare();
-		}
+	public void nextFace(Integer currentFace) {
+		// set next face and reset
+		this.currentFace = currentFace;
+		face = new ArrayList<Integer>(Collections.nCopies(9, SquareColor.UNSET_COLOR));
+		setMiddleSquare();
 	}
 	
 	public ArrayList<Integer> getFace() {
@@ -248,7 +242,7 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 		}
 		
 		return String.format(mContext.getString(R.string.manualInstructionContent), 
-				colorFacingUser.toUpperCase(), colorFacingUp.toUpperCase());
+				colorFacingUser.toUpperCase(Locale.US), colorFacingUp.toUpperCase());
 	}
 
 	@Override

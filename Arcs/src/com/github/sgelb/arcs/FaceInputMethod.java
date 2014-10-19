@@ -16,4 +16,5 @@ public interface FaceInputMethod {
 	public String getInstructionText(Integer faceId);
 	public String getInstructionTitle(Integer faceId);
 	public ArrayList<Integer> getFace();
+	public void nextFace(Integer faceId);
 }
