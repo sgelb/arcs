@@ -46,6 +46,7 @@
                 android:layout_gravity="bottom"
                 android:layout_weight="1"
                 android:scaleType="centerInside"
+                android:contentDescription="@string/backBtnDesc"
                 android:src="@drawable/ic_action_back" />
 
             <ImageButton
@@ -55,6 +56,7 @@
                 android:layout_gravity="bottom"
                 android:layout_weight="1"
                 android:scaleType="centerInside"
+                android:contentDescription="@string/forwardBtnDesc"
                 android:src="@drawable/ic_action_forward" />
 
         </LinearLayout>
