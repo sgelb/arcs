@@ -1,0 +1,13 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <ListPreference
+        android:dialogTitle="@string/dialog_title_cube_input_method_prefs"
+        android:entries="@array/entries_cube_input_method_prefs"
+        android:entryValues="@array/entryvalues_cube_input_method_prefs"
+        android:key="cube_input_method"
+        android:defaultValue="manual"
+        android:summary="@string/summary_cube_input_method_prefs"
+        android:title="@string/title_cube_input_method_prefs" />
+
+
+</PreferenceScreen>

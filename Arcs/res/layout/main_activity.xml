@@ -6,9 +6,9 @@
     android:gravity="right" >
 
     <org.opencv.android.JavaCameraView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
         android:id="@+id/java_camera_view"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
         opencv:show_fps="true" />
 
     <LinearLayout
@@ -24,6 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/instructionTitle"
+            android:textStyle="bold"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <TextView
@@ -31,14 +32,35 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="3"
-            android:text="@string/instructionContent" />
+            android:text="@string/instructionContent" 
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
-        <Button
-            android:id="@+id/button1"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:text="@string/instructionBtn" />
+            android:layout_height="wrap_content" >
+
+            <ImageButton
+                android:id="@+id/backBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_weight="1"
+                android:scaleType="centerInside"
+                android:contentDescription="@string/backBtnDesc"
+                android:src="@drawable/ic_action_back" />
+
+            <ImageButton
+                android:id="@+id/forwardBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_weight="1"
+                android:scaleType="centerInside"
+                android:contentDescription="@string/forwardBtnDesc"
+                android:src="@drawable/ic_action_forward" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
 </RelativeLayout>

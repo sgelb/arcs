@@ -13,6 +13,8 @@ public class Rotation {
 	 * Big thanks to www.algosome.com!
 	*/
 	
+	private static final String TAG = "ARCS::Rotation";
+	
 	// define static face names
 	public final static int FRONT = 0; // squares[0-8]
 	public final static int RIGHT = 1; // squares[9-17]
@@ -121,7 +123,7 @@ public class Rotation {
 			for (int yAxis = 1; yAxis > -2; yAxis--) {
 				for (int xAxis = -1; xAxis < 2; xAxis++) {
 					squaresForEachFace.add(new Square(new SquareLocation(xAxis, yAxis, 1),
-							new SquareLocation(0, 0, 1), Square.UNSET_COLOR));
+							new SquareLocation(0, 0, 1), SquareColor.UNSET_COLOR));
 				}
 			}
 			
@@ -178,7 +180,7 @@ public class Rotation {
 	 */
 	private void setUpSquaresForRotation(int facename) {
 		selectedSquares = new ArrayList<Square>();
-		for(Square square : getCube()) {
+		for(Square square : getSquares()) {
 			
 			if(facename == FRONT) {
 				if(square.getLocationZ() == 1) {
@@ -268,7 +270,7 @@ public class Rotation {
 	}
 	
 	// Returns all squares.
-	public Square[] getCube() {
+	public Square[] getSquares() {
 		return this.squares;
 	}
 	

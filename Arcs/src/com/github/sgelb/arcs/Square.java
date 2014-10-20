@@ -5,16 +5,8 @@ public class Square {
 	/* A square represents one rectangle on the Cube.
 	 */
 	
-	public static final String BLUE = "blue";
-	public static final String GREEN = "green";
-	public static final String ORANGE = "orange";
-	public static final String RED = "red";
-	public static final String WHITE = "white";
-	public static final String YELLOW = "yellow";
-	public static final String UNSET_COLOR = "unsetColor";
-	
-	// The color of the Square represented as a string.
-	private String color;
+	// The square color represented
+	private int color;
 	
 	/* Position of the square is saved in an object that functions as a vector
 	 * containing information about the x, y and y-coordinates.
@@ -29,7 +21,7 @@ public class Square {
 	 */
 	private SquareLocation direction;
 	
-	public Square(SquareLocation location, SquareLocation direction, String color) {
+	public Square(SquareLocation location, SquareLocation direction, int color) {
 		this.location = location;
 		this.direction = direction;
 		this.color = color;
@@ -76,7 +68,7 @@ public class Square {
 		return direction;
 	}
 	
-	public String getColor() {
+	public int getColor() {
 		return color;
 	}
 	
@@ -89,8 +81,8 @@ public class Square {
 		this.direction = newDirection;
 	}
 	
-	public void setColor(String newColor) {
-		this.color = newColor;
+	public void setColor(int color) {
+		this.color = color;
 	}
 
 }
