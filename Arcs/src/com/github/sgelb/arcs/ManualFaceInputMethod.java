@@ -37,6 +37,8 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 	
 	// Array holding coordinates of rectangle overlays
     private ArrayList<Rect> rectangles;
+    
+    private ArrayList<Point> colorLines;
 
     // We are only interested in colors, so face is just an array of 
     // ints aka ColorSquare.COLOR
@@ -50,6 +52,7 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 		this.rectangles = new ArrayList<Rect>(9);
 		// remembers chosen colors for rectangles 
 		this.colorChoices = new ArrayList<Scalar>(6);
+		this.colorLines = new ArrayList<Point>(8);
 	}
 
 	@Override
@@ -81,6 +84,8 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 			Core.rectangle(frame, rectangles.get(i).tl(), rectangles.get(i).br(), 
 					color, strokewidth);
 		}
+		Core.line(frame, colorLines.get(0), colorLines.get(1), 
+				colorChoices.get(SquareColor.getColorOfUpperFace(currentFace)), 4);
 	}
 
 	@Override
@@ -166,7 +171,7 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 
 		// Values needed by positionViews()
 		this.padding = faceMargin;
-		this.xOffset = (int) (2*faceMargin + 3*rectSize.width + 2*rectSpacing);
+		this.xOffset = (int) (2*faceMargin + 3*rectSize.width + 3*rectSpacing);
 
 		// Create nine rectangles, three in each row
 		for (int row=0; row < 3; row++) {
@@ -177,9 +182,17 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 			topLeft = movePointVertically(topLeft, rectDistance);
 			bottomRight = movePointVertically(bottomRight, rectDistance);
 		}
+
+		// upper color line
+		colorLines.add(new Point(tmpRect.get(1).tl().x, 
+				tmpRect.get(1).tl().y - faceMargin/2));
+		colorLines.add(new Point(tmpRect.get(1).tl().x + rectSize.width, 
+				tmpRect.get(1).tl().y - faceMargin/2));
+		
 		return tmpRect;
 	}
 
+	
 	private void showColorChooserDialog(final int position) {
 		// show dialog to choose color of rectangle at position
 		AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
@@ -203,7 +216,7 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 		alertDialog.show();
 	}
 	
-	private boolean currentFaceHasUnsetSquares() {
+	public boolean currentFaceHasUnsetSquares() {
 		for (Integer color : face) {
 			if (color == SquareColor.UNSET_COLOR) {
 				return true;
@@ -234,17 +247,7 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 		// 6. face: yellow - up
 		
 		String colorFacingUser = SquareColor.getString(faceId);
-		String colorFacingUp = SquareColor.getString(SquareColor.UNSET_COLOR);
-		
-		// decide how to twist the cube to read next face in correct orientation
-		if (faceId < 4) {
-			colorFacingUp = SquareColor.getString(SquareColor.YELLOW);
-		} else if (faceId == SquareColor.WHITE) {
-			colorFacingUp = SquareColor.getString(SquareColor.ORANGE);
-		} else if (faceId == SquareColor.YELLOW) {
-			colorFacingUp = SquareColor.getString(SquareColor.RED);
-		}
-		
+		String colorFacingUp = SquareColor.getStringForUpperFace(faceId);
 		return String.format(mContext.getString(R.string.manualInstructionContent), 
 				colorFacingUser.toUpperCase(Locale.US), colorFacingUp.toUpperCase());
 	}

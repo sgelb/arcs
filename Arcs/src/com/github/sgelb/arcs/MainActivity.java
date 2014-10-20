@@ -237,8 +237,8 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 		ArrayList<Integer> face = cube.getFaceColor(currentFace);
 		faceInputMethod.changeFace(currentFace, face);
 		enableButton(backBtn);
-
-		if (face == null) {
+		
+		if (face == null || faceInputMethod.currentFaceHasUnsetSquares()) {
 			disableButton(forwardBtn);
 		} else {
 			enableButton(forwardBtn);

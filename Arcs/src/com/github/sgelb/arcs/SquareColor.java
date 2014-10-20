@@ -1,5 +1,7 @@
 package com.github.sgelb.arcs;
 
+import org.opencv.core.Scalar;
+
 
 public class SquareColor {
 	
@@ -40,4 +42,28 @@ public class SquareColor {
 		return colorString;
 	}
 
+	public static int getColorOfUpperFace(int faceId) {
+		int upperFaceColor = SquareColor.UNSET_COLOR; 
+		if (faceId < 4) {
+			upperFaceColor = SquareColor.YELLOW;
+		} else if (faceId == SquareColor.WHITE) {
+			upperFaceColor = SquareColor.ORANGE;
+		} else if (faceId == SquareColor.YELLOW) {
+			upperFaceColor = SquareColor.RED;
+		}
+		return upperFaceColor;
+	}
+
+	public static String getStringForUpperFace(Integer faceId) {
+		String upperFaceColorString = getString(SquareColor.UNSET_COLOR);
+		if (faceId < 4) {
+			upperFaceColorString = SquareColor.getString(SquareColor.YELLOW);
+		} else if (faceId == SquareColor.WHITE) {
+			upperFaceColorString = SquareColor.getString(SquareColor.ORANGE);
+		} else if (faceId == SquareColor.YELLOW) {
+			upperFaceColorString = SquareColor.getString(SquareColor.RED);
+		}
+		return upperFaceColorString;
+	}
+	
 }

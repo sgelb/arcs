@@ -2,8 +2,6 @@ package com.github.sgelb.arcs;
 
 import java.util.ArrayList;
 
-import android.util.Log;
-
 public class RubiksCube {
 	
 	private Rotation rotator;
