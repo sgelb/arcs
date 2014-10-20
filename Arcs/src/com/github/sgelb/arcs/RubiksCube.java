@@ -59,10 +59,18 @@ public class RubiksCube {
 		this.squares = squares;
 	}
 	
+	public Square[] getFace(int facename) {
+		Square[] face = new Square[9];
+		for (int i=0; i<9; i++) {
+			face[i] = squares[9*facename + i];
+		}
+		return face;
+	}
+	
 	public ArrayList<Integer> getFaceColor(int facename) {
 		ArrayList<Integer> face = new ArrayList<>(9);
 		try {
-			for(int i = 0; i < 9; i++) {
+			for (int i=0; i<9; i++) {
 				face.add(squares[9*facename + i].getColor());
 			}
 		} catch (IndexOutOfBoundsException e) {
