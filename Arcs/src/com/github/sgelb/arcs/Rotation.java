@@ -274,13 +274,4 @@ public class Rotation {
 		return this.squares;
 	}
 	
-	
-	// return one face after the other
-	public static int nextFace(int currentFace) {
-		if (currentFace == UP) {
-			return -1;
-		}
-		// we have to increment before returning, do not change to currentFace++
-		return (currentFace+1);
-	}
 }

@@ -29,7 +29,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -49,7 +49,8 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 	private static Context context;
 	private TextView instructionContent;
 	private TextView instructionTitle;
-	private Button nextBtn;
+	private ImageButton forwardBtn;
+	private ImageButton backBtn;
 	
 	private RubiksCube cube;
 	private Integer currentFace;
@@ -99,16 +100,25 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 		instructionContent = (TextView) findViewById(R.id.instructionContentText);
 		instructionContent.setText(faceInputMethod.getInstructionText(0));
 		
-		nextBtn = (Button) findViewById(R.id.nextBtn);
-		nextBtn.setEnabled(false);
-		nextBtn.setOnClickListener(new View.OnClickListener() {
+		forwardBtn = (ImageButton) findViewById(R.id.forwardBtn);
+		disableButton(forwardBtn);
+		forwardBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				currentFace++;
-				instructionTitle.setText(faceInputMethod.getInstructionTitle(currentFace));
-				instructionContent.setText(faceInputMethod.getInstructionText(currentFace));
-				faceInputMethod.nextFace(currentFace);
-				nextBtn.setEnabled(false);
+				if (currentFace == 5 && !cube.hasUnsetSquares()) {
+					solveCubeAction();
+				} else {
+					forwardFaceAction();
+				}
+			}
+		});
+		
+		backBtn = (ImageButton) findViewById(R.id.backBtn);
+		disableButton(backBtn);
+		backBtn.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				previousFaceAction();
 			}
 		});
 
@@ -220,10 +230,47 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 		}
 	}
 
+	private void forwardFaceAction() {
+		currentFace++;
+		instructionTitle.setText(faceInputMethod.getInstructionTitle(currentFace));
+		instructionContent.setText(faceInputMethod.getInstructionText(currentFace));
+		ArrayList<Integer> face = cube.getFaceColor(currentFace);
+		faceInputMethod.changeFace(currentFace, face);
+		enableButton(backBtn);
+
+		if (face == null) {
+			disableButton(forwardBtn);
+		} else {
+			enableButton(forwardBtn);
+		}
+		
+		if (currentFace == 5) {
+			forwardBtn.setImageResource(R.drawable.ic_launcher);
+			if (cube.hasUnsetSquares()) {
+				disableButton(forwardBtn);
+				}
+		}
+	}
+	
+	private void previousFaceAction() {
+		currentFace--;
+		instructionTitle.setText(faceInputMethod.getInstructionTitle(currentFace));
+		instructionContent.setText(faceInputMethod.getInstructionText(currentFace));
+		faceInputMethod.changeFace(currentFace, cube.getFaceColor(currentFace));
+		forwardBtn.setImageResource(R.drawable.ic_action_forward);
+		enableButton(forwardBtn);
+		if (currentFace == 0) {
+			disableButton(backBtn);
+		}
+	}
+	
+	private void solveCubeAction() {
+		// Solve
+	}
+	
 	@Override
 	public void update(Observable observable, Object data) {
 		if (observable instanceof ManualFaceInputMethod) {
-
 			// got face
 			if (data instanceof ArrayList<?>) {
 				// checked cast for type safety
@@ -236,9 +283,20 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 				}
 				// set face
 				cube.setFaceColor(currentFace, face);
-				nextBtn.setEnabled(true);
+				enableButton(forwardBtn);
 			}
 		}
 	}
 
+	private void disableButton(ImageButton button) {
+		button.setEnabled(false);
+		button.setImageAlpha(100);
+		
+	}
+	
+	private void enableButton(ImageButton button) {
+		button.setEnabled(true);
+		button.setImageAlpha(255);
+	}
+	
 }

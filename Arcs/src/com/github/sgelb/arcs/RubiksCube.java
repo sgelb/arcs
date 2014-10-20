@@ -2,6 +2,8 @@ package com.github.sgelb.arcs;
 
 import java.util.ArrayList;
 
+import android.util.Log;
+
 public class RubiksCube {
 	
 	private Rotation rotator;
@@ -57,14 +59,14 @@ public class RubiksCube {
 		this.squares = squares;
 	}
 	
-	/* Returns all squares of the desired face.
-	 * facename is defined as an public final static variable in Rotation.java:
-	 * Rotation.FRONT, Rotation.RIGHT, ...
-	 */
-	public Square[] getFace(int facename) {
-		Square[] face = new Square[9];
-		for(int i = 0; i < 9; i++) {
-			face[i] = squares[9*facename + i];
+	public ArrayList<Integer> getFaceColor(int facename) {
+		ArrayList<Integer> face = new ArrayList<>(9);
+		try {
+			for(int i = 0; i < 9; i++) {
+				face.add(squares[9*facename + i].getColor());
+			}
+		} catch (IndexOutOfBoundsException e) {
+			face = null;
 		}
 		return face;
 	}
@@ -75,14 +77,13 @@ public class RubiksCube {
 		}
 	}
 	
-	public int getNumberOfUnsetSquares() {
-		int numberOfUnsetSquares = 0;
+	public boolean hasUnsetSquares() {
 		for (Square square : squares) {
 			if (square.getColor() == SquareColor.UNSET_COLOR) {
-				numberOfUnsetSquares++;
+				return true;
 			}
 		}
-		return numberOfUnsetSquares;
+		return false;
 	}
 	
 	// toString-methods for testing purposes.

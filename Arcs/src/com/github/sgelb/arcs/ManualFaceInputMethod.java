@@ -91,8 +91,12 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 		if (event.getAction() == MotionEvent.ACTION_DOWN) {
 			for (int i=0; i < rectangles.size(); i++) {
 				// skip middle square as its color is already set
-				if (i != 4 && rectangles.get(i).contains(new Point(touchX, touchY))) {
-					setColorDialog(i);
+				if (rectangles.get(i).contains(new Point(touchX, touchY))) {
+					if (i != 4) {
+						showColorChooserDialog(i);
+					} else {
+						setAllSquares();
+					}
 				}
 			}
 		}
@@ -176,7 +180,7 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 		return tmpRect;
 	}
 
-	private void setColorDialog(final int position) {
+	private void showColorChooserDialog(final int position) {
 		// show dialog to choose color of rectangle at position
 		AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
 		alert.setTitle(R.string.chooseColorDialogTitle);
@@ -208,17 +212,17 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 		return false;
 	}
 	
-	public void nextFace(Integer currentFace) {
+	public void changeFace(Integer currentFace, ArrayList<Integer> newFace) {
 		// set next face and reset
 		this.currentFace = currentFace;
-		face = new ArrayList<Integer>(Collections.nCopies(9, SquareColor.UNSET_COLOR));
+		if (newFace == null) {
+			this.face = new ArrayList<Integer>(Collections.nCopies(9, SquareColor.UNSET_COLOR));
+		} else {
+			this.face = newFace;
+		}
 		setMiddleSquare();
 	}
 	
-	public ArrayList<Integer> getFace() {
-		return face;
-	}
-
 	@Override
 	public String getInstructionText(Integer faceId) {
 		// we read the faces in the following order. a face's color is defined by its middle square.
@@ -264,8 +268,15 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 	}
 	
 	private void setMiddleSquare() {
-		// set color of middle squares
+		// set color of middle squares to match current face
 		face.set(4, currentFace);
 	}
 	
+	private void setAllSquares() {
+		for (int i=0; i< face.size(); i++) {
+			face.set(i, currentFace);
+		}
+		setChanged();
+		notifyObservers(face);
+	}
 }

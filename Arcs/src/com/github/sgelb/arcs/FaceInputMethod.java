@@ -15,6 +15,5 @@ public interface FaceInputMethod {
 	public int getPadding();
 	public String getInstructionText(Integer faceId);
 	public String getInstructionTitle(Integer faceId);
-	public ArrayList<Integer> getFace();
-	public void nextFace(Integer faceId);
+	public void changeFace(Integer faceId, ArrayList<Integer> face);
 }
