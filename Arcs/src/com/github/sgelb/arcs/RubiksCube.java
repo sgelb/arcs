@@ -2,8 +2,12 @@ package com.github.sgelb.arcs;
 
 import java.util.ArrayList;
 
+import android.util.Log;
+
 public class RubiksCube {
 	
+	private static final String TAG = "ARCS::RubiksCube";
+
 	private Rotation rotator;
 	private CubeUpdater updater;
 	private Square[] squares;
@@ -109,5 +113,31 @@ public class RubiksCube {
 			string += "Color: " + squares[i].getColor() + ", " + squares[i].getLocation().toString();
 		}
 		return string;
+	}
+
+	public String getSingmasterNotation() {
+		String singmaster = new String();
+		
+		// URFDLB
+		for (Square square: getFace(Rotation.UP)) {
+			singmaster += SquareColor.getSingmasterString(square.getColor());
+		}
+		for (Square square: getFace(Rotation.RIGHT)) {
+			singmaster += SquareColor.getSingmasterString(square.getColor());
+		}
+		for (Square square: getFace(Rotation.FRONT)) {
+			singmaster += SquareColor.getSingmasterString(square.getColor());
+		}
+		for (Square square: getFace(Rotation.DOWN)) {
+			singmaster += SquareColor.getSingmasterString(square.getColor());
+		}
+		for (Square square: getFace(Rotation.LEFT)) {
+			singmaster += SquareColor.getSingmasterString(square.getColor());
+		}
+		for (Square square: getFace(Rotation.BACK)) {
+			singmaster += SquareColor.getSingmasterString(square.getColor());
+		}
+		Log.d(TAG, "CUBE: " + singmaster);
+		return singmaster;
 	}
 }

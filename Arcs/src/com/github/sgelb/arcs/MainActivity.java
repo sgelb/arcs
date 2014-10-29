@@ -19,6 +19,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -32,6 +33,9 @@ import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+import cs.min2phase.Search;
+import cs.min2phase.Tools;
 
 public class MainActivity extends Activity implements CvCameraViewListener2, Observer {
 
@@ -54,6 +58,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 	
 	private RubiksCube cube;
 	private Integer currentFace;
+	private CubeSolver cubeSolver;
 
 	private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
 		@Override
@@ -124,6 +129,10 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 
 		prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		setCubeInputMethod();
+		if (prefs.getBoolean("cube_init_method", false)) {
+			initializeRandomCube();
+			enableButton(forwardBtn);
+		}
 		
 		mOpenCvCameraView = (CameraBridgeViewBase) findViewById(R.id.java_camera_view);
 		mOpenCvCameraView.setVisibility(SurfaceView.VISIBLE);
@@ -132,12 +141,59 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 		mOpenCvCameraView.setCvCameraViewListener(this);
 	}
 
+	private void initializeRandomCube() {
+		Log.d(TAG, "Init random cube");
+		String randomCube = Tools.randomCube();
+
+		//URFDLB
+		int index = 0;
+		ArrayList<Integer> faceColors = new ArrayList<Integer>();
+		for (int i=0; i<9; i++) {
+			faceColors.add(SquareColor.fromSingmasterToColor(randomCube.charAt(index)));
+			index++;
+		}
+		cube.setFaceColor(Rotation.UP, faceColors);
+		faceColors = new ArrayList<Integer>();
+		for (int i=0; i<9; i++) {
+			faceColors.add(SquareColor.fromSingmasterToColor(randomCube.charAt(index)));
+			index++;
+		}
+		cube.setFaceColor(Rotation.RIGHT, faceColors);
+		faceColors = new ArrayList<Integer>();
+		for (int i=0; i<9; i++) {
+			faceColors.add(SquareColor.fromSingmasterToColor(randomCube.charAt(index)));
+			index++;
+		}
+		cube.setFaceColor(Rotation.FRONT, faceColors);
+		faceColors = new ArrayList<Integer>();
+		for (int i=0; i<9; i++) {
+			faceColors.add(SquareColor.fromSingmasterToColor(randomCube.charAt(index)));
+			index++;
+		}
+		cube.setFaceColor(Rotation.DOWN, faceColors);
+		faceColors = new ArrayList<Integer>();
+		for (int i=0; i<9; i++) {
+			faceColors.add(SquareColor.fromSingmasterToColor(randomCube.charAt(index)));
+			index++;
+		}
+		cube.setFaceColor(Rotation.LEFT, faceColors);
+		faceColors = new ArrayList<Integer>();
+		for (int i=0; i<9; i++) {
+			faceColors.add(SquareColor.fromSingmasterToColor(randomCube.charAt(index)));
+			index++;
+		}
+		cube.setFaceColor(Rotation.BACK, faceColors);
+	}
+
 	@Override
 	public void onPause()
 	{
 		super.onPause();
 		if (mOpenCvCameraView != null)
 			mOpenCvCameraView.disableView();
+		if (cubeSolver != null && !cubeSolver.isCancelled()) {
+			cubeSolver.cancel(true);
+		}
 	}
 
 	@Override
@@ -152,6 +208,9 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 		super.onDestroy();
 		if (mOpenCvCameraView != null)
 			mOpenCvCameraView.disableView();
+		if (cubeSolver != null && !cubeSolver.isCancelled()) {
+			cubeSolver.cancel(true);
+		}
 	}
 
 	@Override
@@ -179,7 +238,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 	public void onCameraViewStarted(int width, int height) {
 		this.width = width;
 		this.height = height;
-		faceInputMethod.init(width, height);
+		faceInputMethod.init(width, height, cube.getFaceColor(currentFace));
 		positionViews();
 	}
 
@@ -266,6 +325,8 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 	
 	private void solveCubeAction() {
 		// Solve
+		cubeSolver= new CubeSolver();
+		cubeSolver.execute(cube.getSingmasterNotation());
 	}
 	
 	@Override
@@ -297,6 +358,55 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 	private void enableButton(ImageButton button) {
 		button.setEnabled(true);
 		button.setImageAlpha(255);
+	}
+	
+	private class CubeSolver extends AsyncTask<String, Integer, String> {
+		long startTime;
+
+		@Override
+		protected void onPreExecute() {
+			startTime = System.currentTimeMillis();
+		}
+
+		@Override
+		protected String doInBackground(String... singmasterNotation) {
+			Search search = new Search();
+			String solution = search.solution(singmasterNotation[0], 21, 60, 0, 0);
+			return solution;
+		}
+
+		@Override
+	    protected void onPostExecute(String result) {
+			Log.d(TAG, "SOLUTION1: " + result);
+			long runTime = System.currentTimeMillis() - startTime;
+			Log.d(TAG, "RUNTIME: " + runTime);
+			processResult(result);
+	    }
+
+	}
+
+	private void processResult(String result) {
+		String errorMsg = null;
+		if (result.startsWith("Error 1")) {
+			errorMsg = "There is not exactly one facelet of each colour";
+		} else if (result.startsWith("Error 2")) {
+			errorMsg = "Not all 12 edges exist exactly once";
+		} else if (result.startsWith("Error 3")) {
+			errorMsg = "Flip error: One edge has to be flipped";
+		} else if (result.startsWith("Error 4")) {
+			errorMsg = "Not all corners exist exactly once";
+		} else if (result.startsWith("Error 5")) {
+			errorMsg = "Twist error: One corner has to be twisted";
+		} else if (result.startsWith("Error 6")) {
+			errorMsg = "Parity error: Two corners or two edges have to be exchanged";
+		} else if (result.startsWith("Error 7")) {
+			errorMsg = "No solution exists for the given maxDepth";
+		} else if (result.startsWith("Error 8")) {
+			errorMsg = "Probe limit exceeded, no solution within given probMax";
+		}
+		if (errorMsg != null) {
+			Toast.makeText(this, errorMsg, Toast.LENGTH_LONG).show();
+		}
 	}
 	
 }

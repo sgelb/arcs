@@ -1,6 +1,5 @@
 package com.github.sgelb.arcs;
 
-import org.opencv.core.Scalar;
 
 
 public class SquareColor {
@@ -15,7 +14,7 @@ public class SquareColor {
 	
 	public static String getString(int color) {
 		String colorString = "unset";
-		
+
 		switch (color) {
 		case ORANGE:
 			colorString = "orange";
@@ -42,6 +41,35 @@ public class SquareColor {
 		return colorString;
 	}
 
+	public static String getSingmasterString(int color) {
+		String colorString = "X";
+
+		switch (color) {
+		case ORANGE:
+			colorString = "F";
+			break;
+		case BLUE:
+			colorString = "R";
+			break;
+		case RED:
+			colorString = "B";
+			break;
+		case GREEN:
+			colorString = "L";
+			break;
+		case WHITE:
+			colorString = "D";
+			break;
+		case YELLOW:
+			colorString = "U";
+			break;
+		default:
+			colorString = "X";
+			break;
+		}
+		return colorString;
+	}
+	
 	public static int getColorOfUpperFace(int faceId) {
 		int upperFaceColor = SquareColor.UNSET_COLOR; 
 		if (faceId < 4) {
@@ -64,6 +92,34 @@ public class SquareColor {
 			upperFaceColorString = SquareColor.getString(SquareColor.RED);
 		}
 		return upperFaceColorString;
+	}
+
+	public static int fromSingmasterToColor(char character) {
+		int color = -1;
+		
+		switch (character) {
+		case 'U':
+			color = YELLOW;
+			break;
+		case 'R':
+			color = BLUE;
+			break;
+		case 'F':
+			color = ORANGE;
+			break;
+		case 'D':
+			color = WHITE;
+			break;
+		case 'L':
+			color = GREEN;
+			break;
+		case 'B':
+			color = RED;
+			break;
+		default:
+			break;
+		}
+		return color;
 	}
 	
 }

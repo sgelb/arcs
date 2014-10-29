@@ -8,6 +8,11 @@
         android:defaultValue="manual"
         android:summary="@string/summary_cube_input_method_prefs"
         android:title="@string/title_cube_input_method_prefs" />
-
+    <CheckBoxPreference
+        android:title="Initialize random cube"
+        android:defaultValue="false"
+        android:summary="Initialize cube randomly"
+        android:key="cube_init_method" />
+	/>
 
 </PreferenceScreen>

@@ -57,7 +57,7 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 	}
 
 	@Override
-	public void init(int width, int height) {
+	public void init(int width, int height, ArrayList<Integer> face) {
 		this.width = width;
 		colorChoices.add(orange);
 		colorChoices.add(blue);
@@ -66,7 +66,11 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 		colorChoices.add(white);
 		colorChoices.add(yellow);
 		currentFace = Rotation.FRONT;
-		face = new ArrayList<Integer>(Collections.nCopies(9, SquareColor.UNSET_COLOR));
+		if (face != null) {
+			this.face = face;
+		} else {
+			this.face = new ArrayList<Integer>(Collections.nCopies(9, SquareColor.UNSET_COLOR));
+		}
 		rectangles = calculateRectanglesCoordinates(width, height);
 		addObserver((Observer) mContext);
 		setMiddleSquare();
