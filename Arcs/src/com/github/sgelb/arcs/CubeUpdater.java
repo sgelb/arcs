@@ -2,6 +2,7 @@ package com.github.sgelb.arcs;
 
 import java.util.Arrays;
 
+
 public class CubeUpdater {
 	
 	private Square[] squares;

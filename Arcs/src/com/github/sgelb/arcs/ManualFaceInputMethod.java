@@ -20,6 +20,7 @@ import android.view.MotionEvent;
 
 public class ManualFaceInputMethod extends Observable implements FaceInputMethod {
 
+	@SuppressWarnings("unused")
 	private static final String TAG = "ARCS::ManualCubeInputActivity";
 	private Scalar unsetColor = new Scalar(0, 0, 0);
 	private Scalar orange = new Scalar(255, 165, 0);

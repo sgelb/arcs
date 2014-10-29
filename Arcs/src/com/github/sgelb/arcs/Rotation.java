@@ -13,6 +13,7 @@ public class Rotation {
 	 * Big thanks to www.algosome.com!
 	*/
 	
+	@SuppressWarnings("unused")
 	private static final String TAG = "ARCS::Rotation";
 	
 	// define static face names
