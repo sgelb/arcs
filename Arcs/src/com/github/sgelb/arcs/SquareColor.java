@@ -1,6 +1,5 @@
 package com.github.sgelb.arcs;
 
-import org.opencv.core.Scalar;
 
 
 public class SquareColor {
@@ -13,9 +12,9 @@ public class SquareColor {
 	public static final int WHITE = 4;
 	public static final int YELLOW = 5;
 	
-	public static String getString(int color) {
+	public static String getColorString(int color) {
 		String colorString = "unset";
-		
+
 		switch (color) {
 		case ORANGE:
 			colorString = "orange";
@@ -42,6 +41,35 @@ public class SquareColor {
 		return colorString;
 	}
 
+	public static String getSingmasterString(int color) {
+		String colorString = "X";
+
+		switch (color) {
+		case ORANGE:
+			colorString = "F";
+			break;
+		case BLUE:
+			colorString = "R";
+			break;
+		case RED:
+			colorString = "B";
+			break;
+		case GREEN:
+			colorString = "L";
+			break;
+		case WHITE:
+			colorString = "D";
+			break;
+		case YELLOW:
+			colorString = "U";
+			break;
+		default:
+			colorString = "X";
+			break;
+		}
+		return colorString;
+	}
+	
 	public static int getColorOfUpperFace(int faceId) {
 		int upperFaceColor = SquareColor.UNSET_COLOR; 
 		if (faceId < 4) {
@@ -54,14 +82,14 @@ public class SquareColor {
 		return upperFaceColor;
 	}
 
-	public static String getStringForUpperFace(Integer faceId) {
-		String upperFaceColorString = getString(SquareColor.UNSET_COLOR);
-		if (faceId < 4) {
-			upperFaceColorString = SquareColor.getString(SquareColor.YELLOW);
-		} else if (faceId == SquareColor.WHITE) {
-			upperFaceColorString = SquareColor.getString(SquareColor.ORANGE);
-		} else if (faceId == SquareColor.YELLOW) {
-			upperFaceColorString = SquareColor.getString(SquareColor.RED);
+	public static String getStringForUpperFace(Integer facePosition) {
+		String upperFaceColorString = getColorString(Rotation.UP);
+		if (facePosition < 4) {
+			upperFaceColorString = getColorString(Rotation.UP);
+		} else if (facePosition == SquareColor.WHITE) {
+			upperFaceColorString = getColorString(Rotation.FRONT);
+		} else if (facePosition == SquareColor.YELLOW) {
+			upperFaceColorString = getColorString(Rotation.BACK);
 		}
 		return upperFaceColorString;
 	}

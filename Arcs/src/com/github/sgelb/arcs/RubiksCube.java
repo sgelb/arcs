@@ -2,8 +2,12 @@ package com.github.sgelb.arcs;
 
 import java.util.ArrayList;
 
+import android.util.Log;
+
 public class RubiksCube {
 	
+	private static final String TAG = "ARCS::RubiksCube";
+
 	private Rotation rotator;
 	private CubeUpdater updater;
 	private Square[] squares;
@@ -109,5 +113,31 @@ public class RubiksCube {
 			string += "Color: " + squares[i].getColor() + ", " + squares[i].getLocation().toString();
 		}
 		return string;
+	}
+
+	public String getSingmasterNotation() {
+		StringBuilder singmaster = new StringBuilder();
+		
+		// URFDLB
+		for (Square square: getFace(Rotation.UP)) {
+			singmaster.append(SquareColor.getSingmasterString(square.getColor()));
+		}
+		for (Square square: getFace(Rotation.RIGHT)) {
+			singmaster.append(SquareColor.getSingmasterString(square.getColor()));
+		}
+		for (Square square: getFace(Rotation.FRONT)) {
+			singmaster.append(SquareColor.getSingmasterString(square.getColor()));
+		}
+		for (Square square: getFace(Rotation.DOWN)) {
+			singmaster.append(SquareColor.getSingmasterString(square.getColor()));
+		}
+		for (Square square: getFace(Rotation.LEFT)) {
+			singmaster.append(SquareColor.getSingmasterString(square.getColor()));
+		}
+		for (Square square: getFace(Rotation.BACK)) {
+			singmaster.append(SquareColor.getSingmasterString(square.getColor()));
+		}
+		Log.d(TAG, "CUBE: " + singmaster);
+		return singmaster.toString();
 	}
 }

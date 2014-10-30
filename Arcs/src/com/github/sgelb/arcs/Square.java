@@ -72,7 +72,6 @@ public class Square {
 		return color;
 	}
 	
-	
 	public void setLocation(SquareLocation newLocation) {
 		this.location = newLocation;
 	}
