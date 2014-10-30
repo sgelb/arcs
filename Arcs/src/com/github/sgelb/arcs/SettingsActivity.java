@@ -10,7 +10,6 @@ public class SettingsActivity extends Activity {
 
 	public SettingsActivity() {
 		super();
-		
 	}
 	
 	@Override
