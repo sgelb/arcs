@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
     
-    <!-- Add item -->
-    <item android:id="@+id/action_settings"
-        android:title="@string/action_settings"
-        android:showAsAction="ifRoom" />
+    <item android:id="@+id/create_random_cube"
+        android:icon="@drawable/ic_action_shuffle"
+        android:showAsAction="always|withText"
+        android:title="@string/create_random_cube" />
+    <item android:id="@+id/clear_cube"
+        android:showAsAction="always|withText"
+        android:icon="@drawable/ic_action_shuffle"
+        android:title="@string/clear_cube" />
     
 </menu>
