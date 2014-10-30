@@ -17,6 +17,7 @@ import org.opencv.core.Scalar;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -224,6 +225,10 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 		case R.id.clear_cube:
 			cube = new RubiksCube();
 			resetFaceView();
+			return true;
+		case R.id.about:
+			Intent aboutIntent = new Intent(this, AboutActivity.class);
+			startActivity(aboutIntent);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);

@@ -9,5 +9,9 @@
         android:showAsAction="always|withText"
         android:icon="@drawable/ic_action_cancel"
         android:title="@string/clear_cube" />
+     <item android:id="@+id/about"
+        android:showAsAction="always|withText"
+        android:icon="@drawable/ic_action_about"
+        android:title="@string/about" />
     
 </menu>
