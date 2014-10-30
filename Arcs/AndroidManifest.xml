@@ -35,7 +35,8 @@
         <activity
             android:name="com.github.sgelb.arcs.SettingsActivity"
             android:label="@string/title_settings_activity"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".MainActivity" 
+            >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.github.sgelb.arcs.MainActivity" />

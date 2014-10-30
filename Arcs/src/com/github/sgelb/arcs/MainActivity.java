@@ -193,6 +193,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 				this, mLoaderCallback);
 	}
 
+	@Override
 	public void onDestroy() {
 		super.onDestroy();
 		if (mOpenCvCameraView != null)
