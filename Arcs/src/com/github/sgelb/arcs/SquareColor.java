@@ -94,32 +94,32 @@ public class SquareColor {
 		return upperFaceColorString;
 	}
 
-	public static int fromSingmasterToColor(char character) {
-		int color = -1;
-		
-		switch (character) {
-		case 'U':
-			color = YELLOW;
-			break;
-		case 'R':
-			color = BLUE;
-			break;
-		case 'F':
-			color = ORANGE;
-			break;
-		case 'D':
-			color = WHITE;
-			break;
-		case 'L':
-			color = GREEN;
-			break;
-		case 'B':
-			color = RED;
-			break;
-		default:
-			break;
-		}
-		return color;
-	}
+//	public static int fromSingmasterToColor(char character) {
+//		int color = -1;
+//		
+//		switch (character) {
+//		case 'U':
+//			color = YELLOW;
+//			break;
+//		case 'R':
+//			color = BLUE;
+//			break;
+//		case 'F':
+//			color = ORANGE;
+//			break;
+//		case 'D':
+//			color = WHITE;
+//			break;
+//		case 'L':
+//			color = GREEN;
+//			break;
+//		case 'B':
+//			color = RED;
+//			break;
+//		default:
+//			break;
+//		}
+//		return color;
+//	}
 	
 }

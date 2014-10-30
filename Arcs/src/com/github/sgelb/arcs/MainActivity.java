@@ -375,27 +375,36 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 	}
 
 	private void processResult(String result) {
-		String errorMsg = null;
-		if (result.startsWith("Error 1")) {
-			errorMsg = "There is not exactly one facelet of each colour";
-		} else if (result.startsWith("Error 2")) {
-			errorMsg = "Not all 12 edges exist exactly once";
-		} else if (result.startsWith("Error 3")) {
-			errorMsg = "Flip error: One edge has to be flipped";
-		} else if (result.startsWith("Error 4")) {
-			errorMsg = "Not all corners exist exactly once";
-		} else if (result.startsWith("Error 5")) {
-			errorMsg = "Twist error: One corner has to be twisted";
-		} else if (result.startsWith("Error 6")) {
-			errorMsg = "Parity error: Two corners or two edges have to be exchanged";
-		} else if (result.startsWith("Error 7")) {
-			errorMsg = "No solution exists for the given maxDepth";
-		} else if (result.startsWith("Error 8")) {
-			errorMsg = "Probe limit exceeded, no solution within given probMax";
+		if (result.contains("Error")) {
+			switch (result.charAt(result.length() - 1)) {
+			case '1':
+				result = "There are not exactly nine facelets of each color!";
+				break;
+			case '2':
+				result = "Not all 12 edges exist exactly once!";
+				break;
+			case '3':
+				result = "Flip error: One edge has to be flipped!";
+				break;
+			case '4':
+				result = "Not all 8 corners exist exactly once!";
+				break;
+			case '5':
+				result = "Twist error: One corner has to be twisted!";
+				break;
+			case '6':
+				result = "Parity error: Two corners or two edges have to be exchanged!";
+				break;
+			case '7':
+				result = "No solution exists for the given maximum move number!";
+				break;
+			case '8':
+				result = "Timeout, no solution found within given maximum time!";
+				break;
+			}
 		}
-		if (errorMsg != null) {
-			Toast.makeText(this, errorMsg, Toast.LENGTH_LONG).show();
-		}
+		Toast.makeText(this, result, Toast.LENGTH_LONG).show();
 	}
+		
 	
 }
