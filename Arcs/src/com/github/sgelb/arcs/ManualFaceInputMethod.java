@@ -251,7 +251,7 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 		// 5. face: white - down
 		// 6. face: yellow - up
 		
-		String colorFacingUser = SquareColor.getString(faceId);
+		String colorFacingUser = SquareColor.getColorString(faceId);
 		String colorFacingUp = SquareColor.getStringForUpperFace(faceId);
 		return String.format(mContext.getString(R.string.manualInstructionContent), 
 				colorFacingUser.toUpperCase(Locale.US), colorFacingUp.toUpperCase());

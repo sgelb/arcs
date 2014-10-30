@@ -116,28 +116,28 @@ public class RubiksCube {
 	}
 
 	public String getSingmasterNotation() {
-		String singmaster = new String();
+		StringBuilder singmaster = new StringBuilder();
 		
 		// URFDLB
 		for (Square square: getFace(Rotation.UP)) {
-			singmaster += SquareColor.getSingmasterString(square.getColor());
+			singmaster.append(SquareColor.getSingmasterString(square.getColor()));
 		}
 		for (Square square: getFace(Rotation.RIGHT)) {
-			singmaster += SquareColor.getSingmasterString(square.getColor());
+			singmaster.append(SquareColor.getSingmasterString(square.getColor()));
 		}
 		for (Square square: getFace(Rotation.FRONT)) {
-			singmaster += SquareColor.getSingmasterString(square.getColor());
+			singmaster.append(SquareColor.getSingmasterString(square.getColor()));
 		}
 		for (Square square: getFace(Rotation.DOWN)) {
-			singmaster += SquareColor.getSingmasterString(square.getColor());
+			singmaster.append(SquareColor.getSingmasterString(square.getColor()));
 		}
 		for (Square square: getFace(Rotation.LEFT)) {
-			singmaster += SquareColor.getSingmasterString(square.getColor());
+			singmaster.append(SquareColor.getSingmasterString(square.getColor()));
 		}
 		for (Square square: getFace(Rotation.BACK)) {
-			singmaster += SquareColor.getSingmasterString(square.getColor());
+			singmaster.append(SquareColor.getSingmasterString(square.getColor()));
 		}
 		Log.d(TAG, "CUBE: " + singmaster);
-		return singmaster;
+		return singmaster.toString();
 	}
 }

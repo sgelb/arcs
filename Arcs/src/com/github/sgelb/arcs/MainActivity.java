@@ -360,18 +360,16 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 		@Override
 		protected String doInBackground(String... singmasterNotation) {
 			Search search = new Search();
-			String solution = search.solution(singmasterNotation[0], 21, 60, 0, 0);
+			String solution = search.solution(singmasterNotation[0], 21, 10000, 0, 0x0);
 			return solution;
 		}
 
 		@Override
 	    protected void onPostExecute(String result) {
-			Log.d(TAG, "SOLUTION1: " + result);
 			long runTime = System.currentTimeMillis() - startTime;
-			Log.d(TAG, "RUNTIME: " + runTime);
+			Log.d(TAG, "Found solution in " + runTime + "ms :" + result);
 			processResult(result);
 	    }
-
 	}
 
 	private void processResult(String result) {
