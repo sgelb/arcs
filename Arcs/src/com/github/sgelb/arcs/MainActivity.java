@@ -141,48 +141,37 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 		mOpenCvCameraView.setCvCameraViewListener(this);
 	}
 
+	private int convertFacePosition(int inputPosition) {
+		if (inputPosition == 0) return 5;
+		if (inputPosition == 1) return 1;
+		if (inputPosition == 2) return 0;
+		if (inputPosition == 3) return 4;
+		if (inputPosition == 4) return 3;
+		if (inputPosition == 5) return 2;
+		return -1;
+	}
+	
 	private void initializeRandomCube() {
 		Log.d(TAG, "Init random cube");
 		String randomCube = Tools.randomCube();
 
-		//URFDLB
-		int index = 0;
-		ArrayList<Integer> faceColors = new ArrayList<Integer>();
-		for (int i=0; i<9; i++) {
-			faceColors.add(SquareColor.fromSingmasterToColor(randomCube.charAt(index)));
-			index++;
+		Square[] squares = cube.getSquares();
+		
+		// set facelets
+		for (int inputFace = 0; inputFace < 6; inputFace++) {
+			// read the 54 facelets from randomCube and repostion them according our face order
+			//URFDLB -> FRBLDU
+			int outputFace = convertFacePosition(inputFace); 
+			for (int facelet = 0; facelet < 9; facelet++) {
+				if (randomCube.charAt(9*inputFace + facelet) == 'F') squares[9*outputFace + facelet].setColor(SquareColor.ORANGE);
+				if (randomCube.charAt(9*inputFace + facelet) == 'R') squares[9*outputFace + facelet].setColor(SquareColor.BLUE);
+				if (randomCube.charAt(9*inputFace + facelet) == 'B') squares[9*outputFace + facelet].setColor(SquareColor.RED);
+				if (randomCube.charAt(9*inputFace + facelet) == 'L') squares[9*outputFace + facelet].setColor(SquareColor.GREEN);
+				if (randomCube.charAt(9*inputFace + facelet) == 'D') squares[9*outputFace + facelet].setColor(SquareColor.WHITE);
+				if (randomCube.charAt(9*inputFace + facelet) == 'U') squares[9*outputFace + facelet].setColor(SquareColor.YELLOW);
+			}
 		}
-		cube.setFaceColor(Rotation.UP, faceColors);
-		faceColors = new ArrayList<Integer>();
-		for (int i=0; i<9; i++) {
-			faceColors.add(SquareColor.fromSingmasterToColor(randomCube.charAt(index)));
-			index++;
-		}
-		cube.setFaceColor(Rotation.RIGHT, faceColors);
-		faceColors = new ArrayList<Integer>();
-		for (int i=0; i<9; i++) {
-			faceColors.add(SquareColor.fromSingmasterToColor(randomCube.charAt(index)));
-			index++;
-		}
-		cube.setFaceColor(Rotation.FRONT, faceColors);
-		faceColors = new ArrayList<Integer>();
-		for (int i=0; i<9; i++) {
-			faceColors.add(SquareColor.fromSingmasterToColor(randomCube.charAt(index)));
-			index++;
-		}
-		cube.setFaceColor(Rotation.DOWN, faceColors);
-		faceColors = new ArrayList<Integer>();
-		for (int i=0; i<9; i++) {
-			faceColors.add(SquareColor.fromSingmasterToColor(randomCube.charAt(index)));
-			index++;
-		}
-		cube.setFaceColor(Rotation.LEFT, faceColors);
-		faceColors = new ArrayList<Integer>();
-		for (int i=0; i<9; i++) {
-			faceColors.add(SquareColor.fromSingmasterToColor(randomCube.charAt(index)));
-			index++;
-		}
-		cube.setFaceColor(Rotation.BACK, faceColors);
+		cube.setSquares(squares);
 	}
 
 	@Override
