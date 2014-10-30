@@ -8,6 +8,10 @@ import android.preference.PreferenceFragment;
 
 public class SettingsActivity extends Activity {
 
+	public SettingsActivity() {
+		super();
+	}
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -17,8 +21,7 @@ public class SettingsActivity extends Activity {
 				new SettingsFragment()).commit();
 	}
 
-
-	public class SettingsFragment extends PreferenceFragment {
+	public static class SettingsFragment extends PreferenceFragment {
 
 		@Override
 		public void onCreate(Bundle savedInstanceState) {

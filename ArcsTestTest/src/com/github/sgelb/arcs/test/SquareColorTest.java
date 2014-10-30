@@ -7,13 +7,13 @@ import junit.framework.TestCase;
 public class SquareColorTest extends TestCase {
 	
 	public void testGetString() {
-		assertEquals(SquareColor.getString(SquareColor.ORANGE), "orange");
-		assertEquals(SquareColor.getString(SquareColor.BLUE), "blue");
-		assertEquals(SquareColor.getString(SquareColor.RED), "red");
-		assertEquals(SquareColor.getString(SquareColor.GREEN), "green");
-		assertEquals(SquareColor.getString(SquareColor.WHITE), "white");
-		assertEquals(SquareColor.getString(SquareColor.YELLOW), "yellow");
-		assertEquals(SquareColor.getString(SquareColor.UNSET_COLOR), "unset");
+		assertEquals(SquareColor.getColorString(SquareColor.ORANGE), "orange");
+		assertEquals(SquareColor.getColorString(SquareColor.BLUE), "blue");
+		assertEquals(SquareColor.getColorString(SquareColor.RED), "red");
+		assertEquals(SquareColor.getColorString(SquareColor.GREEN), "green");
+		assertEquals(SquareColor.getColorString(SquareColor.WHITE), "white");
+		assertEquals(SquareColor.getColorString(SquareColor.YELLOW), "yellow");
+		assertEquals(SquareColor.getColorString(SquareColor.UNSET_COLOR), "unset");
 	}
 
 }

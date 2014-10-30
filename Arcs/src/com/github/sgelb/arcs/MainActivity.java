@@ -19,6 +19,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -32,6 +33,9 @@ import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+import cs.min2phase.Search;
+import cs.min2phase.Tools;
 
 public class MainActivity extends Activity implements CvCameraViewListener2, Observer {
 
@@ -54,6 +58,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 	
 	private RubiksCube cube;
 	private Integer currentFace;
+	private CubeSolver cubeSolver;
 
 	private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
 		@Override
@@ -124,6 +129,10 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 
 		prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		setCubeInputMethod();
+		if (prefs.getBoolean("cube_init_method", false)) {
+			initializeRandomCube();
+			enableButton(forwardBtn);
+		}
 		
 		mOpenCvCameraView = (CameraBridgeViewBase) findViewById(R.id.java_camera_view);
 		mOpenCvCameraView.setVisibility(SurfaceView.VISIBLE);
@@ -132,12 +141,54 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 		mOpenCvCameraView.setCvCameraViewListener(this);
 	}
 
+	private int convertFacePosition(int inputPosition) {
+		if (inputPosition == 0) return 5;
+		if (inputPosition == 1) return 1;
+		if (inputPosition == 2) return 0;
+		if (inputPosition == 3) return 4;
+		if (inputPosition == 4) return 3;
+		if (inputPosition == 5) return 2;
+		return -1;
+	}
+	
+	private void initializeRandomCube() {
+		Log.d(TAG, "Init random cube");
+		String randomCube = Tools.randomCube();
+
+		Square[] squares = cube.getSquares();
+		
+		// set facelets
+		for (int inputFace = 0; inputFace < 6; inputFace++) {
+			// read the 54 facelets from randomCube and repostion them according our face order
+			//URFDLB -> FRBLDU
+			int outputFace = convertFacePosition(inputFace); 
+			for (int facelet = 0; facelet < 9; facelet++) {
+				if (randomCube.charAt(9*inputFace + facelet) == 'F')
+					squares[9*outputFace + facelet].setColor(SquareColor.ORANGE);
+				if (randomCube.charAt(9*inputFace + facelet) == 'R')
+					squares[9*outputFace + facelet].setColor(SquareColor.BLUE);
+				if (randomCube.charAt(9*inputFace + facelet) == 'B')
+					squares[9*outputFace + facelet].setColor(SquareColor.RED);
+				if (randomCube.charAt(9*inputFace + facelet) == 'L')
+					squares[9*outputFace + facelet].setColor(SquareColor.GREEN);
+				if (randomCube.charAt(9*inputFace + facelet) == 'D')
+					squares[9*outputFace + facelet].setColor(SquareColor.WHITE);
+				if (randomCube.charAt(9*inputFace + facelet) == 'U')
+					squares[9*outputFace + facelet].setColor(SquareColor.YELLOW);
+			}
+		}
+		cube.setSquares(squares);
+	}
+
 	@Override
 	public void onPause()
 	{
 		super.onPause();
 		if (mOpenCvCameraView != null)
 			mOpenCvCameraView.disableView();
+		if (cubeSolver != null && !cubeSolver.isCancelled()) {
+			cubeSolver.cancel(true);
+		}
 	}
 
 	@Override
@@ -148,10 +199,14 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 				this, mLoaderCallback);
 	}
 
+	@Override
 	public void onDestroy() {
 		super.onDestroy();
 		if (mOpenCvCameraView != null)
 			mOpenCvCameraView.disableView();
+		if (cubeSolver != null && !cubeSolver.isCancelled()) {
+			cubeSolver.cancel(true);
+		}
 	}
 
 	@Override
@@ -179,7 +234,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 	public void onCameraViewStarted(int width, int height) {
 		this.width = width;
 		this.height = height;
-		faceInputMethod.init(width, height);
+		faceInputMethod.init(width, height, cube.getFaceColor(currentFace));
 		positionViews();
 	}
 
@@ -266,6 +321,8 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 	
 	private void solveCubeAction() {
 		// Solve
+		cubeSolver= new CubeSolver();
+		cubeSolver.execute(cube.getSingmasterNotation());
 	}
 	
 	@Override
@@ -298,5 +355,61 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 		button.setEnabled(true);
 		button.setImageAlpha(255);
 	}
+	
+	private class CubeSolver extends AsyncTask<String, Integer, String> {
+		long startTime;
+
+		@Override
+		protected void onPreExecute() {
+			startTime = System.currentTimeMillis();
+		}
+
+		@Override
+		protected String doInBackground(String... singmasterNotation) {
+			Search search = new Search();
+			String solution = search.solution(singmasterNotation[0], 21, 10000, 0, 0x0);
+			return solution;
+		}
+
+		@Override
+	    protected void onPostExecute(String result) {
+			long runTime = System.currentTimeMillis() - startTime;
+			Log.d(TAG, "Found solution in " + runTime + "ms :" + result);
+			processResult(result);
+	    }
+	}
+
+	private void processResult(String result) {
+		if (result.contains("Error")) {
+			switch (result.charAt(result.length() - 1)) {
+			case '1':
+				result = "There are not exactly nine facelets of each color!";
+				break;
+			case '2':
+				result = "Not all 12 edges exist exactly once!";
+				break;
+			case '3':
+				result = "Flip error: One edge has to be flipped!";
+				break;
+			case '4':
+				result = "Not all 8 corners exist exactly once!";
+				break;
+			case '5':
+				result = "Twist error: One corner has to be twisted!";
+				break;
+			case '6':
+				result = "Parity error: Two corners or two edges have to be exchanged!";
+				break;
+			case '7':
+				result = "No solution exists for the given maximum move number!";
+				break;
+			case '8':
+				result = "Timeout, no solution found within given maximum time!";
+				break;
+			}
+		}
+		Toast.makeText(this, result, Toast.LENGTH_LONG).show();
+	}
+		
 	
 }
