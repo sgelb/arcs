@@ -17,7 +17,6 @@ import org.opencv.core.Scalar;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -129,10 +128,6 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 
 		prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		setCubeInputMethod();
-		if (prefs.getBoolean("cube_init_method", false)) {
-			initializeRandomCube();
-			enableButton(forwardBtn);
-		}
 		
 		mOpenCvCameraView = (CameraBridgeViewBase) findViewById(R.id.java_camera_view);
 		mOpenCvCameraView.setVisibility(SurfaceView.VISIBLE);
@@ -152,7 +147,6 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 	}
 	
 	private void initializeRandomCube() {
-		Log.d(TAG, "Init random cube");
 		String randomCube = Tools.randomCube();
 
 		Square[] squares = cube.getSquares();
@@ -223,12 +217,33 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		switch (item.getItemId()) {
-		case R.id.action_settings:
-			Intent settingsIntent = new Intent(this, SettingsActivity.class);
-			startActivity(settingsIntent);
+		case R.id.create_random_cube:
+			initializeRandomCube();
+			resetFaceView();
+			return true;
+		case R.id.clear_cube:
+			cube = new RubiksCube();
+			resetFaceView();
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+	}
+
+	private void resetFaceView() {
+		// reset after creating random cube or cleared cube
+		currentFace = Rotation.FRONT;
+		faceInputMethod.changeFace(currentFace, cube.getFaceColor(currentFace));
+		instructionTitle.setText(faceInputMethod.getInstructionTitle(currentFace));
+		instructionContent.setText(faceInputMethod.getInstructionText(currentFace));
+		forwardBtn.setImageResource(R.drawable.ic_action_forward);
+		if (cube.hasUnsetSquares()) {
+			disableButton(forwardBtn);
+		} else {
+			enableButton(forwardBtn);
+		}
+		disableButton(backBtn);
+		
 	}
 
 	public void onCameraViewStarted(int width, int height) {
@@ -361,6 +376,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 
 		@Override
 		protected void onPreExecute() {
+			disableButton(forwardBtn);
 			startTime = System.currentTimeMillis();
 		}
 
@@ -373,6 +389,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 
 		@Override
 	    protected void onPostExecute(String result) {
+			enableButton(forwardBtn);
 			long runTime = System.currentTimeMillis() - startTime;
 			Log.d(TAG, "Found solution in " + runTime + "ms :" + result);
 			processResult(result);
@@ -407,6 +424,8 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 				result = "Timeout, no solution found within given maximum time!";
 				break;
 			}
+		} else if (result.isEmpty()) {
+			result = "This cube is already solved!";
 		}
 		Toast.makeText(this, result, Toast.LENGTH_LONG).show();
 	}
