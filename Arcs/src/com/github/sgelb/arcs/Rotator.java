@@ -124,7 +124,7 @@ public class Rotator {
 			for (int yAxis = 1; yAxis > -2; yAxis--) {
 				for (int xAxis = -1; xAxis < 2; xAxis++) {
 					squaresForEachFace.add(new Facelet(new SquareLocation(xAxis, yAxis, 1),
-							new SquareLocation(0, 0, 1), SquareColor.UNSET_COLOR));
+							new SquareLocation(0, 0, 1), ColorConverter.UNSET_COLOR));
 				}
 			}
 			

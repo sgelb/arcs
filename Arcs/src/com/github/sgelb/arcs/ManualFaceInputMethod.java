@@ -2,7 +2,6 @@ package com.github.sgelb.arcs;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -69,7 +68,7 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 		if (face != null) {
 			this.face = face;
 		} else {
-			this.face = new ArrayList<Integer>(Collections.nCopies(9, SquareColor.UNSET_COLOR));
+			this.face = new ArrayList<Integer>(Collections.nCopies(9, ColorConverter.UNSET_COLOR));
 		}
 		rectangles = calculateRectanglesCoordinates(width, height);
 		addObserver((Observer) mContext);
@@ -82,7 +81,7 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 			int strokewidth = 2;
 			Scalar color = unsetColor;
 			
-			if (face.get(i) > SquareColor.UNSET_COLOR) {
+			if (face.get(i) > ColorConverter.UNSET_COLOR) {
 				strokewidth = 5;
 				color = colorChoices.get(face.get(i));
 			}
@@ -90,7 +89,7 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 					color, strokewidth);
 		}
 		Core.line(frame, colorLines.get(0), colorLines.get(1), 
-				colorChoices.get(SquareColor.getColorOfUpperFace(currentFace)), 4);
+				colorChoices.get(ColorConverter.getUpperFaceColor(currentFace)), 4);
 	}
 
 	@Override
@@ -223,7 +222,7 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 	
 	public boolean currentFaceHasUnsetSquares() {
 		for (Integer color : face) {
-			if (color == SquareColor.UNSET_COLOR) {
+			if (color == ColorConverter.UNSET_COLOR) {
 				return true;
 			}
 		}
@@ -234,7 +233,7 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 		// set next face and reset
 		this.currentFace = currentFace;
 		if (newFace == null) {
-			this.face = new ArrayList<Integer>(Collections.nCopies(9, SquareColor.UNSET_COLOR));
+			this.face = new ArrayList<Integer>(Collections.nCopies(9, ColorConverter.UNSET_COLOR));
 		} else {
 			this.face = newFace;
 		}
@@ -251,10 +250,10 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 		// 5. face: white - down
 		// 6. face: yellow - up
 		
-		String colorFacingUser = SquareColor.getColorString(faceId);
-		String colorFacingUp = SquareColor.getStringForUpperFace(faceId);
+		String colorFacingUser = ColorConverter.getColorName(faceId);
+		String colorFacingUp = ColorConverter.getUpperFaceColorName(faceId);
 		return String.format(mContext.getString(R.string.manualInstructionContent), 
-				colorFacingUser.toUpperCase(Locale.US), colorFacingUp.toUpperCase());
+				colorFacingUser, colorFacingUp);
 	}
 
 	@Override

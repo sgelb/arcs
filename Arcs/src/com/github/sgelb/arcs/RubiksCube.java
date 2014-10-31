@@ -103,7 +103,7 @@ public class RubiksCube {
 	
 	public boolean hasUnsetSquares() {
 		for (Facelet facelet : facelets) {
-			if (facelet.getColor() == SquareColor.UNSET_COLOR) {
+			if (facelet.getColor() == ColorConverter.UNSET_COLOR) {
 				return true;
 			}
 		}
@@ -134,22 +134,22 @@ public class RubiksCube {
 		
 		// URFDLB
 		for (Facelet facelet: getFace(Rotator.UP)) {
-			singmaster.append(SquareColor.getSingmasterString(facelet.getColor()));
+			singmaster.append(ColorConverter.colorToSingmaster(facelet.getColor()));
 		}
 		for (Facelet facelet: getFace(Rotator.RIGHT)) {
-			singmaster.append(SquareColor.getSingmasterString(facelet.getColor()));
+			singmaster.append(ColorConverter.colorToSingmaster(facelet.getColor()));
 		}
 		for (Facelet facelet: getFace(Rotator.FRONT)) {
-			singmaster.append(SquareColor.getSingmasterString(facelet.getColor()));
+			singmaster.append(ColorConverter.colorToSingmaster(facelet.getColor()));
 		}
 		for (Facelet facelet: getFace(Rotator.DOWN)) {
-			singmaster.append(SquareColor.getSingmasterString(facelet.getColor()));
+			singmaster.append(ColorConverter.colorToSingmaster(facelet.getColor()));
 		}
 		for (Facelet facelet: getFace(Rotator.LEFT)) {
-			singmaster.append(SquareColor.getSingmasterString(facelet.getColor()));
+			singmaster.append(ColorConverter.colorToSingmaster(facelet.getColor()));
 		}
 		for (Facelet facelet: getFace(Rotator.BACK)) {
-			singmaster.append(SquareColor.getSingmasterString(facelet.getColor()));
+			singmaster.append(ColorConverter.colorToSingmaster(facelet.getColor()));
 		}
 		Log.d(TAG, "CUBE: " + singmaster);
 		return singmaster.toString();

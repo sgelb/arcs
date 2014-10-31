@@ -173,17 +173,17 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 			int outputFace = convertFacePosition(inputFace); 
 			for (int facelet = 0; facelet < 9; facelet++) {
 				if (randomCube.charAt(9*inputFace + facelet) == 'F')
-					squares[9*outputFace + facelet].setColor(SquareColor.ORANGE);
+					squares[9*outputFace + facelet].setColor(ColorConverter.ORANGE);
 				if (randomCube.charAt(9*inputFace + facelet) == 'R')
-					squares[9*outputFace + facelet].setColor(SquareColor.BLUE);
+					squares[9*outputFace + facelet].setColor(ColorConverter.BLUE);
 				if (randomCube.charAt(9*inputFace + facelet) == 'B')
-					squares[9*outputFace + facelet].setColor(SquareColor.RED);
+					squares[9*outputFace + facelet].setColor(ColorConverter.RED);
 				if (randomCube.charAt(9*inputFace + facelet) == 'L')
-					squares[9*outputFace + facelet].setColor(SquareColor.GREEN);
+					squares[9*outputFace + facelet].setColor(ColorConverter.GREEN);
 				if (randomCube.charAt(9*inputFace + facelet) == 'D')
-					squares[9*outputFace + facelet].setColor(SquareColor.WHITE);
+					squares[9*outputFace + facelet].setColor(ColorConverter.WHITE);
 				if (randomCube.charAt(9*inputFace + facelet) == 'U')
-					squares[9*outputFace + facelet].setColor(SquareColor.YELLOW);
+					squares[9*outputFace + facelet].setColor(ColorConverter.YELLOW);
 			}
 		}
 		cube.setSquares(squares);
