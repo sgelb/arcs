@@ -1,4 +1,4 @@
-package com.github.sgelb.arcs;
+package com.github.sgelb.arcs.input;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,6 +16,10 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.view.MotionEvent;
+
+import com.github.sgelb.arcs.R;
+import com.github.sgelb.arcs.cube.ColorConverter;
+import com.github.sgelb.arcs.cube.Rotator;
 
 public class ManualFaceInputMethod extends Observable implements FaceInputMethod {
 

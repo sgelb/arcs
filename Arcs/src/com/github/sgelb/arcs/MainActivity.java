@@ -15,6 +15,13 @@ import org.opencv.core.Mat;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 
+import com.github.sgelb.arcs.cube.ColorConverter;
+import com.github.sgelb.arcs.cube.Facelet;
+import com.github.sgelb.arcs.cube.Rotator;
+import com.github.sgelb.arcs.cube.RubiksCube;
+import com.github.sgelb.arcs.input.FaceInputMethod;
+import com.github.sgelb.arcs.input.ManualFaceInputMethod;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;

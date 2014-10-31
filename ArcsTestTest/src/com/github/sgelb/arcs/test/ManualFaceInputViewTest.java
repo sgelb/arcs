@@ -7,7 +7,7 @@ import org.opencv.core.Rect;
 
 import android.test.ActivityTestCase;
 
-import com.github.sgelb.arcs.ManualFaceInputMethod;
+import com.github.sgelb.arcs.input.ManualFaceInputMethod;
 
 public class ManualFaceInputViewTest extends ActivityTestCase {
 

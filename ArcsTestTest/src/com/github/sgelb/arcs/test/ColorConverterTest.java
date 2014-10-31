@@ -1,6 +1,6 @@
 package com.github.sgelb.arcs.test;
 
-import com.github.sgelb.arcs.ColorConverter;
+import com.github.sgelb.arcs.cube.ColorConverter;
 
 import android.test.ActivityTestCase;
 

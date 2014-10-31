@@ -1,6 +1,7 @@
-package com.github.sgelb.arcs;
+package com.github.sgelb.arcs.cube;
 
 import java.util.ArrayList;
+
 
 public class Rotator {
 	

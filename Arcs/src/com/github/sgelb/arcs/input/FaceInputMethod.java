@@ -1,4 +1,4 @@
-package com.github.sgelb.arcs;
+package com.github.sgelb.arcs.input;
 
 import java.util.ArrayList;
 

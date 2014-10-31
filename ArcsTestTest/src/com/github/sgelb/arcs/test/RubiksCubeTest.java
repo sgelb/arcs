@@ -4,11 +4,11 @@ import java.util.Arrays;
 
 import junit.framework.TestCase;
 
-import com.github.sgelb.arcs.Rotator;
-import com.github.sgelb.arcs.RubiksCube;
-import com.github.sgelb.arcs.Facelet;
-import com.github.sgelb.arcs.ColorConverter;
-import com.github.sgelb.arcs.SquareLocation;
+import com.github.sgelb.arcs.cube.ColorConverter;
+import com.github.sgelb.arcs.cube.Facelet;
+import com.github.sgelb.arcs.cube.Rotator;
+import com.github.sgelb.arcs.cube.RubiksCube;
+import com.github.sgelb.arcs.cube.SquareLocation;
 
 
 public class RubiksCubeTest  extends TestCase {

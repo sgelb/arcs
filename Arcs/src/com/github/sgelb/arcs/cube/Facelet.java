@@ -1,4 +1,5 @@
-package com.github.sgelb.arcs;
+package com.github.sgelb.arcs.cube;
+
 
 public class Facelet {
 	
