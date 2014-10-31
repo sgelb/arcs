@@ -80,6 +80,20 @@ public class RubiksCube {
 		}
 		return face;
 	}
+
+	public int[] getFaceletColors() {
+		int[] colors = new int[54];
+		for (int i=0; i<squares.length; i++) {
+			colors[i] = squares[i].getColor();
+		}
+		return colors;
+	}
+
+	public void setFaceletColors(int[] colors) {
+		for (int i=0; i<colors.length; i++) {
+			squares[i].setColor(colors[i]);
+		}
+	}
 	
 	public void setFaceColor(int facename, ArrayList<Integer> face) {
 		for(int i = 0; i < 9; i++) {

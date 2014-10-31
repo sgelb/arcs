@@ -40,6 +40,7 @@ import cs.min2phase.Tools;
 public class MainActivity extends Activity implements CvCameraViewListener2, Observer {
 
 	private static final String TAG = "ARCS::MainActivity";
+	private static final String STATE_SQUARES = "cubeSquares";
 
 	private static final Scalar BGCOLOR = new Scalar(70, 70, 70);
 
@@ -85,18 +86,31 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 	public static Context getContext() {
 		return MainActivity.context;
 	}
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+	    // Save the current cube state
+	    savedInstanceState.putIntArray(STATE_SQUARES, cube.getFaceletColors());
+	    super.onSaveInstanceState(savedInstanceState);
+	}
 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		Log.i(TAG, "called onCreate");
 		super.onCreate(savedInstanceState);
+
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
 		MainActivity.context = getApplicationContext();
 		setContentView(R.layout.main_activity);
 
 		cube = new RubiksCube();
+		// Check whether we're recreating a previously destroyed instance
+		if (savedInstanceState != null) {
+			Log.d(TAG, "Restored state");
+			// Restore cube from saved state
+			int[] colors = savedInstanceState.getIntArray(STATE_SQUARES);
+			cube.setFaceletColors(colors);
+		}
 		currentFace = Rotation.FRONT;
 		
 		instructionTitle = (TextView) findViewById(R.id.instructionTitleText);
