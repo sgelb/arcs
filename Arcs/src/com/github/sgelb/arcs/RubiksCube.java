@@ -8,12 +8,12 @@ public class RubiksCube {
 	
 	private static final String TAG = "ARCS::RubiksCube";
 
-	private Rotation rotator;
+	private Rotator rotator;
 	private CubeUpdater updater;
 	private Square[] squares;
 	
 	public RubiksCube() {
-		this.rotator = new Rotation();
+		this.rotator = new Rotator();
 		this.updater = new CubeUpdater();
 		this.squares = rotator.getSquares();
 	}
@@ -133,22 +133,22 @@ public class RubiksCube {
 		StringBuilder singmaster = new StringBuilder();
 		
 		// URFDLB
-		for (Square square: getFace(Rotation.UP)) {
+		for (Square square: getFace(Rotator.UP)) {
 			singmaster.append(SquareColor.getSingmasterString(square.getColor()));
 		}
-		for (Square square: getFace(Rotation.RIGHT)) {
+		for (Square square: getFace(Rotator.RIGHT)) {
 			singmaster.append(SquareColor.getSingmasterString(square.getColor()));
 		}
-		for (Square square: getFace(Rotation.FRONT)) {
+		for (Square square: getFace(Rotator.FRONT)) {
 			singmaster.append(SquareColor.getSingmasterString(square.getColor()));
 		}
-		for (Square square: getFace(Rotation.DOWN)) {
+		for (Square square: getFace(Rotator.DOWN)) {
 			singmaster.append(SquareColor.getSingmasterString(square.getColor()));
 		}
-		for (Square square: getFace(Rotation.LEFT)) {
+		for (Square square: getFace(Rotator.LEFT)) {
 			singmaster.append(SquareColor.getSingmasterString(square.getColor()));
 		}
-		for (Square square: getFace(Rotation.BACK)) {
+		for (Square square: getFace(Rotator.BACK)) {
 			singmaster.append(SquareColor.getSingmasterString(square.getColor()));
 		}
 		Log.d(TAG, "CUBE: " + singmaster);

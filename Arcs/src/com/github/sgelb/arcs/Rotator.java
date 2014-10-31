@@ -2,7 +2,7 @@ package com.github.sgelb.arcs;
 
 import java.util.ArrayList;
 
-public class Rotation {
+public class Rotator {
 	
 	/* This is an implementation of a cube using vectors
 	 * to represent the positions of the 54 squares.
@@ -14,7 +14,7 @@ public class Rotation {
 	*/
 	
 	@SuppressWarnings("unused")
-	private static final String TAG = "ARCS::Rotation";
+	private static final String TAG = "ARCS::Rotator";
 	
 	// define static face names
 	public final static int FRONT = 0; // squares[0-8]
@@ -35,7 +35,7 @@ public class Rotation {
 	private ArrayList<Square> selectedSquares;
 	
 
-	public Rotation() {
+	public Rotator() {
 		this.squares = new Square[54];
 		initCube();
 	}

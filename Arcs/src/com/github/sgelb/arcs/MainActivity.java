@@ -111,7 +111,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 			int[] colors = savedInstanceState.getIntArray(STATE_SQUARES);
 			cube.setFaceletColors(colors);
 		}
-		currentFace = Rotation.FRONT;
+		currentFace = Rotator.FRONT;
 		
 		instructionTitle = (TextView) findViewById(R.id.instructionTitleText);
 		instructionTitle.setText(faceInputMethod.getInstructionTitle(0));
@@ -251,7 +251,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 
 	private void resetFaceView() {
 		// reset after creating random cube or cleared cube
-		currentFace = Rotation.FRONT;
+		currentFace = Rotator.FRONT;
 		faceInputMethod.changeFace(currentFace, cube.getFaceColor(currentFace));
 		instructionTitle.setText(faceInputMethod.getInstructionTitle(currentFace));
 		instructionContent.setText(faceInputMethod.getInstructionText(currentFace));

@@ -83,13 +83,13 @@ public class SquareColor {
 	}
 
 	public static String getStringForUpperFace(Integer facePosition) {
-		String upperFaceColorString = getColorString(Rotation.UP);
+		String upperFaceColorString = getColorString(Rotator.UP);
 		if (facePosition < 4) {
-			upperFaceColorString = getColorString(Rotation.UP);
+			upperFaceColorString = getColorString(Rotator.UP);
 		} else if (facePosition == SquareColor.WHITE) {
-			upperFaceColorString = getColorString(Rotation.FRONT);
+			upperFaceColorString = getColorString(Rotator.FRONT);
 		} else if (facePosition == SquareColor.YELLOW) {
-			upperFaceColorString = getColorString(Rotation.BACK);
+			upperFaceColorString = getColorString(Rotator.BACK);
 		}
 		return upperFaceColorString;
 	}

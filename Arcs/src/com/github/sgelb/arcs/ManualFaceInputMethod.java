@@ -65,7 +65,7 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 		colorChoices.add(green);
 		colorChoices.add(white);
 		colorChoices.add(yellow);
-		currentFace = Rotation.FRONT;
+		currentFace = Rotator.FRONT;
 		if (face != null) {
 			this.face = face;
 		} else {
