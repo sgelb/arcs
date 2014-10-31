@@ -164,7 +164,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 	private void initializeRandomCube() {
 		String randomCube = Tools.randomCube();
 
-		Square[] squares = cube.getSquares();
+		Facelet[] squares = cube.getSquares();
 		
 		// set facelets
 		for (int inputFace = 0; inputFace < 6; inputFace++) {

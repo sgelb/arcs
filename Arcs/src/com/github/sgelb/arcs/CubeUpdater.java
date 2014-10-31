@@ -5,17 +5,17 @@ import java.util.Arrays;
 
 public class CubeUpdater {
 	
-	private Square[] squares;
+	private Facelet[] facelets;
 	
 	public CubeUpdater() {
 		// initialized to prevent null-pointer-exceptions.
-		squares = new Square[54];
+		facelets = new Facelet[54];
 	}
 	
-	public Square[] updateSquares(Square[] squares) {
-		this.squares = squares;
+	public Facelet[] updateSquares(Facelet[] squares) {
+		this.facelets = squares;
 		int position = 0;
-		Square[] updatedSquares = new Square[54];
+		Facelet[] updatedSquares = new Facelet[54];
 		
 		// Front face.
 		for(int y = 1; y > -2; y--) {
@@ -72,27 +72,27 @@ public class CubeUpdater {
 			}
 		}
 		
-		this.squares = updatedSquares;
-		return this.squares;
+		this.facelets = updatedSquares;
+		return this.facelets;
 	}
 	
 	
-	private Square getSquareAt(SquareLocation loc, SquareLocation dir) {
-		for(Square square : this.squares) {
-			int[] getLoc = square.getLocation().getLocation();
-			int[] getDir = square.getDirection().getLocation();
+	private Facelet getSquareAt(SquareLocation loc, SquareLocation dir) {
+		for(Facelet facelet : this.facelets) {
+			int[] getLoc = facelet.getLocation().getLocation();
+			int[] getDir = facelet.getDirection().getLocation();
 			
 			if(Arrays.equals(loc.getLocation(), getLoc)) {
 				if(Arrays.equals(dir.getLocation(), getDir)) {
-					return square;
+					return facelet;
 				}
 			}
 		}
 		return null;
 	}
 	
-	public Square[] getSquares() {
-		return this.squares;
+	public Facelet[] getSquares() {
+		return this.facelets;
 	}
 	
 }

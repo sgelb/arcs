@@ -10,12 +10,12 @@ public class RubiksCube {
 
 	private Rotator rotator;
 	private CubeUpdater updater;
-	private Square[] squares;
+	private Facelet[] facelets;
 	
 	public RubiksCube() {
 		this.rotator = new Rotator();
 		this.updater = new CubeUpdater();
-		this.squares = rotator.getSquares();
+		this.facelets = rotator.getSquares();
 	}
 	
 	public void rotateFront() {
@@ -49,22 +49,22 @@ public class RubiksCube {
 	}
 
 	public void update() {
-		squares = rotator.getSquares();
-		squares = updater.updateSquares(squares);
+		facelets = rotator.getSquares();
+		facelets = updater.updateSquares(facelets);
 	}
 	
-	public Square[] getSquares() {
-		return squares;
+	public Facelet[] getSquares() {
+		return facelets;
 	}
 	
-	public void setSquares(Square[] squares) {
-		this.squares = squares;
+	public void setSquares(Facelet[] squares) {
+		this.facelets = squares;
 	}
 	
-	public Square[] getFace(int facename) {
-		Square[] face = new Square[9];
+	public Facelet[] getFace(int facename) {
+		Facelet[] face = new Facelet[9];
 		for (int i=0; i<9; i++) {
-			face[i] = squares[9*facename + i];
+			face[i] = facelets[9*facename + i];
 		}
 		return face;
 	}
@@ -73,7 +73,7 @@ public class RubiksCube {
 		ArrayList<Integer> face = new ArrayList<>(9);
 		try {
 			for (int i=0; i<9; i++) {
-				face.add(squares[9*facename + i].getColor());
+				face.add(facelets[9*facename + i].getColor());
 			}
 		} catch (IndexOutOfBoundsException e) {
 			face = null;
@@ -83,27 +83,27 @@ public class RubiksCube {
 
 	public int[] getFaceletColors() {
 		int[] colors = new int[54];
-		for (int i=0; i<squares.length; i++) {
-			colors[i] = squares[i].getColor();
+		for (int i=0; i<facelets.length; i++) {
+			colors[i] = facelets[i].getColor();
 		}
 		return colors;
 	}
 
 	public void setFaceletColors(int[] colors) {
 		for (int i=0; i<colors.length; i++) {
-			squares[i].setColor(colors[i]);
+			facelets[i].setColor(colors[i]);
 		}
 	}
 	
 	public void setFaceColor(int facename, ArrayList<Integer> face) {
 		for(int i = 0; i < 9; i++) {
-			squares[9*facename + i].setColor(face.get(i));
+			facelets[9*facename + i].setColor(face.get(i));
 		}
 	}
 	
 	public boolean hasUnsetSquares() {
-		for (Square square : squares) {
-			if (square.getColor() == SquareColor.UNSET_COLOR) {
+		for (Facelet facelet : facelets) {
+			if (facelet.getColor() == SquareColor.UNSET_COLOR) {
 				return true;
 			}
 		}
@@ -115,8 +115,8 @@ public class RubiksCube {
 	@Override
 	public String toString() {
 		String string = "";
-		for(int i = 0; i < squares.length; i += 3) {
-			string += squares[i].getColor() + " " + squares[i + 1].getColor() + " " + squares[i + 2].getColor() + "\n";
+		for(int i = 0; i < facelets.length; i += 3) {
+			string += facelets[i].getColor() + " " + facelets[i + 1].getColor() + " " + facelets[i + 2].getColor() + "\n";
 		}
 		return string;
 	}
@@ -124,7 +124,7 @@ public class RubiksCube {
 	public String getPositions() {
 		String string = "";
 		for(int i = 0; i < 9; i++) {
-			string += "Color: " + squares[i].getColor() + ", " + squares[i].getLocation().toString();
+			string += "Color: " + facelets[i].getColor() + ", " + facelets[i].getLocation().toString();
 		}
 		return string;
 	}
@@ -133,23 +133,23 @@ public class RubiksCube {
 		StringBuilder singmaster = new StringBuilder();
 		
 		// URFDLB
-		for (Square square: getFace(Rotator.UP)) {
-			singmaster.append(SquareColor.getSingmasterString(square.getColor()));
+		for (Facelet facelet: getFace(Rotator.UP)) {
+			singmaster.append(SquareColor.getSingmasterString(facelet.getColor()));
 		}
-		for (Square square: getFace(Rotator.RIGHT)) {
-			singmaster.append(SquareColor.getSingmasterString(square.getColor()));
+		for (Facelet facelet: getFace(Rotator.RIGHT)) {
+			singmaster.append(SquareColor.getSingmasterString(facelet.getColor()));
 		}
-		for (Square square: getFace(Rotator.FRONT)) {
-			singmaster.append(SquareColor.getSingmasterString(square.getColor()));
+		for (Facelet facelet: getFace(Rotator.FRONT)) {
+			singmaster.append(SquareColor.getSingmasterString(facelet.getColor()));
 		}
-		for (Square square: getFace(Rotator.DOWN)) {
-			singmaster.append(SquareColor.getSingmasterString(square.getColor()));
+		for (Facelet facelet: getFace(Rotator.DOWN)) {
+			singmaster.append(SquareColor.getSingmasterString(facelet.getColor()));
 		}
-		for (Square square: getFace(Rotator.LEFT)) {
-			singmaster.append(SquareColor.getSingmasterString(square.getColor()));
+		for (Facelet facelet: getFace(Rotator.LEFT)) {
+			singmaster.append(SquareColor.getSingmasterString(facelet.getColor()));
 		}
-		for (Square square: getFace(Rotator.BACK)) {
-			singmaster.append(SquareColor.getSingmasterString(square.getColor()));
+		for (Facelet facelet: getFace(Rotator.BACK)) {
+			singmaster.append(SquareColor.getSingmasterString(facelet.getColor()));
 		}
 		Log.d(TAG, "CUBE: " + singmaster);
 		return singmaster.toString();

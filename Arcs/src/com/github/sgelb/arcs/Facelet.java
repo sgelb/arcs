@@ -1,27 +1,18 @@
 package com.github.sgelb.arcs;
 
-public class Square {
+public class Facelet {
 	
-	/* A square represents one rectangle on the Cube.
-	 */
-	
-	// The square color represented
+	// The facelet color
 	private int color;
 	
-	/* Position of the square is saved in an object that functions as a vector
-	 * containing information about the x, y and y-coordinates.
-	 */
-	
+	// Position of the facelet is saved in an object that functions as a vector
+	// containing information about the x, y and y-coordinates.
 	private SquareLocation location;
 	
-	/* direction holds the information on which face it is located.
-	 * Only one of the x, y or z coordinates has a value that is non-zero.
-	 * If, for example, the z value is 1, the square is located at the front
-	 * face.
-	 */
+	// the non-zero value of x,y or z of direction points to the face this facelet is located on
 	private SquareLocation direction;
 	
-	public Square(SquareLocation location, SquareLocation direction, int color) {
+	public Facelet(SquareLocation location, SquareLocation direction, int color) {
 		this.location = location;
 		this.direction = direction;
 		this.color = color;
