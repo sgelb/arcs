@@ -416,10 +416,15 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 				result = "Timeout, no solution found within given maximum time!";
 				break;
 			}
+			Toast.makeText(this, result, Toast.LENGTH_LONG).show();
+			return;
 		} else if (result.isEmpty()) {
 			result = "This cube is already solved!";
+			Toast.makeText(this, result, Toast.LENGTH_LONG).show();
+			return;
 		}
-		Toast.makeText(this, result, Toast.LENGTH_LONG).show();
+		instructionTitle.setText(getString(R.string.solution));
+		instructionContent.setText(result);
 	}
 
 

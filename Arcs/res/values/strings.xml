@@ -7,6 +7,7 @@
     <string name="create_random_cube">Create randomized cube</string>
     <string name="clear_cube">Clear cube</string>
     <string name="about">About A.R.C.S</string>
+    <string name="solution">Solution</string>
     <string name="instructionTitle">Set colors on %1$s face</string>
     <string name="manualInstructionContent">Twist the cube with the %1$s colored middle piece 
         facing you and the %2$s colored middle piece pointing up.\n\nEnter the corresponding colors.</string>
