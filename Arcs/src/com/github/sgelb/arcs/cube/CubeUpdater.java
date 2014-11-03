@@ -21,8 +21,8 @@ public class CubeUpdater {
 		// Front face.
 		for(int y = 1; y > -2; y--) {
 			for(int x = -1; x < 2; x++) {
-				updatedSquares[position] = getSquareAt(new SquareLocation(x, y, 1),
-						new SquareLocation(0, 0, 1));
+				updatedSquares[position] = getSquareAt(new FaceletLocation(x, y, 1),
+						new FaceletLocation(0, 0, 1));
 				position++;
 			}
 		}
@@ -30,8 +30,8 @@ public class CubeUpdater {
 		// Right face.
 		for(int y = 1; y > -2; y--) {
 			for(int z = 1; z > -2; z--) {
-				updatedSquares[position] = getSquareAt(new SquareLocation(1, y, z),
-						new SquareLocation(1, 0, 0));
+				updatedSquares[position] = getSquareAt(new FaceletLocation(1, y, z),
+						new FaceletLocation(1, 0, 0));
 				position++;
 			}
 		}
@@ -39,8 +39,8 @@ public class CubeUpdater {
 		// Back face.
 		for(int y = 1; y > -2; y--) {
 			for(int x = 1; x > -2; x--) {
-				updatedSquares[position] = getSquareAt(new SquareLocation(x, y, -1),
-						new SquareLocation(0, 0, -1));
+				updatedSquares[position] = getSquareAt(new FaceletLocation(x, y, -1),
+						new FaceletLocation(0, 0, -1));
 				position++;
 			}
 		}
@@ -48,8 +48,8 @@ public class CubeUpdater {
 		// Left face.
 		for(int y = 1; y > -2; y--) {
 			for(int z = -1; z < 2; z++) {
-				updatedSquares[position] = getSquareAt(new SquareLocation(-1, y, z),
-						new SquareLocation(-1, 0, 0));
+				updatedSquares[position] = getSquareAt(new FaceletLocation(-1, y, z),
+						new FaceletLocation(-1, 0, 0));
 				position++;
 			}
 		}
@@ -58,8 +58,8 @@ public class CubeUpdater {
 		// Down face.
 		for(int z = 1; z > -2; z--) {
 			for(int x = -1; x < 2; x++) {
-				updatedSquares[position] = getSquareAt(new SquareLocation(x, -1, z),
-						new SquareLocation(0, -1, 0));
+				updatedSquares[position] = getSquareAt(new FaceletLocation(x, -1, z),
+						new FaceletLocation(0, -1, 0));
 				position++;
 			}
 		}
@@ -67,8 +67,8 @@ public class CubeUpdater {
 		// Up face.
 		for(int z = -1; z < 2; z++) {
 			for(int x = -1; x < 2; x++) {
-				updatedSquares[position] = getSquareAt(new SquareLocation(x, 1, z),
-						new SquareLocation(0, 1, 0));
+				updatedSquares[position] = getSquareAt(new FaceletLocation(x, 1, z),
+						new FaceletLocation(0, 1, 0));
 				position++;
 			}
 		}
@@ -78,7 +78,7 @@ public class CubeUpdater {
 	}
 	
 	
-	private Facelet getSquareAt(SquareLocation loc, SquareLocation dir) {
+	private Facelet getSquareAt(FaceletLocation loc, FaceletLocation dir) {
 		for(Facelet facelet : this.facelets) {
 			int[] getLoc = facelet.getLocation().getLocation();
 			int[] getDir = facelet.getDirection().getLocation();

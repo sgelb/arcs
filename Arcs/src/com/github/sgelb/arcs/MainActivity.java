@@ -15,13 +15,6 @@ import org.opencv.core.Mat;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 
-import com.github.sgelb.arcs.cube.ColorConverter;
-import com.github.sgelb.arcs.cube.Facelet;
-import com.github.sgelb.arcs.cube.Rotator;
-import com.github.sgelb.arcs.cube.RubiksCube;
-import com.github.sgelb.arcs.input.FaceInputMethod;
-import com.github.sgelb.arcs.input.ManualFaceInputMethod;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -41,8 +34,13 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.github.sgelb.arcs.cube.Rotator;
+import com.github.sgelb.arcs.cube.RubiksCube;
+import com.github.sgelb.arcs.input.FaceInputMethod;
+import com.github.sgelb.arcs.input.ManualFaceInputMethod;
+
 import cs.min2phase.Search;
-import cs.min2phase.Tools;
 
 public class MainActivity extends Activity implements CvCameraViewListener2, Observer {
 
@@ -63,41 +61,14 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 	private TextView instructionTitle;
 	private ImageButton forwardBtn;
 	private ImageButton backBtn;
-	
+
 	private RubiksCube cube;
 	private Integer currentFace;
 	private CubeSolver cubeSolver;
 
-	private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
-		@Override
-		public void onManagerConnected(int status) {
-			switch (status) {
-			case LoaderCallbackInterface.SUCCESS:
-			{
-				Log.i(TAG, "OpenCV loaded successfully");
-				mOpenCvCameraView.enableView();
-			} break;
-			default:
-			{
-				super.onManagerConnected(status);
-			} break;
-			}
-		}
-	};
-
 	public MainActivity() {
 		Log.i(TAG, "Instantiated new " + this.getClass());
-		this.faceInputMethod = new ManualFaceInputMethod(this);
-	}
-
-	public static Context getContext() {
-		return MainActivity.context;
-	}
-	@Override
-	public void onSaveInstanceState(Bundle savedInstanceState) {
-	    // Save the current cube state
-	    savedInstanceState.putIntArray(STATE_SQUARES, cube.getFaceletColors());
-	    super.onSaveInstanceState(savedInstanceState);
+		faceInputMethod = new ManualFaceInputMethod(this);
 	}
 
 	/** Called when the activity is first created. */
@@ -119,13 +90,13 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 			cube.setFaceletColors(colors);
 		}
 		currentFace = Rotator.FRONT;
-		
+
 		instructionTitle = (TextView) findViewById(R.id.instructionTitleText);
 		instructionTitle.setText(faceInputMethod.getInstructionTitle(0));
-		
+
 		instructionContent = (TextView) findViewById(R.id.instructionContentText);
 		instructionContent.setText(faceInputMethod.getInstructionText(0));
-		
+
 		forwardBtn = (ImageButton) findViewById(R.id.forwardBtn);
 		disableButton(forwardBtn);
 		forwardBtn.setOnClickListener(new View.OnClickListener() {
@@ -138,7 +109,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 				}
 			}
 		});
-		
+
 		backBtn = (ImageButton) findViewById(R.id.backBtn);
 		disableButton(backBtn);
 		backBtn.setOnClickListener(new View.OnClickListener() {
@@ -150,7 +121,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 
 		prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		setCubeInputMethod();
-		
+
 		mOpenCvCameraView = (CameraBridgeViewBase) findViewById(R.id.java_camera_view);
 		mOpenCvCameraView.setVisibility(SurfaceView.VISIBLE);
 		// Use front camera
@@ -158,50 +129,20 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 		mOpenCvCameraView.setCvCameraViewListener(this);
 	}
 
-	private int convertFacePosition(int inputPosition) {
-		if (inputPosition == 0) return 5;
-		if (inputPosition == 1) return 1;
-		if (inputPosition == 2) return 0;
-		if (inputPosition == 3) return 4;
-		if (inputPosition == 4) return 3;
-		if (inputPosition == 5) return 2;
-		return -1;
-	}
-	
-	private void initializeRandomCube() {
-		String randomCube = Tools.randomCube();
-
-		Facelet[] squares = cube.getSquares();
-		
-		// set facelets
-		for (int inputFace = 0; inputFace < 6; inputFace++) {
-			// read the 54 facelets from randomCube and repostion them according our face order
-			//URFDLB -> FRBLDU
-			int outputFace = convertFacePosition(inputFace); 
-			for (int facelet = 0; facelet < 9; facelet++) {
-				if (randomCube.charAt(9*inputFace + facelet) == 'F')
-					squares[9*outputFace + facelet].setColor(ColorConverter.ORANGE);
-				if (randomCube.charAt(9*inputFace + facelet) == 'R')
-					squares[9*outputFace + facelet].setColor(ColorConverter.BLUE);
-				if (randomCube.charAt(9*inputFace + facelet) == 'B')
-					squares[9*outputFace + facelet].setColor(ColorConverter.RED);
-				if (randomCube.charAt(9*inputFace + facelet) == 'L')
-					squares[9*outputFace + facelet].setColor(ColorConverter.GREEN);
-				if (randomCube.charAt(9*inputFace + facelet) == 'D')
-					squares[9*outputFace + facelet].setColor(ColorConverter.WHITE);
-				if (randomCube.charAt(9*inputFace + facelet) == 'U')
-					squares[9*outputFace + facelet].setColor(ColorConverter.YELLOW);
-			}
-		}
-		cube.setSquares(squares);
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+		// Save the current cube state
+		savedInstanceState.putIntArray(STATE_SQUARES, cube.getFaceletColors());
+		super.onSaveInstanceState(savedInstanceState);
 	}
 
 	@Override
 	public void onPause()
 	{
 		super.onPause();
-		if (mOpenCvCameraView != null)
+		if (mOpenCvCameraView != null) {
 			mOpenCvCameraView.disableView();
+		}
 		if (cubeSolver != null && !cubeSolver.isCancelled()) {
 			cubeSolver.cancel(true);
 		}
@@ -211,15 +152,16 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 	public void onResume()
 	{
 		super.onResume();
-		OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_9, 
+		OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_9,
 				this, mLoaderCallback);
 	}
 
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		if (mOpenCvCameraView != null)
+		if (mOpenCvCameraView != null) {
 			mOpenCvCameraView.disableView();
+		}
 		if (cubeSolver != null && !cubeSolver.isCancelled()) {
 			cubeSolver.cancel(true);
 		}
@@ -240,11 +182,11 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 		// as you specify a parent activity in AndroidManifest.xml.
 		switch (item.getItemId()) {
 		case R.id.create_random_cube:
-			initializeRandomCube();
+			cube.randomize();
 			resetFaceView();
 			return true;
 		case R.id.clear_cube:
-			cube = new RubiksCube();
+			cube.clear();
 			resetFaceView();
 			return true;
 		case R.id.about:
@@ -255,6 +197,73 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 			return super.onOptionsItemSelected(item);
 		}
 	}
+
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		return faceInputMethod.onTouchEvent(event);
+	}
+
+	public static Context getContext() {
+		return MainActivity.context;
+	}
+
+	private void setCubeInputMethod() {
+		switch (prefs.getString("cube_input_method", "manual")) {
+		case "manual":
+			faceInputMethod = new ManualFaceInputMethod(this);
+			break;
+		default:
+			faceInputMethod = new ManualFaceInputMethod(this);
+		}
+	}
+
+	@Override
+	public void onCameraViewStarted(int width, int height) {
+		this.width = width;
+		this.height = height;
+		faceInputMethod.init(width, height, cube.getFaceColor(currentFace));
+		positionViews();
+	}
+
+	@Override
+	public void onCameraViewStopped() {
+	}
+
+	@Override
+	public Mat onCameraFrame(CvCameraViewFrame inputFrame) {
+		frame = inputFrame.rgba();
+
+		faceInputMethod.drawOverlay(frame);
+		drawViewBackground();
+
+		// Flip frame to revert mirrored front camera image
+		Core.flip(frame, frame, 1);
+		return frame;
+	}
+
+	private void drawViewBackground() {
+		// draw solid rect as background for text/button on right side of layout
+		Core.rectangle(frame, new Point(width - faceInputMethod.getXOffset() + faceInputMethod.getPadding()/2, 0),
+				new Point(0, height), BGCOLOR, -1);
+	}
+
+	private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
+		@Override
+		public void onManagerConnected(int status) {
+			switch (status) {
+			case LoaderCallbackInterface.SUCCESS:
+			{
+				Log.i(TAG, "OpenCV loaded successfully");
+				mOpenCvCameraView.enableView();
+			} break;
+			default:
+			{
+				super.onManagerConnected(status);
+			} break;
+			}
+		}
+	};
+
 
 	private void resetFaceView() {
 		// reset after creating random cube or cleared cube
@@ -269,39 +278,6 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 			enableButton(forwardBtn);
 		}
 		disableButton(backBtn);
-		
-	}
-
-	public void onCameraViewStarted(int width, int height) {
-		this.width = width;
-		this.height = height;
-		faceInputMethod.init(width, height, cube.getFaceColor(currentFace));
-		positionViews();
-	}
-
-	public void onCameraViewStopped() {
-	}
-
-	public Mat onCameraFrame(CvCameraViewFrame inputFrame) {
-		frame = inputFrame.rgba();
-
-		faceInputMethod.drawOverlay(frame);
-		drawViewBackground();
-
-		// Flip frame to revert mirrored front camera image
-		Core.flip(frame, frame, 1);
-		return frame;
-	}
-
-	@Override
-	public boolean onTouchEvent(MotionEvent event) {
-		return faceInputMethod.onTouchEvent(event);
-	}
-
-	private void drawViewBackground() {
-		// draw solid rect as background for text/button on right side of layout 
-		Core.rectangle(frame, new Point(width - faceInputMethod.getXOffset() + faceInputMethod.getPadding()/2, 0), 
-				new Point(0, height), BGCOLOR, -1);
 	}
 
 	private void positionViews() {
@@ -315,16 +291,6 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 		instructionContent.setMaxWidth(width - padding - xOffset);
 		instructionContent.setMinWidth(width - padding - xOffset);
 	}
-	
-	private void setCubeInputMethod() {
-		switch (prefs.getString("cube_input_method", "manual")) {
-		case "manual":			
-			this.faceInputMethod = new ManualFaceInputMethod(this);
-			break;
-		default:
-			this.faceInputMethod = new ManualFaceInputMethod(this);
-		}
-	}
 
 	private void forwardFaceAction() {
 		currentFace++;
@@ -333,13 +299,13 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 		ArrayList<Integer> face = cube.getFaceColor(currentFace);
 		faceInputMethod.changeFace(currentFace, face);
 		enableButton(backBtn);
-		
+
 		if (face == null || faceInputMethod.currentFaceHasUnsetSquares()) {
 			disableButton(forwardBtn);
 		} else {
 			enableButton(forwardBtn);
 		}
-		
+
 		if (currentFace == 5) {
 			forwardBtn.setImageResource(R.drawable.ic_launcher);
 			if (cube.hasUnsetSquares()) {
@@ -347,7 +313,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 				}
 		}
 	}
-	
+
 	private void previousFaceAction() {
 		currentFace--;
 		instructionTitle.setText(faceInputMethod.getInstructionTitle(currentFace));
@@ -359,13 +325,13 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 			disableButton(backBtn);
 		}
 	}
-	
+
 	private void solveCubeAction() {
 		// Solve
 		cubeSolver= new CubeSolver();
 		cubeSolver.execute(cube.getSingmasterNotation());
 	}
-	
+
 	@Override
 	public void update(Observable observable, Object data) {
 		if (observable instanceof ManualFaceInputMethod) {
@@ -389,14 +355,14 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 	private void disableButton(ImageButton button) {
 		button.setEnabled(false);
 		button.setImageAlpha(100);
-		
+
 	}
-	
+
 	private void enableButton(ImageButton button) {
 		button.setEnabled(true);
 		button.setImageAlpha(255);
 	}
-	
+
 	private class CubeSolver extends AsyncTask<String, Integer, String> {
 		long startTime;
 
@@ -455,6 +421,6 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 		}
 		Toast.makeText(this, result, Toast.LENGTH_LONG).show();
 	}
-		
-	
+
+
 }

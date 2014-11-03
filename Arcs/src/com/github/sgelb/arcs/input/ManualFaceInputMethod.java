@@ -50,7 +50,6 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 
     private Integer currentFace;
 
-
 	public ManualFaceInputMethod(Context mContext) {
 		this.mContext = mContext;
 		this.rectangles = new ArrayList<Rect>(9);
@@ -199,7 +198,6 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 		
 		return tmpRect;
 	}
-
 	
 	private void showColorChooserDialog(final int position) {
 		// show dialog to choose color of rectangle at position

@@ -8,12 +8,12 @@ public class Facelet {
 	
 	// Position of the facelet is saved in an object that functions as a vector
 	// containing information about the x, y and y-coordinates.
-	private SquareLocation location;
+	private FaceletLocation location;
 	
 	// the non-zero value of x,y or z of direction points to the face this facelet is located on
-	private SquareLocation direction;
+	private FaceletLocation direction;
 	
-	public Facelet(SquareLocation location, SquareLocation direction, int color) {
+	public Facelet(FaceletLocation location, FaceletLocation direction, int color) {
 		this.location = location;
 		this.direction = direction;
 		this.color = color;
@@ -32,7 +32,7 @@ public class Facelet {
 		return location.getLocationZ();
 	}
 	
-	public SquareLocation getLocation() {
+	public FaceletLocation getLocation() {
 		return location;
 	}
 	
@@ -56,7 +56,7 @@ public class Facelet {
 		return direction.getLocation();
 	}
 	
-	public SquareLocation getDirection() {
+	public FaceletLocation getDirection() {
 		return direction;
 	}
 	
@@ -64,11 +64,11 @@ public class Facelet {
 		return color;
 	}
 	
-	public void setLocation(SquareLocation newLocation) {
+	public void setLocation(FaceletLocation newLocation) {
 		this.location = newLocation;
 	}
 	
-	public void setDirection(SquareLocation newDirection) {
+	public void setDirection(FaceletLocation newDirection) {
 		this.direction = newDirection;
 	}
 	

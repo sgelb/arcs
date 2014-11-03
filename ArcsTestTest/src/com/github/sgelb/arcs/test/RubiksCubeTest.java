@@ -8,16 +8,16 @@ import com.github.sgelb.arcs.cube.ColorConverter;
 import com.github.sgelb.arcs.cube.Facelet;
 import com.github.sgelb.arcs.cube.Rotator;
 import com.github.sgelb.arcs.cube.RubiksCube;
-import com.github.sgelb.arcs.cube.SquareLocation;
+import com.github.sgelb.arcs.cube.FaceletLocation;
 
 
 public class RubiksCubeTest  extends TestCase {
 	
 	private RubiksCube cube;
 	
-	private SquareLocation locationA;
-	private SquareLocation locationB;
-	private SquareLocation locationC;
+	private FaceletLocation locationA;
+	private FaceletLocation locationB;
+	private FaceletLocation locationC;
 	
 	public RubiksCubeTest() {
 		cube = new RubiksCube();
@@ -25,9 +25,9 @@ public class RubiksCubeTest  extends TestCase {
 	
 	public void testShouldRotateFront() {
 		// First/Upper row on front side
-		locationA = new SquareLocation(-1, 1, 1);
-		locationB = new SquareLocation(0, 1, 1);
-		locationC = new SquareLocation(1, 1, 1);
+		locationA = new FaceletLocation(-1, 1, 1);
+		locationB = new FaceletLocation(0, 1, 1);
+		locationC = new FaceletLocation(1, 1, 1);
 		cube.rotateFront();
 		assertTrue(Arrays.equals(locationA.getLocation(), cube.getSquares()[0].getLocationsAsArray()));
 		assertTrue(Arrays.equals(locationB.getLocation(), cube.getSquares()[1].getLocationsAsArray()));
@@ -36,9 +36,9 @@ public class RubiksCubeTest  extends TestCase {
 	
 	public void testShouldRotateRight() {
 		// First/Upper row on right face
-		locationA = new SquareLocation(1, 1, 1);
-		locationB = new SquareLocation(1, 1, 0);
-		locationC = new SquareLocation(1, 1, -1);
+		locationA = new FaceletLocation(1, 1, 1);
+		locationB = new FaceletLocation(1, 1, 0);
+		locationC = new FaceletLocation(1, 1, -1);
 		cube.rotateRight();
 		assertTrue(Arrays.equals(locationA.getLocation(), cube.getSquares()[9].getLocationsAsArray()));
 		assertTrue(Arrays.equals(locationB.getLocation(), cube.getSquares()[10].getLocationsAsArray()));
@@ -48,9 +48,9 @@ public class RubiksCubeTest  extends TestCase {
 
 	public void testShouldRotateBack() {
 		// Right col on back side
-		locationA = new SquareLocation(1, 1, -1);
-		locationB = new SquareLocation(1, 0, -1);
-		locationC = new SquareLocation(1, -1, -1);
+		locationA = new FaceletLocation(1, 1, -1);
+		locationB = new FaceletLocation(1, 0, -1);
+		locationC = new FaceletLocation(1, -1, -1);
 		cube.rotateBack();
 		assertTrue(Arrays.equals(locationA.getLocation(), cube.getSquares()[18].getLocationsAsArray()));
 		assertTrue(Arrays.equals(locationB.getLocation(), cube.getSquares()[21].getLocationsAsArray()));
@@ -60,9 +60,9 @@ public class RubiksCubeTest  extends TestCase {
 	
 	public void testShouldRotateLeft() {
 		// First/Upper row on left face
-		locationA = new SquareLocation(-1, 1, -1);
-		locationB = new SquareLocation(-1, 1, 0);
-		locationC = new SquareLocation(-1, 1, 1);
+		locationA = new FaceletLocation(-1, 1, -1);
+		locationB = new FaceletLocation(-1, 1, 0);
+		locationC = new FaceletLocation(-1, 1, 1);
 		cube.rotateLeft();
 		assertTrue(Arrays.equals(locationA.getLocation(), cube.getSquares()[27].getLocationsAsArray()));
 		assertTrue(Arrays.equals(locationB.getLocation(), cube.getSquares()[28].getLocationsAsArray()));
@@ -71,9 +71,9 @@ public class RubiksCubeTest  extends TestCase {
 	
 	public void testShouldRotateDown() {
 		// Right col on down side
-		locationA = new SquareLocation(1, -1, 1);
-		locationB = new SquareLocation(1, -1, 0);
-		locationC = new SquareLocation(1, -1, -1);
+		locationA = new FaceletLocation(1, -1, 1);
+		locationB = new FaceletLocation(1, -1, 0);
+		locationC = new FaceletLocation(1, -1, -1);
 		cube.rotateDown();
 		assertTrue(Arrays.equals(locationA.getLocation(), cube.getSquares()[38].getLocationsAsArray()));
 		assertTrue(Arrays.equals(locationB.getLocation(), cube.getSquares()[41].getLocationsAsArray()));
@@ -82,9 +82,9 @@ public class RubiksCubeTest  extends TestCase {
 	
 	public void testShouldRotateUp() {
 		// First col on upper side 
-		locationA = new SquareLocation(-1, 1, -1);
-		locationB = new SquareLocation(-1, 1, 0);
-		locationC = new SquareLocation(-1, 1, 1);
+		locationA = new FaceletLocation(-1, 1, -1);
+		locationB = new FaceletLocation(-1, 1, 0);
+		locationC = new FaceletLocation(-1, 1, 1);
 		cube.rotateUp();
 		assertTrue(Arrays.equals(locationA.getLocation(), cube.getSquares()[45].getLocationsAsArray()));
 		assertTrue(Arrays.equals(locationB.getLocation(), cube.getSquares()[48].getLocationsAsArray()));
