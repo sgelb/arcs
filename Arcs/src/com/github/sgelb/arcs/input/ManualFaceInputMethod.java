@@ -75,7 +75,7 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 		}
 		rectangles = calculateRectanglesCoordinates(width, height);
 		addObserver((Observer) mContext);
-		setMiddleSquare();
+		setMiddleFacelet();
 	}
 
 	@Override
@@ -102,12 +102,12 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 		int touchY = (int) event.getY();
 		if (event.getAction() == MotionEvent.ACTION_DOWN) {
 			for (int i=0; i < rectangles.size(); i++) {
-				// skip middle square as its color is already set
+				// skip middle facelet as its color is already set
 				if (rectangles.get(i).contains(new Point(touchX, touchY))) {
 					if (i != 4) {
 						showColorChooserDialog(i);
 					} else {
-						setAllSquares();
+						setAllFacelets();
 					}
 				}
 			}
@@ -209,9 +209,9 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 				
 				face.set(position, colorChoice);
 				
-				// test if all squares on face are set
+				// test if all facelets on face are set
 				// and get next face
-				if (!currentFaceHasUnsetSquares()) {
+				if (!currentFaceHasUnsetFacelets()) {
 					setChanged();
 					notifyObservers(face);
 				}
@@ -222,7 +222,7 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 		alertDialog.show();
 	}
 	
-	public boolean currentFaceHasUnsetSquares() {
+	public boolean currentFaceHasUnsetFacelets() {
 		for (Integer color : face) {
 			if (color == ColorConverter.UNSET_COLOR) {
 				return true;
@@ -239,12 +239,12 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 		} else {
 			this.face = newFace;
 		}
-		setMiddleSquare();
+		setMiddleFacelet();
 	}
 	
 	@Override
 	public String getInstructionText(Integer faceId) {
-		// we read the faces in the following order. a face's color is defined by its middle square.
+		// we read the faces in the following order. a face's color is defined by its middle facelet.
 		// 1. face: orange - front
 		// 2. face: blue - right
 		// 3. face: red - back
@@ -276,12 +276,12 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 		return mContext.getString(R.string.instructionTitle, msg);
 	}
 	
-	private void setMiddleSquare() {
-		// set color of middle squares to match current face
+	private void setMiddleFacelet() {
+		// set color of middle facelet to match current face
 		face.set(4, currentFace);
 	}
 	
-	private void setAllSquares() {
+	private void setAllFacelets() {
 		for (int i=0; i< face.size(); i++) {
 			face.set(i, currentFace);
 		}

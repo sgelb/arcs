@@ -45,7 +45,7 @@ import cs.min2phase.Search;
 public class MainActivity extends Activity implements CvCameraViewListener2, Observer {
 
 	private static final String TAG = "ARCS::MainActivity";
-	private static final String STATE_SQUARES = "cubeSquares";
+	private static final String STATE_FACELETS = "cubeFacelets";
 
 	private static final Scalar BGCOLOR = new Scalar(70, 70, 70);
 
@@ -86,7 +86,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 		if (savedInstanceState != null) {
 			Log.d(TAG, "Restored state");
 			// Restore cube from saved state
-			int[] colors = savedInstanceState.getIntArray(STATE_SQUARES);
+			int[] colors = savedInstanceState.getIntArray(STATE_FACELETS);
 			cube.setFaceletColors(colors);
 		}
 		currentFace = Rotator.FRONT;
@@ -102,7 +102,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 		forwardBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if (currentFace == 5 && !cube.hasUnsetSquares()) {
+				if (currentFace == 5 && !cube.hasUnsetFacelets()) {
 					solveCubeAction();
 				} else {
 					forwardFaceAction();
@@ -132,7 +132,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
 		// Save the current cube state
-		savedInstanceState.putIntArray(STATE_SQUARES, cube.getFaceletColors());
+		savedInstanceState.putIntArray(STATE_FACELETS, cube.getFaceletColors());
 		super.onSaveInstanceState(savedInstanceState);
 	}
 
@@ -272,7 +272,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 		instructionTitle.setText(faceInputMethod.getInstructionTitle(currentFace));
 		instructionContent.setText(faceInputMethod.getInstructionText(currentFace));
 		forwardBtn.setImageResource(R.drawable.ic_action_forward);
-		if (cube.hasUnsetSquares()) {
+		if (cube.hasUnsetFacelets()) {
 			disableButton(forwardBtn);
 		} else {
 			enableButton(forwardBtn);
@@ -300,7 +300,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 		faceInputMethod.changeFace(currentFace, face);
 		enableButton(backBtn);
 
-		if (face == null || faceInputMethod.currentFaceHasUnsetSquares()) {
+		if (face == null || faceInputMethod.currentFaceHasUnsetFacelets()) {
 			disableButton(forwardBtn);
 		} else {
 			enableButton(forwardBtn);
@@ -308,7 +308,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 
 		if (currentFace == 5) {
 			forwardBtn.setImageResource(R.drawable.ic_launcher);
-			if (cube.hasUnsetSquares()) {
+			if (cube.hasUnsetFacelets()) {
 				disableButton(forwardBtn);
 				}
 		}

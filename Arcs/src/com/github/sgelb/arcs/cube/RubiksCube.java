@@ -51,15 +51,15 @@ public class RubiksCube {
 
 	public void update() {
 		facelets = rotator.getFacelets();
-		facelets = updater.updateSquares(facelets);
+		facelets = updater.updateFacelets(facelets);
 	}
 
-	public Facelet[] getSquares() {
+	public Facelet[] getFacelets() {
 		return facelets;
 	}
 
-	public void setSquares(Facelet[] squares) {
-		facelets = squares;
+	public void setFacelets(Facelet[] facelets) {
+		this.facelets = facelets;
 	}
 
 	public Facelet[] getFace(int facename) {
@@ -102,7 +102,7 @@ public class RubiksCube {
 		}
 	}
 
-	public boolean hasUnsetSquares() {
+	public boolean hasUnsetFacelets() {
 		for (Facelet facelet : facelets) {
 			if (facelet.getColor() == ColorConverter.UNSET_COLOR) {
 				return true;

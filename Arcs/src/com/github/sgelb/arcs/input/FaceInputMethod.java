@@ -16,5 +16,5 @@ public interface FaceInputMethod {
 	public String getInstructionText(Integer faceId);
 	public String getInstructionTitle(Integer faceId);
 	public void changeFace(Integer faceId, ArrayList<Integer> face);
-	public boolean currentFaceHasUnsetSquares();
+	public boolean currentFaceHasUnsetFacelets();
 }

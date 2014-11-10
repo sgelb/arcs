@@ -149,8 +149,8 @@ public class Rotator {
 			}
 
 			// Here the facelets that just got initialized are assigned onto the facelets.
-			for(int squareOnFaceIndex = 0; squareOnFaceIndex < 9; squareOnFaceIndex++) {
-				facelets[face * 9 + squareOnFaceIndex] = faceletsForEachFace.get(squareOnFaceIndex);
+			for(int faceletOnFaceIndex = 0; faceletOnFaceIndex < 9; faceletOnFaceIndex++) {
+				facelets[face * 9 + faceletOnFaceIndex] = faceletsForEachFace.get(faceletOnFaceIndex);
 			}
 
 		}
