@@ -53,10 +53,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.github.sgelb.arcs.MainActivity" />
         </activity>
-        <activity
-            android:name=".AboutActivity"
-            android:label="@string/title_activity_about" >
-        </activity>
 
         <!--  About activity -->
         <activity

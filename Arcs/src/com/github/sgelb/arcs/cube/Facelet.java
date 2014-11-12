@@ -1,27 +1,19 @@
-package com.github.sgelb.arcs;
+package com.github.sgelb.arcs.cube;
 
-public class Square {
+
+public class Facelet {
 	
-	/* A square represents one rectangle on the Cube.
-	 */
-	
-	// The square color represented
+	// The facelet color
 	private int color;
 	
-	/* Position of the square is saved in an object that functions as a vector
-	 * containing information about the x, y and y-coordinates.
-	 */
+	// Position of the facelet is saved in an object that functions as a vector
+	// containing information about the x, y and y-coordinates.
+	private FaceletLocation location;
 	
-	private SquareLocation location;
+	// the non-zero value of x,y or z of direction points to the face this facelet is located on
+	private FaceletLocation direction;
 	
-	/* direction holds the information on which face it is located.
-	 * Only one of the x, y or z coordinates has a value that is non-zero.
-	 * If, for example, the z value is 1, the square is located at the front
-	 * face.
-	 */
-	private SquareLocation direction;
-	
-	public Square(SquareLocation location, SquareLocation direction, int color) {
+	public Facelet(FaceletLocation location, FaceletLocation direction, int color) {
 		this.location = location;
 		this.direction = direction;
 		this.color = color;
@@ -40,7 +32,7 @@ public class Square {
 		return location.getLocationZ();
 	}
 	
-	public SquareLocation getLocation() {
+	public FaceletLocation getLocation() {
 		return location;
 	}
 	
@@ -64,7 +56,7 @@ public class Square {
 		return direction.getLocation();
 	}
 	
-	public SquareLocation getDirection() {
+	public FaceletLocation getDirection() {
 		return direction;
 	}
 	
@@ -72,11 +64,11 @@ public class Square {
 		return color;
 	}
 	
-	public void setLocation(SquareLocation newLocation) {
+	public void setLocation(FaceletLocation newLocation) {
 		this.location = newLocation;
 	}
 	
-	public void setDirection(SquareLocation newDirection) {
+	public void setDirection(FaceletLocation newDirection) {
 		this.direction = newDirection;
 	}
 	
