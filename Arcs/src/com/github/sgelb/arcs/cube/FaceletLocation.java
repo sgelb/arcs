@@ -1,12 +1,12 @@
-package com.github.sgelb.arcs;
+package com.github.sgelb.arcs.cube;
 
-public class SquareLocation {
+public class FaceletLocation {
 	
 	private int locationX;
 	private int locationY;
 	private int locationZ;
 	
-	public SquareLocation(int x, int y, int z) {
+	public FaceletLocation(int x, int y, int z) {
 		this.locationX = x;
 		this.locationY = y;
 		this.locationZ = z;

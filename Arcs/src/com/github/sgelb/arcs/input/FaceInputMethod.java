@@ -1,4 +1,4 @@
-package com.github.sgelb.arcs;
+package com.github.sgelb.arcs.input;
 
 import java.util.ArrayList;
 
@@ -16,5 +16,5 @@ public interface FaceInputMethod {
 	public String getInstructionText(Integer faceId);
 	public String getInstructionTitle(Integer faceId);
 	public void changeFace(Integer faceId, ArrayList<Integer> face);
-	public boolean currentFaceHasUnsetSquares();
+	public boolean currentFaceHasUnsetFacelets();
 }
