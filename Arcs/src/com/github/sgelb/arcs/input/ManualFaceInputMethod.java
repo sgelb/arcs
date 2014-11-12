@@ -11,10 +11,12 @@ import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
+import org.opencv.imgproc.Imgproc;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.util.Log;
 import android.view.MotionEvent;
 
 import com.github.sgelb.arcs.R;
@@ -33,18 +35,22 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 	private Scalar white = new Scalar(255, 255, 255);
 	private Scalar yellow = new Scalar(255, 255, 0);
 	private ArrayList<Scalar> colorChoices;
-	
+
 	private Context mContext;
 	private int width;
 	private int xOffset;
 	private int padding;
-	
+	private int maxRows;
+	private int maxCols;
+	private int rowStart;
+	private int colStart;
+
 	// Array holding coordinates of rectangle overlays
     private ArrayList<Rect> rectangles;
-    
+
     private ArrayList<Point> colorLines;
 
-    // We are only interested in colors, so face is just an array of 
+    // We are only interested in colors, so face is just an array of
     // ints aka ColorSquare.COLOR
     private ArrayList<Integer> face;
 
@@ -52,10 +58,10 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 
 	public ManualFaceInputMethod(Context mContext) {
 		this.mContext = mContext;
-		this.rectangles = new ArrayList<Rect>(9);
-		// remembers chosen colors for rectangles 
-		this.colorChoices = new ArrayList<Scalar>(6);
-		this.colorLines = new ArrayList<Point>(8);
+		rectangles = new ArrayList<Rect>(9);
+		// remembers chosen colors for rectangles
+		colorChoices = new ArrayList<Scalar>(6);
+		colorLines = new ArrayList<Point>(8);
 	}
 
 	@Override
@@ -80,18 +86,25 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 
 	@Override
 	public void drawOverlay(Mat frame) {
+
+		// draw rectangles
 		for (int i=0; i<rectangles.size(); i++) {
+			// recognize facelet colors
+			detectColors(i, frame.submat(rectangles.get(i)));
+
 			int strokewidth = 2;
 			Scalar color = unsetColor;
-			
+
 			if (face.get(i) > ColorConverter.UNSET_COLOR) {
 				strokewidth = 5;
 				color = colorChoices.get(face.get(i));
 			}
-			Core.rectangle(frame, rectangles.get(i).tl(), rectangles.get(i).br(), 
+			Core.rectangle(frame, rectangles.get(i).tl(), rectangles.get(i).br(),
 					color, strokewidth);
 		}
-		Core.line(frame, colorLines.get(0), colorLines.get(1), 
+
+		// draw color line representing upper face
+		Core.line(frame, colorLines.get(0), colorLines.get(1),
 				colorChoices.get(ColorConverter.getUpperFaceColor(currentFace)), 4);
 	}
 
@@ -117,22 +130,22 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 
 	@Override
 	public int getXOffset() {
-		return this.xOffset;
+		return xOffset;
 	}
-	
+
 	@Override
 	public int getPadding() {
-		return this.padding;
+		return padding;
 	}
-	
-	
+
+
 	public Point movePointHorizontally(Point a, Point b, int factor) {
 		// beware: due to y-mirrored output, we have to substract x
 		return new Point(a.x - factor*b.x, a.y);
 	}
 
 	public Rect getNextRectInRow(Point tl, Point br, Point dist, int factor) {
-		// calculate next rectangle in row 
+		// calculate next rectangle in row
 		return new Rect(
 				movePointHorizontally(tl, dist, factor),
 				movePointHorizontally(br, dist, factor));
@@ -146,7 +159,7 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 		// Creates ListArray of cv::rects to draw overlay
 
 		// Beware: because front camera output is y-mirrored,
-		// point of origin is on top left corner and some values 
+		// point of origin is on top left corner and some values
 		// have to be negated/subtracted for correct calculating
 
 		// Rectangle positions in ListArray:
@@ -165,11 +178,11 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 		// Size of single rect
 		Size rectSize = new Size(
 				(height - 2*rectSpacing - 2*faceMargin)/3,
-				(height - 2*rectSpacing - 2*faceMargin)/3); 
+				(height - 2*rectSpacing - 2*faceMargin)/3);
 
 		// vector from tl of rect to tl of rect on the right
-		Point rectDistance = new Point(rectSize.width + rectSpacing, 
-				(double) rectSize.height + rectSpacing);
+		Point rectDistance = new Point(rectSize.width + rectSpacing,
+				rectSize.height + rectSpacing);
 
 		// Initial points: top left/bottom right corners of first rectangle
 		Point topLeft = new Point(width - faceMargin, faceMargin);
@@ -177,8 +190,14 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 				faceMargin + rectSize.height);
 
 		// Values needed by positionViews()
-		this.padding = faceMargin;
-		this.xOffset = (int) (2*faceMargin + 3*rectSize.width + 3*rectSpacing);
+		padding = faceMargin;
+		xOffset = (int) (2*faceMargin + 3*rectSize.width + 3*rectSpacing);
+
+		// Values needed by detectColors
+		maxRows = (int) rectSize.height - 1;
+		maxCols = (int) rectSize.width - 1;
+		rowStart = (int) Math.ceil(maxRows/3.0);
+		colStart = (int) Math.ceil(maxCols/3.0);
 
 		// Create nine rectangles, three in each row
 		for (int row=0; row < 3; row++) {
@@ -191,14 +210,14 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 		}
 
 		// upper color line
-		colorLines.add(new Point(tmpRect.get(1).tl().x, 
+		colorLines.add(new Point(tmpRect.get(1).tl().x,
 				tmpRect.get(1).tl().y - faceMargin/2));
-		colorLines.add(new Point(tmpRect.get(1).tl().x + rectSize.width, 
+		colorLines.add(new Point(tmpRect.get(1).tl().x + rectSize.width,
 				tmpRect.get(1).tl().y - faceMargin/2));
-		
+
 		return tmpRect;
 	}
-	
+
 	private void showColorChooserDialog(final int position) {
 		// show dialog to choose color of rectangle at position
 		AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
@@ -206,22 +225,23 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 		alert.setItems(R.array.colors, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int colorChoice) {
-				
+
 				face.set(position, colorChoice);
-				
+
 				// test if all facelets on face are set
 				// and get next face
 				if (!currentFaceHasUnsetFacelets()) {
 					setChanged();
 					notifyObservers(face);
 				}
-					
+
 			}
 		});
 		AlertDialog alertDialog = alert.create();
 		alertDialog.show();
 	}
-	
+
+	@Override
 	public boolean currentFaceHasUnsetFacelets() {
 		for (Integer color : face) {
 			if (color == ColorConverter.UNSET_COLOR) {
@@ -230,18 +250,19 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 		}
 		return false;
 	}
-	
+
+	@Override
 	public void changeFace(Integer currentFace, ArrayList<Integer> newFace) {
 		// set next face and reset
 		this.currentFace = currentFace;
 		if (newFace == null) {
-			this.face = new ArrayList<Integer>(Collections.nCopies(9, ColorConverter.UNSET_COLOR));
+			face = new ArrayList<Integer>(Collections.nCopies(9, ColorConverter.UNSET_COLOR));
 		} else {
-			this.face = newFace;
+			face = newFace;
 		}
 		setMiddleFacelet();
 	}
-	
+
 	@Override
 	public String getInstructionText(Integer faceId) {
 		// we read the faces in the following order. a face's color is defined by its middle facelet.
@@ -251,10 +272,10 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 		// 4. face: green - left
 		// 5. face: white - down
 		// 6. face: yellow - up
-		
+
 		String colorFacingUser = ColorConverter.getColorName(faceId);
 		String colorFacingUp = ColorConverter.getUpperFaceColorName(faceId);
-		return String.format(mContext.getString(R.string.manualInstructionContent), 
+		return String.format(mContext.getString(R.string.manualInstructionContent),
 				colorFacingUser, colorFacingUp);
 	}
 
@@ -271,21 +292,55 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 		} else {
 			ordinalAppendix = "th";
 		}
-		
+
 		String msg = String.valueOf(faceId) + ordinalAppendix;
 		return mContext.getString(R.string.instructionTitle, msg);
 	}
-	
+
 	private void setMiddleFacelet() {
 		// set color of middle facelet to match current face
 		face.set(4, currentFace);
 	}
-	
+
 	private void setAllFacelets() {
 		for (int i=0; i< face.size(); i++) {
 			face.set(i, currentFace);
 		}
 		setChanged();
 		notifyObservers(face);
+	}
+
+	private void detectColors(int faceletId, Mat facelet) {
+		Imgproc.cvtColor(facelet, facelet, Imgproc.COLOR_RGBA2BGR);
+		Imgproc.cvtColor(facelet, facelet, Imgproc.COLOR_BGR2HLS);
+
+		double hue = facelet.get(maxRows/2, maxCols/2)[0];
+		double lum = facelet.get(maxRows/2, maxCols/2)[1];
+		for (int row=rowStart; row < maxRows; row = row + rowStart) {
+			for (int col=colStart; col < maxCols; col = col + colStart) {
+				hue += facelet.get(row, col)[0];
+				lum += facelet.get(row, col)[1];
+			}
+		}
+		hue /= 5;
+		lum /= 5;
+
+		String color = "unknown";
+		 if (hue < 14 && hue > 6) {
+			color = "orange";
+		} else if (hue < 130 && hue > 100 && lum < 130) {
+			color = "blue";
+		} else if (hue <= 6 || hue > 170) {
+			color = "red";
+		} else if (hue < 75 && hue > 42) {
+			color = "green";
+		} else if (hue < 30 && hue > 15) {
+			color = "yellow";
+		} else if (lum > 100) {
+			 color = "white";
+		}
+
+		Log.d(TAG, "Color of " + faceletId + ": " + color + " H: " + hue + " L: " + lum);
+		// TODO: String lastColor, bool colorIsSet, int countsOfColor for getting color
 	}
 }
