@@ -355,7 +355,6 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 	private void disableButton(ImageButton button) {
 		button.setEnabled(false);
 		button.setImageAlpha(100);
-
 	}
 
 	private void enableButton(ImageButton button) {
