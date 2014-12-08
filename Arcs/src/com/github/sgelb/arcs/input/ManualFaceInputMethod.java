@@ -1,6 +1,7 @@
 package com.github.sgelb.arcs.input;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Observable;
 import java.util.Observer;
@@ -20,7 +21,6 @@ import android.content.DialogInterface;
 import android.util.Log;
 import android.view.MotionEvent;
 
-import com.github.sgelb.arcs.MainActivity;
 import com.github.sgelb.arcs.R;
 import com.github.sgelb.arcs.cube.ColorConverter;
 import com.github.sgelb.arcs.cube.Rotator;
@@ -56,6 +56,8 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
     private ArrayList<Integer> face;
 
     private Integer currentFace;
+    
+    private ArrayList<ArrayList<Integer>> lastSeenColors;
 
 	public ManualFaceInputMethod(Context mContext) {
 		this.mContext = mContext;
@@ -63,6 +65,8 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 		// remembers chosen colors for rectangles
 		colorChoices = new ArrayList<Scalar>(6);
 		colorLines = new ArrayList<Point>(8);
+		ArrayList<Integer> tmpList = new ArrayList<Integer>(Collections.nCopies(2, 0));
+		lastSeenColors = new ArrayList<ArrayList<Integer>>(Collections.nCopies(9, tmpList));
 	}
 
 	@Override
@@ -344,22 +348,33 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 			color = ColorConverter.WHITE;
 		}
 		 
+
+		// we have seent his color the first time in a row.
+		if (lastSeenColors.get(faceletId).get(0) != color) {
+			lastSeenColors.get(faceletId).set(0, color);
+			lastSeenColors.get(faceletId).set(1, 1);
+			return;
+		} else {
+			lastSeenColors.get(faceletId).set(1, lastSeenColors.get(faceletId).get(1) + 1);
+		}
 		
-		// TODO: int lastColor, bool colorIsSet, int countOfSameColorEachFrame
-		
-		//if we are sure, we can set the face's color
-		face.set(faceletId, color);
-		// test if all facelets on face are set
-		((Activity) mContext).runOnUiThread(new Runnable() {
-			@Override
-			public void run()  {
-				if (!currentFaceHasUnsetFacelets()) {
-					setChanged();
-					notifyObservers(face);
+
+		if (lastSeenColors.get(faceletId).get(1) > 60) {
+			// if we are sure, we can set the face's color
+			face.set(faceletId, color);
+
+			// then test if all facelets on face are set
+			if (!currentFaceHasUnsetFacelets()) {
+				// TODO: rest lastSeenColors
+				((Activity) mContext).runOnUiThread(new Runnable() {
+					@Override
+					public void run()  {
+						setChanged();
+						notifyObservers(face);
 					}
+				});
 			}
-		});
-		 
+		}
 		Log.d(TAG, "Color of " + faceletId + ": " + color + " H: " + hue + " L: " + lum);
 	}
 }
