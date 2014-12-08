@@ -13,19 +13,20 @@ import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.util.Log;
 import android.view.MotionEvent;
 
+import com.github.sgelb.arcs.MainActivity;
 import com.github.sgelb.arcs.R;
 import com.github.sgelb.arcs.cube.ColorConverter;
 import com.github.sgelb.arcs.cube.Rotator;
 
 public class ManualFaceInputMethod extends Observable implements FaceInputMethod {
 
-	@SuppressWarnings("unused")
 	private static final String TAG = "ARCS::ManualCubeInputActivity";
 	private Scalar unsetColor = new Scalar(0, 0, 0);
 	private Scalar orange = new Scalar(255, 165, 0);
@@ -89,8 +90,6 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 
 		// draw rectangles
 		for (int i=0; i<rectangles.size(); i++) {
-			// recognize facelet colors
-			detectColors(i, frame.submat(rectangles.get(i)));
 
 			int strokewidth = 2;
 			Scalar color = unsetColor;
@@ -98,6 +97,9 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 			if (face.get(i) > ColorConverter.UNSET_COLOR) {
 				strokewidth = 5;
 				color = colorChoices.get(face.get(i));
+			} else {
+				// auto-detect facelet colors
+				detectColors(i, frame.submat(rectangles.get(i)));
 			}
 			Core.rectangle(frame, rectangles.get(i).tl(), rectangles.get(i).br(),
 					color, strokewidth);
@@ -314,6 +316,8 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 		Imgproc.cvtColor(facelet, facelet, Imgproc.COLOR_RGBA2BGR);
 		Imgproc.cvtColor(facelet, facelet, Imgproc.COLOR_BGR2HLS);
 
+		// We read hue and luminance values from 5 points, which are arranged like the "5" dots on a dice
+		// and calculate the mean over a period of 60 frames
 		double hue = facelet.get(maxRows/2, maxCols/2)[0];
 		double lum = facelet.get(maxRows/2, maxCols/2)[1];
 		for (int row=rowStart; row < maxRows; row = row + rowStart) {
@@ -325,22 +329,37 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 		hue /= 5;
 		lum /= 5;
 
-		String color = "unknown";
-		 if (hue < 14 && hue > 6) {
-			color = "orange";
+		int color = ColorConverter.UNSET_COLOR;
+		if (hue < 14 && hue > 6) {
+			color = ColorConverter.ORANGE;
 		} else if (hue < 130 && hue > 100 && lum < 130) {
-			color = "blue";
+			color = ColorConverter.BLUE;
 		} else if (hue <= 6 || hue > 170) {
-			color = "red";
+			color = ColorConverter.RED;
 		} else if (hue < 75 && hue > 42) {
-			color = "green";
+			color = ColorConverter.GREEN;
 		} else if (hue < 30 && hue > 15) {
-			color = "yellow";
+			color = ColorConverter.YELLOW;
 		} else if (lum > 100) {
-			 color = "white";
+			color = ColorConverter.WHITE;
 		}
-
+		 
+		
+		// TODO: int lastColor, bool colorIsSet, int countOfSameColorEachFrame
+		
+		//if we are sure, we can set the face's color
+		face.set(faceletId, color);
+		// test if all facelets on face are set
+		((Activity) mContext).runOnUiThread(new Runnable() {
+			@Override
+			public void run()  {
+				if (!currentFaceHasUnsetFacelets()) {
+					setChanged();
+					notifyObservers(face);
+					}
+			}
+		});
+		 
 		Log.d(TAG, "Color of " + faceletId + ": " + color + " H: " + hue + " L: " + lum);
-		// TODO: String lastColor, bool colorIsSet, int countsOfColor for getting color
 	}
 }

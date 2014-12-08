@@ -177,23 +177,20 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		switch (item.getItemId()) {
-		case R.id.create_random_cube:
+		int itemId = item.getItemId();
+		if (itemId == R.id.create_random_cube) {
 			cube.randomize();
 			resetFaceView();
 			return true;
-		case R.id.clear_cube:
+		} else if (itemId == R.id.clear_cube) {
 			cube.clear();
 			resetFaceView();
 			return true;
-		case R.id.about:
+		} else if (itemId == R.id.about) {
 			Intent aboutIntent = new Intent(this, AboutActivity.class);
 			startActivity(aboutIntent);
 			return true;
-		default:
+		} else {
 			return super.onOptionsItemSelected(item);
 		}
 	}
