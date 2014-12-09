@@ -61,6 +61,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 	private TextView instructionTitle;
 	private ImageButton forwardBtn;
 	private ImageButton backBtn;
+	private ImageButton cameraBtn;
 
 	private RubiksCube cube;
 	private Integer currentFace;
@@ -105,7 +106,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 				if (currentFace == 5 && !cube.hasUnsetFacelets()) {
 					solveCubeAction();
 				} else {
-					forwardFaceAction();
+					forwardBtnAction();
 				}
 			}
 		});
@@ -115,7 +116,15 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 		backBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				previousFaceAction();
+				previousBtnAction();
+			}
+		});
+
+		cameraBtn = (ImageButton) findViewById(R.id.cameraBtn);
+		cameraBtn.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				cameraBtnAction();
 			}
 		});
 
@@ -289,7 +298,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 		instructionContent.setMinWidth(width - padding - xOffset);
 	}
 
-	private void forwardFaceAction() {
+	private void forwardBtnAction() {
 		currentFace++;
 		instructionTitle.setText(faceInputMethod.getInstructionTitle(currentFace));
 		instructionContent.setText(faceInputMethod.getInstructionText(currentFace));
@@ -311,7 +320,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 		}
 	}
 
-	private void previousFaceAction() {
+	private void previousBtnAction() {
 		currentFace--;
 		instructionTitle.setText(faceInputMethod.getInstructionTitle(currentFace));
 		instructionContent.setText(faceInputMethod.getInstructionText(currentFace));
@@ -321,6 +330,10 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 		if (currentFace == 0) {
 			disableButton(backBtn);
 		}
+	}
+
+	private void cameraBtnAction() {
+		faceInputMethod.startDetectingColors();
 	}
 
 	private void solveCubeAction() {

@@ -1,8 +1,8 @@
 package com.github.sgelb.arcs.input;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -46,6 +46,7 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 	private int rowStart;
 	private int colStart;
 
+
 	// Array holding coordinates of rectangle overlays
     private ArrayList<Rect> rectangles;
 
@@ -56,8 +57,10 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
     private ArrayList<Integer> face;
 
     private Integer currentFace;
-    
-    private ArrayList<ArrayList<Integer>> lastSeenColors;
+
+    private int detectingColorsCountdown;
+    private int detectingColorRounds;
+    private ArrayList<HashMap<String, Double>> detectedColors;
 
 	public ManualFaceInputMethod(Context mContext) {
 		this.mContext = mContext;
@@ -65,8 +68,8 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 		// remembers chosen colors for rectangles
 		colorChoices = new ArrayList<Scalar>(6);
 		colorLines = new ArrayList<Point>(8);
-		ArrayList<Integer> tmpList = new ArrayList<Integer>(Collections.nCopies(2, 0));
-		lastSeenColors = new ArrayList<ArrayList<Integer>>(Collections.nCopies(9, tmpList));
+		detectingColorsCountdown = 0;
+		detectingColorRounds = 1;
 	}
 
 	@Override
@@ -98,15 +101,23 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 			int strokewidth = 2;
 			Scalar color = unsetColor;
 
+			// auto-detect facelet colors, except preset middle facelet
+			if (i != 4 && detectingColorsCountdown > 0) {
+				collectDetectedColors(i, frame.submat(rectangles.get(i)));
+				if (detectingColorsCountdown == 1) {
+					calculateColor(i);
+				}
+			}
+
 			if (face.get(i) > ColorConverter.UNSET_COLOR) {
 				strokewidth = 5;
 				color = colorChoices.get(face.get(i));
-			} else {
-				// auto-detect facelet colors
-				detectColors(i, frame.submat(rectangles.get(i)));
 			}
 			Core.rectangle(frame, rectangles.get(i).tl(), rectangles.get(i).br(),
 					color, strokewidth);
+		}
+		if (detectingColorsCountdown > 0) {
+			detectingColorsCountdown--;
 		}
 
 		// draw color line representing upper face
@@ -316,7 +327,7 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 		notifyObservers(face);
 	}
 
-	private void detectColors(int faceletId, Mat facelet) {
+	private void collectDetectedColors(int faceletId, Mat facelet) {
 		Imgproc.cvtColor(facelet, facelet, Imgproc.COLOR_RGBA2BGR);
 		Imgproc.cvtColor(facelet, facelet, Imgproc.COLOR_BGR2HLS);
 
@@ -333,6 +344,14 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 		hue /= 5;
 		lum /= 5;
 
+		detectedColors.get(faceletId).put("hue", detectedColors.get(faceletId).get("hue") + hue);
+		detectedColors.get(faceletId).put("lum", detectedColors.get(faceletId).get("lum") + lum);
+	}
+
+	void calculateColor(int faceletId) {
+		double hue = detectedColors.get(faceletId).get("hue") / detectingColorRounds;
+		double lum = detectedColors.get(faceletId).get("lum") / detectingColorRounds;
+
 		int color = ColorConverter.UNSET_COLOR;
 		if (hue < 14 && hue > 6) {
 			color = ColorConverter.ORANGE;
@@ -347,34 +366,38 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 		} else if (lum > 100) {
 			color = ColorConverter.WHITE;
 		}
-		 
 
-		// we have seent his color the first time in a row.
-		if (lastSeenColors.get(faceletId).get(0) != color) {
-			lastSeenColors.get(faceletId).set(0, color);
-			lastSeenColors.get(faceletId).set(1, 1);
-			return;
-		} else {
-			lastSeenColors.get(faceletId).set(1, lastSeenColors.get(faceletId).get(1) + 1);
+		Log.d(TAG, "COLOR: " + faceletId + ":"+ color);
+		Log.d(TAG, "COLOR H: " + hue + "L: " + lum);
+		face.set(faceletId, color);
+
+		// test if all facelets on face are set
+		if (!currentFaceHasUnsetFacelets()) {
+			((Activity) mContext).runOnUiThread(new Runnable() {
+				@Override
+				public void run()  {
+					setChanged();
+					notifyObservers(face);
+				}
+			});
 		}
-		
+	}
 
-		if (lastSeenColors.get(faceletId).get(1) > 60) {
-			// if we are sure, we can set the face's color
-			face.set(faceletId, color);
-
-			// then test if all facelets on face are set
-			if (!currentFaceHasUnsetFacelets()) {
-				// TODO: rest lastSeenColors
-				((Activity) mContext).runOnUiThread(new Runnable() {
-					@Override
-					public void run()  {
-						setChanged();
-						notifyObservers(face);
-					}
-				});
-			}
+	private void initiateDetectedColors() {
+		detectedColors = null;
+		detectedColors = new ArrayList<HashMap<String, Double>>();
+		for (int i = 0; i < face.size(); i++) {
+			detectedColors.add(new HashMap<String, Double>());
+			detectedColors.get(i).put("hue", (double) 0);
+			detectedColors.get(i).put("lum", (double) 0);
 		}
-		Log.d(TAG, "Color of " + faceletId + ": " + color + " H: " + hue + " L: " + lum);
+	}
+
+	@Override
+	public void startDetectingColors() {
+		// fetch colors of facelets the next N frames
+		initiateDetectedColors();
+		detectingColorsCountdown = detectingColorRounds;
+
 	}
 }

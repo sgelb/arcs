@@ -13,7 +13,9 @@
         facing you and the %2$s colored middle piece pointing up.\n\nEnter the corresponding colors.</string>
     <string name="instructionContent"></string>
     <string name="backBtnDesc">Back button</string>
+    <string name="cameraBtnDesc">Detect colors</string>
     <string name="forwardBtnDesc">Forward button</string>
+    
     <string name="dialog_title_cube_input_method_prefs">Cube Input Method</string>
 
     <string-array name="entries_cube_input_method_prefs">
