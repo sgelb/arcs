@@ -182,7 +182,7 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 		int rectSpacing = 7*height/100;
 
 		// margin around face
-		int faceMargin = 10*height/100;
+		int faceMargin = 5*height/100;
 
 		// Size of single rect
 		Size rectSize = new Size(

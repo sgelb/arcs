@@ -133,7 +133,6 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 
 		mOpenCvCameraView = (CameraBridgeViewBase) findViewById(R.id.java_camera_view);
 		mOpenCvCameraView.setVisibility(SurfaceView.VISIBLE);
-		// Use front camera
 		mOpenCvCameraView.setCameraIndex(0);
 		mOpenCvCameraView.setCvCameraViewListener(this);
 	}
@@ -146,8 +145,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 	}
 
 	@Override
-	public void onPause()
-	{
+	public void onPause() {
 		super.onPause();
 		if (mOpenCvCameraView != null) {
 			mOpenCvCameraView.disableView();
@@ -158,8 +156,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 	}
 
 	@Override
-	public void onResume()
-	{
+	public void onResume() {
 		super.onResume();
 		OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_9,
 				this, mLoaderCallback);
