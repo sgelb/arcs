@@ -134,7 +134,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 		mOpenCvCameraView = (CameraBridgeViewBase) findViewById(R.id.java_camera_view);
 		mOpenCvCameraView.setVisibility(SurfaceView.VISIBLE);
 		// Use front camera
-		mOpenCvCameraView.setCameraIndex(1);
+		mOpenCvCameraView.setCameraIndex(0);
 		mOpenCvCameraView.setCvCameraViewListener(this);
 	}
 
@@ -227,7 +227,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 	public void onCameraViewStarted(int width, int height) {
 		this.width = width;
 		this.height = height;
-		faceInputMethod.init(width, height, cube.getFaceColor(currentFace));
+		faceInputMethod.init(height, cube.getFaceColor(currentFace));
 		positionViews();
 	}
 
@@ -238,19 +238,15 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 	@Override
 	public Mat onCameraFrame(CvCameraViewFrame inputFrame) {
 		frame = inputFrame.rgba();
-
 		faceInputMethod.drawOverlay(frame);
 		drawViewBackground();
-
-		// Flip frame to revert mirrored front camera image
-		Core.flip(frame, frame, 1);
 		return frame;
 	}
 
 	private void drawViewBackground() {
 		// draw solid rect as background for text/button on right side of layout
-		Core.rectangle(frame, new Point(width - faceInputMethod.getXOffset() + faceInputMethod.getPadding()/2, 0),
-				new Point(0, height), BGCOLOR, -1);
+		Core.rectangle(frame, new Point(faceInputMethod.getXOffset() - faceInputMethod.getPadding(), 0),
+				new Point(width, height), BGCOLOR, -1);
 	}
 
 	private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {

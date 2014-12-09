@@ -8,7 +8,7 @@ import android.view.MotionEvent;
 
 public interface FaceInputMethod {
 
-	public void init(int width, int height, 	ArrayList<Integer> face);
+	public void init(int height, ArrayList<Integer> face);
 	public void drawOverlay(Mat frame);
 	public boolean onTouchEvent(MotionEvent event);
 	public int getXOffset();

@@ -38,7 +38,6 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 	private ArrayList<Scalar> colorChoices;
 
 	private Context mContext;
-	private int width;
 	private int xOffset;
 	private int padding;
 	private int maxRows;
@@ -73,8 +72,7 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 	}
 
 	@Override
-	public void init(int width, int height, ArrayList<Integer> face) {
-		this.width = width;
+	public void init(int height, ArrayList<Integer> face) {
 		colorChoices.add(orange);
 		colorChoices.add(blue);
 		colorChoices.add(red);
@@ -87,7 +85,7 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 		} else {
 			this.face = new ArrayList<Integer>(Collections.nCopies(9, ColorConverter.UNSET_COLOR));
 		}
-		rectangles = calculateRectanglesCoordinates(width, height);
+		rectangles = calculateRectanglesCoordinates(height);
 		addObserver((Observer) mContext);
 		setMiddleFacelet();
 	}
@@ -101,7 +99,7 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 			int strokewidth = 2;
 			Scalar color = unsetColor;
 
-			// auto-detect facelet colors, except preset middle facelet
+			// auto-detect facelet colors except preset middle facelet
 			if (i != 4 && detectingColorsCountdown > 0) {
 				collectDetectedColors(i, frame.submat(rectangles.get(i)));
 				if (detectingColorsCountdown == 1) {
@@ -127,8 +125,7 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		// view is y-mirrored, therefor we have to substract x from width
-		int touchX = width - (int) event.getX();
+		int touchX = (int) event.getX();
 		int touchY = (int) event.getY();
 		if (event.getAction() == MotionEvent.ACTION_DOWN) {
 			for (int i=0; i < rectangles.size(); i++) {
@@ -157,8 +154,7 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 
 
 	public Point movePointHorizontally(Point a, Point b, int factor) {
-		// beware: due to y-mirrored output, we have to substract x
-		return new Point(a.x - factor*b.x, a.y);
+		return new Point(a.x + factor*b.x, a.y);
 	}
 
 	public Rect getNextRectInRow(Point tl, Point br, Point dist, int factor) {
@@ -172,12 +168,8 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 		return new Point(a.x, a.y + b.y);
 	}
 
-	public ArrayList<Rect> calculateRectanglesCoordinates(int width, int height) {
+	public ArrayList<Rect> calculateRectanglesCoordinates(int height) {
 		// Creates ListArray of cv::rects to draw overlay
-
-		// Beware: because front camera output is y-mirrored,
-		// point of origin is on top left corner and some values
-		// have to be negated/subtracted for correct calculating
 
 		// Rectangle positions in ListArray:
 		// |0|1|2|
@@ -202,8 +194,8 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 				rectSize.height + rectSpacing);
 
 		// Initial points: top left/bottom right corners of first rectangle
-		Point topLeft = new Point(width - faceMargin, faceMargin);
-		Point bottomRight = new Point(width - faceMargin - rectSize.width,
+		Point topLeft = new Point(faceMargin, faceMargin);
+		Point bottomRight = new Point(faceMargin + rectSize.width,
 				faceMargin + rectSize.height);
 
 		// Values needed by positionViews()
