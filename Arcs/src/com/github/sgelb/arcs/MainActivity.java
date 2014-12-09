@@ -61,6 +61,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 	private TextView instructionTitle;
 	private ImageButton forwardBtn;
 	private ImageButton backBtn;
+	private ImageButton cameraBtn;
 
 	private RubiksCube cube;
 	private Integer currentFace;
@@ -105,7 +106,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 				if (currentFace == 5 && !cube.hasUnsetFacelets()) {
 					solveCubeAction();
 				} else {
-					forwardFaceAction();
+					forwardBtnAction();
 				}
 			}
 		});
@@ -115,7 +116,15 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 		backBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				previousFaceAction();
+				previousBtnAction();
+			}
+		});
+
+		cameraBtn = (ImageButton) findViewById(R.id.cameraBtn);
+		cameraBtn.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				cameraBtnAction();
 			}
 		});
 
@@ -125,7 +134,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 		mOpenCvCameraView = (CameraBridgeViewBase) findViewById(R.id.java_camera_view);
 		mOpenCvCameraView.setVisibility(SurfaceView.VISIBLE);
 		// Use front camera
-		mOpenCvCameraView.setCameraIndex(1);
+		mOpenCvCameraView.setCameraIndex(0);
 		mOpenCvCameraView.setCvCameraViewListener(this);
 	}
 
@@ -177,23 +186,20 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		switch (item.getItemId()) {
-		case R.id.create_random_cube:
+		int itemId = item.getItemId();
+		if (itemId == R.id.create_random_cube) {
 			cube.randomize();
 			resetFaceView();
 			return true;
-		case R.id.clear_cube:
+		} else if (itemId == R.id.clear_cube) {
 			cube.clear();
 			resetFaceView();
 			return true;
-		case R.id.about:
+		} else if (itemId == R.id.about) {
 			Intent aboutIntent = new Intent(this, AboutActivity.class);
 			startActivity(aboutIntent);
 			return true;
-		default:
+		} else {
 			return super.onOptionsItemSelected(item);
 		}
 	}
@@ -221,7 +227,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 	public void onCameraViewStarted(int width, int height) {
 		this.width = width;
 		this.height = height;
-		faceInputMethod.init(width, height, cube.getFaceColor(currentFace));
+		faceInputMethod.init(height, cube.getFaceColor(currentFace));
 		positionViews();
 	}
 
@@ -232,19 +238,15 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 	@Override
 	public Mat onCameraFrame(CvCameraViewFrame inputFrame) {
 		frame = inputFrame.rgba();
-
 		faceInputMethod.drawOverlay(frame);
 		drawViewBackground();
-
-		// Flip frame to revert mirrored front camera image
-		Core.flip(frame, frame, 1);
 		return frame;
 	}
 
 	private void drawViewBackground() {
 		// draw solid rect as background for text/button on right side of layout
-		Core.rectangle(frame, new Point(width - faceInputMethod.getXOffset() + faceInputMethod.getPadding()/2, 0),
-				new Point(0, height), BGCOLOR, -1);
+		Core.rectangle(frame, new Point(faceInputMethod.getXOffset() - faceInputMethod.getPadding(), 0),
+				new Point(width, height), BGCOLOR, -1);
 	}
 
 	private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
@@ -292,7 +294,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 		instructionContent.setMinWidth(width - padding - xOffset);
 	}
 
-	private void forwardFaceAction() {
+	private void forwardBtnAction() {
 		currentFace++;
 		instructionTitle.setText(faceInputMethod.getInstructionTitle(currentFace));
 		instructionContent.setText(faceInputMethod.getInstructionText(currentFace));
@@ -314,7 +316,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 		}
 	}
 
-	private void previousFaceAction() {
+	private void previousBtnAction() {
 		currentFace--;
 		instructionTitle.setText(faceInputMethod.getInstructionTitle(currentFace));
 		instructionContent.setText(faceInputMethod.getInstructionText(currentFace));
@@ -324,6 +326,10 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 		if (currentFace == 0) {
 			disableButton(backBtn);
 		}
+	}
+
+	private void cameraBtnAction() {
+		faceInputMethod.startDetectingColors();
 	}
 
 	private void solveCubeAction() {

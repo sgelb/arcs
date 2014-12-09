@@ -44,7 +44,7 @@ public class ManualFaceInputViewTest extends ActivityTestCase {
 		Rect last = new Rect(new Point(792, 646), new Point(634, 488));
 		expected.add(last);
 
-		result = manualFaceInputMethod.calculateRectanglesCoordinates(1280, 720);
+		result = manualFaceInputMethod.calculateRectanglesCoordinates(720);
 		assertEquals(expected.get(0), result.get(0));
 		assertEquals(expected.get(1), result.get(8));
 	}
