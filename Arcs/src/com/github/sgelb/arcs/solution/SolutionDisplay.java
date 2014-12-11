@@ -4,36 +4,31 @@ import com.github.sgelb.arcs.cube.Facelet;
 import com.github.sgelb.arcs.cube.Rotator;
 import com.github.sgelb.arcs.cube.RubiksCube;
 
+/* This class is taking the cube and calculates the next
+ * step only when it's needed.
+ */
+
 public class SolutionDisplay {
 	
-	public RubiksCube cube;
-	public String[] solutionString;
-	public String nextStep;
-	public int positionOfIndex;
-	public int[][] steps;
+	private RubiksCube cube;
 	
-	public SolutionDisplay(RubiksCube cube, String solution) {
+	// The cube is given from the activity.
+	
+	public SolutionDisplay(RubiksCube cube) {
 		this.cube = cube;
-		solution = solution.toLowerCase();
-		positionOfIndex = 0;
+	}
+	
+	public Facelet[] getNextStep(String step) {
 		
-		/* steps is a two dimesional int array which has the maximum length
-		 * of the solution string. Each array contains an array of length 9
-		 * which are the facelets of the front face of the cube.
+		/* step is a string that looks like "R3".
+		 * The first char is the rotation and the second
+		 * char is the count, how often this rotation
+		 * should be done.
 		 */
 		
-		solutionString = solution.split(" ");
-		steps = new int[solutionString.length][9];
-		parse();
-	}
-	
-	public void parse() {
-		for(String step : solutionString) {
-			rotations(step.charAt(0), Integer.valueOf(step.charAt(1)));
-		}
-	}
-	
-	public void rotations(char rotation, int count) {
+		char rotation = step.charAt(0);
+		int count = Integer.valueOf(step.charAt(1));
+		
 		switch(rotation) {
 		case 'f':
 			for(int i = 0; i < count; i++) {
@@ -68,19 +63,9 @@ public class SolutionDisplay {
 		default:
 			break;
 		}
-		prepareSteps();
-		positionOfIndex++;
-	}
-	
-	public void prepareSteps() {
-		Facelet[] front = cube.getFace(Rotator.FRONT);
-		for(int i = 0; i < 9; i++) {
-			steps[positionOfIndex][i] = front[i].getColor();
-		}
-	}
-	
-	public int[][] getSteps() {
-		return steps;
+		
+		// Returns an array of Facelets.
+		return cube.getFace(Rotator.FRONT);
 	}
 
 }
