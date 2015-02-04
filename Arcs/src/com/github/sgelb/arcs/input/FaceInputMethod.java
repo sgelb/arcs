@@ -15,4 +15,5 @@ public interface FaceInputMethod {
 	public String getInstructionTitle(Integer faceId);
 	public void changeFace(Integer faceId, ArrayList<Integer> face);
 	public boolean currentFaceHasUnsetFacelets();
+	public void startDetectingColors();
 }

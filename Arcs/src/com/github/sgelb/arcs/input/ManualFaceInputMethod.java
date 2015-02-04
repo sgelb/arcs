@@ -2,6 +2,7 @@ package com.github.sgelb.arcs.input;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -10,10 +11,13 @@ import org.opencv.core.Mat;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
+import org.opencv.imgproc.Imgproc;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.util.Log;
 import android.view.MotionEvent;
 
 import com.github.sgelb.arcs.R;
@@ -22,21 +26,40 @@ import com.github.sgelb.arcs.cube.Rotator;
 
 public class ManualFaceInputMethod extends Observable implements FaceInputMethod {
 
-	@SuppressWarnings("unused")
 	private static final String TAG = "ARCS::ManualCubeInputActivity";
 
-	private Context mContext;
 
 	// Array holding coordinates of rectangle overlays
     private ArrayList<Rect> rectangles;
     // Array holding coordinates of color line
     private ArrayList<Point> colorLine;
+	private Scalar unsetColor = new Scalar(0, 0, 0);
+	private Scalar orange = new Scalar(255, 165, 0);
+	private Scalar blue = new Scalar(0, 0, 255);
+	private Scalar red = new Scalar(255, 0, 0);
+	private Scalar green = new Scalar(0, 255, 0);
+	private Scalar white = new Scalar(255, 255, 255);
+	private Scalar yellow = new Scalar(255, 255, 0);
+	private ArrayList<Scalar> colorChoices;
+
+	private Context mContext;
+	private int xOffset;
+	private int padding;
+	private int maxRows;
+	private int maxCols;
+	private int rowStart;
+	private int colStart;
+
 
     // We are only interested in colors, so face is just an array of
     // ints aka ColorSquare.COLOR
     private ArrayList<Integer> face;
 
     private Integer currentFace;
+
+    private int detectingColorsCountdown;
+    private int detectingColorRounds;
+    private ArrayList<HashMap<String, Double>> detectedColors;
 
 	public ManualFaceInputMethod(Context mContext) {
 		this.mContext = mContext;
@@ -47,6 +70,9 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 
 	@Override
 	public void init(ArrayList<Rect> rectangles, ArrayList<Integer> face) {
+		colorChoices = new ArrayList<Scalar>(6);
+		detectingColorsCountdown = 0;
+		detectingColorRounds = 1;
 		currentFace = Rotator.FRONT;
 		if (face != null) {
 			this.face = face;
@@ -62,9 +88,20 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 
 	@Override
 	public void drawOverlay(Mat frame) {
+
+		// draw rectangles
 		for (int i=0; i<rectangles.size(); i++) {
+
 			int strokewidth = 2;
-			Scalar color = new Scalar(0, 0, 0);
+			Scalar color = unsetColor;
+
+			// auto-detect facelet colors except preset middle facelet
+			if (i != 4 && detectingColorsCountdown > 0) {
+				collectDetectedColors(i, frame.submat(rectangles.get(i)));
+				if (detectingColorsCountdown == 1) {
+					calculateColor(i);
+				}
+			}
 
 			if (face.get(i) > ColorConverter.UNSET_COLOR) {
 				strokewidth = 5;
@@ -73,14 +110,17 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 			Core.rectangle(frame, rectangles.get(i).tl(), rectangles.get(i).br(),
 					color, strokewidth);
 		}
+		if (detectingColorsCountdown > 0) {
+			detectingColorsCountdown--;
+		}
+
+		// draw color line representing upper face
 		Core.line(frame, colorLine.get(0), colorLine.get(1),
 				ColorConverter.colorChoices[ColorConverter.getUpperFaceColor(currentFace)], 4);
 	}
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		// view is y-mirrored, therefor we have to substract x from width
-//		int touchX = width - (int) event.getX();
 		int touchX = (int) event.getX();
 		int touchY = (int) event.getY();
 		if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -188,5 +228,79 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 		}
 		setChanged();
 		notifyObservers(face);
+	}
+
+	private void collectDetectedColors(int faceletId, Mat facelet) {
+		Imgproc.cvtColor(facelet, facelet, Imgproc.COLOR_RGBA2BGR);
+		Imgproc.cvtColor(facelet, facelet, Imgproc.COLOR_BGR2HLS);
+
+		// We read hue and luminance values from 5 points, which are arranged like the "5" dots on a dice
+		// and calculate the mean over a period of 60 frames
+		double hue = facelet.get(maxRows/2, maxCols/2)[0];
+		double lum = facelet.get(maxRows/2, maxCols/2)[1];
+		for (int row=rowStart; row < maxRows; row = row + rowStart) {
+			for (int col=colStart; col < maxCols; col = col + colStart) {
+				hue += facelet.get(row, col)[0];
+				lum += facelet.get(row, col)[1];
+			}
+		}
+		hue /= 5;
+		lum /= 5;
+
+		detectedColors.get(faceletId).put("hue", detectedColors.get(faceletId).get("hue") + hue);
+		detectedColors.get(faceletId).put("lum", detectedColors.get(faceletId).get("lum") + lum);
+	}
+
+	void calculateColor(int faceletId) {
+		double hue = detectedColors.get(faceletId).get("hue") / detectingColorRounds;
+		double lum = detectedColors.get(faceletId).get("lum") / detectingColorRounds;
+
+		int color = ColorConverter.UNSET_COLOR;
+		if (hue < 14 && hue > 6) {
+			color = ColorConverter.ORANGE;
+		} else if (hue < 130 && hue > 100 && lum < 130) {
+			color = ColorConverter.BLUE;
+		} else if (hue <= 6 || hue > 170) {
+			color = ColorConverter.RED;
+		} else if (hue < 75 && hue > 42) {
+			color = ColorConverter.GREEN;
+		} else if (hue < 30 && hue > 15) {
+			color = ColorConverter.YELLOW;
+		} else if (lum > 100) {
+			color = ColorConverter.WHITE;
+		}
+
+		Log.d(TAG, "COLOR: " + faceletId + ":"+ color);
+		Log.d(TAG, "COLOR H: " + hue + "L: " + lum);
+		face.set(faceletId, color);
+
+		// test if all facelets on face are set
+		if (!currentFaceHasUnsetFacelets()) {
+			((Activity) mContext).runOnUiThread(new Runnable() {
+				@Override
+				public void run()  {
+					setChanged();
+					notifyObservers(face);
+				}
+			});
+		}
+	}
+
+	private void initiateDetectedColors() {
+		detectedColors = null;
+		detectedColors = new ArrayList<HashMap<String, Double>>();
+		for (int i = 0; i < face.size(); i++) {
+			detectedColors.add(new HashMap<String, Double>());
+			detectedColors.get(i).put("hue", (double) 0);
+			detectedColors.get(i).put("lum", (double) 0);
+		}
+	}
+
+	@Override
+	public void startDetectingColors() {
+		// fetch colors of facelets the next N frames
+		initiateDetectedColors();
+		detectingColorsCountdown = detectingColorRounds;
+
 	}
 }

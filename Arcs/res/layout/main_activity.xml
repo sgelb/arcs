@@ -50,6 +50,16 @@
                 android:src="@drawable/ic_action_back" />
 
             <ImageButton
+                android:id="@+id/cameraBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_weight="1"
+                android:scaleType="centerInside"
+                android:contentDescription="@string/cameraBtnDesc"
+                android:src="@drawable/ic_action_camera" />
+            
+            <ImageButton
                 android:id="@+id/forwardBtn"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
