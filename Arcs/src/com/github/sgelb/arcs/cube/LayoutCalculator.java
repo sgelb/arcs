@@ -65,18 +65,18 @@ public class LayoutCalculator {
 	}
 
 
-	private Point movePointHorizontally(Point a, Point b, int factor) {
+	public Point movePointHorizontally(Point a, Point b, int factor) {
 		return new Point(a.x + factor*b.x, a.y);
 	}
 
-	private Rect getNextRectInRow(Point tl, Point br, Point dist, int factor) {
+	public Rect getNextRectInRow(Point tl, Point br, Point dist, int factor) {
 		// calculate next rectangle in row
 		return new Rect(
 				movePointHorizontally(tl, dist, factor),
 				movePointHorizontally(br, dist, factor));
 	}
 
-	private Point movePointVertically(Point a, Point b) {
+	public Point movePointVertically(Point a, Point b) {
 		return new Point(a.x, a.y + b.y);
 	}
 

@@ -74,22 +74,22 @@ public class ColorConverter {
 		int androidColor = Color.argb(255, 0, 0, 0);
 
 		switch (color) {
-		case (ORANGE):
+		case ORANGE:
 			androidColor = Color.argb(255, 255, 165, 0);
 			break;
-		case (BLUE):
+		case BLUE:
 			androidColor = Color.argb(255, 0, 0, 255);
 			break;
-		case (RED):
+		case RED:
 			androidColor = Color.argb(255, 255, 0, 0);
 			break;
-		case (GREEN):
+		case GREEN:
 			androidColor = Color.argb(255, 0, 255, 0);
 			break;
-		case (WHITE):
+		case WHITE:
 			androidColor = Color.argb(255, 255, 255, 255);
 			break;
-		case (YELLOW):
+		case YELLOW:
 			androidColor = Color.argb(255, 255, 255, 0);
 			break;
 		default:

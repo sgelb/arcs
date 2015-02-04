@@ -25,43 +25,43 @@ public class SolutionDisplay {
 		 * char is the count, how often this rotation
 		 * should be done.
 		 */
-		int face = Rotator.FRONT;
+		Facelet[] facelets = cube.getFace(Rotator.FRONT);
 		char rotation = step.charAt(0);
-		int count = Integer.valueOf(step.charAt(1));
+		int count = Character.getNumericValue(step.charAt(1));
 
 		switch(rotation) {
 		case 'f':
-			face = Rotator.FRONT;
+			facelets = cube.getFace(Rotator.FRONT);
 			for(int i = 0; i < count; i++) {
 				cube.rotateFront();
 			}
 			break;
 		case 'r':
-			face = Rotator.RIGHT;
+			facelets = cube.getFace(Rotator.RIGHT);
 			for(int i = 0; i < count; i++) {
 				cube.rotateRight();
 			}
 			break;
 		case 'b':
-			face = Rotator.BACK;
+			facelets = cube.getFace(Rotator.BACK);
 			for(int i = 0; i < count; i++) {
 				cube.rotateBack();
 			}
 			break;
 		case 'l':
-			face = Rotator.LEFT;
+			facelets = cube.getFace(Rotator.LEFT);
 			for(int i = 0; i < count; i++) {
 				cube.rotateLeft();
 			}
 			break;
 		case 'd':
-			face = Rotator.DOWN;
+			facelets = cube.getFace(Rotator.DOWN);
 			for(int i = 0; i < count; i++) {
 				cube.rotateDown();
 			}
 			break;
 		case 'u':
-			face = Rotator.UP;
+			facelets = cube.getFace(Rotator.UP);
 			for(int i = 0; i < count; i++) {
 				cube.rotateUp();
 			}
@@ -71,7 +71,7 @@ public class SolutionDisplay {
 		}
 
 		// Returns an array of Facelets.
-		return cube.getFace(face);
+		return facelets;
 	}
 
 }

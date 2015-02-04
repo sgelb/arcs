@@ -129,7 +129,7 @@ public class Rotator {
 			// Back
 			} else if (face == BACK) {
 				for(Facelet facelet : faceletsForEachFace) {
-					rotateFacelet(facelet, "x", Math.PI);
+					rotateFacelet(facelet, "y", Math.PI);
 				}
 			// Left
 			} else if (face == LEFT) {

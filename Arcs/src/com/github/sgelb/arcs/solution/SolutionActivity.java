@@ -11,7 +11,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -78,17 +77,17 @@ public class SolutionActivity extends Activity {
 		canvas = new Canvas(bitmap);
 		imageView.setImageBitmap(bitmap);
 
-		// FIXME: add clicklistener auf fwd/prev-Buttons
+		// FIXME: correct calculation of previous rotation
 		Button prevBtn = (Button) findViewById(R.id.solPrevBtn);
-		prevBtn.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if (currentStep > 0) {
-					currentStep--;
-					drawSolutionStep();
-				}
-			}
-		});
+//		prevBtn.setOnClickListener(new View.OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				if (currentStep > 0) {
+//					currentStep--;
+//					drawSolutionStep();
+//				}
+//			}
+//		});
 
 		Button forwardBtn = (Button) findViewById(R.id.solFwdBtn);
 		forwardBtn.setOnClickListener(new View.OnClickListener() {
@@ -125,7 +124,6 @@ public class SolutionActivity extends Activity {
 
 
 	private void drawSolutionStep() {
-		Log.d("COLOR", "COLOR: " + solutions[currentStep]);
 		currentFacelets = solver.getNextStep(solutions[currentStep]);
 		drawCurrentFace();
 
@@ -133,11 +131,14 @@ public class SolutionActivity extends Activity {
 		solutionTitle.setText("Step " + (currentStep + 1) + " of " + totalSteps);
 		solutionText.setText(
 				solution + "\n\n"
-				+ "Rotate face "
+				+ "Rotate "
+				+ solutions[currentStep].charAt(0)
+				+ " "
 				+ 90*Character.getNumericValue(solutions[currentStep].charAt(1))
-				+ " ° clockwise.");
+				+ "° clockwise.");
 	}
 
+	// show cube faces
 	private void drawCurrentFace() {
 		for (int i=0; i < rectangles.size(); i++) {
 			Paint paint = new Paint();
@@ -148,7 +149,6 @@ public class SolutionActivity extends Activity {
 		}
 	}
 
-	// show cube faces
 	// show rotation arrow
 	// show step description
 
