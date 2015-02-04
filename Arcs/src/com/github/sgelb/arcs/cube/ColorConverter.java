@@ -1,7 +1,8 @@
 package com.github.sgelb.arcs.cube;
 
+import org.opencv.core.Scalar;
+
 import android.graphics.Color;
-import android.util.Log;
 
 
 
@@ -15,6 +16,16 @@ public class ColorConverter {
 	public static final int GREEN = 3;
 	public static final int WHITE = 4;
 	public static final int YELLOW = 5;
+
+	private static Scalar unsetColor = new Scalar(0, 0, 0);
+	private static Scalar orange = new Scalar(255, 165, 0);
+	private static Scalar blue = new Scalar(0, 0, 255);
+	private static Scalar red = new Scalar(255, 0, 0);
+	private static Scalar green = new Scalar(0, 255, 0);
+	private static Scalar white = new Scalar(255, 255, 255);
+	private static Scalar yellow = new Scalar(255, 255, 0);
+
+	public static Scalar[] colorChoices = {orange, blue, red, green, white, yellow};
 
 	private static String[] colorNames = {"ORANGE", "BLUE", "RED", "GREEN", "WHITE", "YELLOW"};
 	private static String[] singmasterNames = {"F", "R", "B", "L", "D", "U"};
@@ -61,7 +72,6 @@ public class ColorConverter {
 
 	public static int getAndroidColor(int color) {
 		int androidColor = Color.argb(255, 0, 0, 0);
-		Log.d("COLORCONVERTER", "COLOR: " + color);
 
 		switch (color) {
 		case (ORANGE):

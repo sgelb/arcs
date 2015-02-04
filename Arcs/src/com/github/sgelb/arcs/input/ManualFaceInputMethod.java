@@ -24,14 +24,6 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 
 	@SuppressWarnings("unused")
 	private static final String TAG = "ARCS::ManualCubeInputActivity";
-	private Scalar unsetColor = new Scalar(0, 0, 0);
-	private Scalar orange = new Scalar(255, 165, 0);
-	private Scalar blue = new Scalar(0, 0, 255);
-	private Scalar red = new Scalar(255, 0, 0);
-	private Scalar green = new Scalar(0, 255, 0);
-	private Scalar white = new Scalar(255, 255, 255);
-	private Scalar yellow = new Scalar(255, 255, 0);
-	private ArrayList<Scalar> colorChoices;
 
 	private Context mContext;
 
@@ -50,18 +42,11 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 		this.mContext = mContext;
 		rectangles = new ArrayList<Rect>(9);
 		// remembers chosen colors for rectangles
-		colorChoices = new ArrayList<Scalar>(6);
 		colorLine = new ArrayList<Point>(2);
 	}
 
 	@Override
 	public void init(ArrayList<Rect> rectangles, ArrayList<Integer> face) {
-		colorChoices.add(orange);
-		colorChoices.add(blue);
-		colorChoices.add(red);
-		colorChoices.add(green);
-		colorChoices.add(white);
-		colorChoices.add(yellow);
 		currentFace = Rotator.FRONT;
 		if (face != null) {
 			this.face = face;
@@ -79,17 +64,17 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 	public void drawOverlay(Mat frame) {
 		for (int i=0; i<rectangles.size(); i++) {
 			int strokewidth = 2;
-			Scalar color = unsetColor;
+			Scalar color = new Scalar(0, 0, 0);
 
 			if (face.get(i) > ColorConverter.UNSET_COLOR) {
 				strokewidth = 5;
-				color = colorChoices.get(face.get(i));
+				color = ColorConverter.colorChoices[face.get(i)];
 			}
 			Core.rectangle(frame, rectangles.get(i).tl(), rectangles.get(i).br(),
 					color, strokewidth);
 		}
 		Core.line(frame, colorLine.get(0), colorLine.get(1),
-				colorChoices.get(ColorConverter.getUpperFaceColor(currentFace)), 4);
+				ColorConverter.colorChoices[ColorConverter.getUpperFaceColor(currentFace)], 4);
 	}
 
 	@Override
