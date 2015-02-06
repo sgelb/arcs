@@ -39,7 +39,6 @@
     </string-array>
 
     <string name="title_activity_about">About</string>
-    <string name="hello_world">Hello world!</string>
 
     <string-array name="errors">
         <item>There are not exactly nine facelets of each color!</item>
@@ -52,5 +51,12 @@
         <item>Timeout, no solution found within given maximum time!</item>
     </string-array>
     <string name="cube_is_solved">This cube is already solved!</string>
+    
+     <string name="solutionStepTitle">Step %1$s of %2$s</string>
+    <string-array name="rotationTexts">
+        <item>90° clockwise</item>
+        <item>180°</item>
+        <item>90° counter-clockwise</item>
+    </string-array>
     
 </resources>
