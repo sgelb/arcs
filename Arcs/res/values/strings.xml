@@ -41,4 +41,16 @@
     <string name="title_activity_about">About</string>
     <string name="hello_world">Hello world!</string>
 
+    <string-array name="errors">
+        <item>There are not exactly nine facelets of each color!</item>
+        <item>Not all 12 edges exist exactly once!</item>
+        <item>Flip error: One edge has to be flipped!</item>
+        <item>Not all 8 corners exist exactly once!</item>
+        <item>Twist error: One corner has to be twisted!</item>
+        <item>Parity error: Two corners or two edges have to be exchanged!</item>
+        <item>No solution exists for the given maximum move number!</item>
+        <item>Timeout, no solution found within given maximum time!</item>
+    </string-array>
+    <string name="cube_is_solved">This cube is already solved!</string>
+    
 </resources>
