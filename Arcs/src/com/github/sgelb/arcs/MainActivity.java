@@ -421,7 +421,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 		// got valid solution, start SolutionActivity
 		Intent solutionIntent = new Intent(this, SolutionActivity.class);
 		solutionIntent.putExtra(CUBE, cube.getFaceletColors());
-		solutionIntent.putExtra(SOLUTION, solution);
+		solutionIntent.putExtra(SOLUTION, solution.toLowerCase());
 		solutionIntent.putExtra(WIDTH, width);
 		solutionIntent.putExtra(HEIGHT, height);
 		startActivity(solutionIntent);

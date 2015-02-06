@@ -12,7 +12,7 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -78,7 +78,7 @@ public class SolutionActivity extends Activity {
 		imageView.setImageBitmap(bitmap);
 
 		// FIXME: correct calculation of previous rotation
-		Button prevBtn = (Button) findViewById(R.id.solPrevBtn);
+		ImageButton prevBtn = (ImageButton) findViewById(R.id.solPrevBtn);
 //		prevBtn.setOnClickListener(new View.OnClickListener() {
 //			@Override
 //			public void onClick(View v) {
@@ -89,7 +89,7 @@ public class SolutionActivity extends Activity {
 //			}
 //		});
 
-		Button forwardBtn = (Button) findViewById(R.id.solFwdBtn);
+		ImageButton forwardBtn = (ImageButton) findViewById(R.id.solFwdBtn);
 		forwardBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
