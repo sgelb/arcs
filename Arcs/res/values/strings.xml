@@ -16,6 +16,8 @@
     <string name="cameraBtnDesc">Detect colors</string>
     <string name="forwardBtnDesc">Forward button</string>
     
+    <string name="rotate">Rotate</string>
+    
     <string name="dialog_title_cube_input_method_prefs">Cube Input Method</string>
 
     <string-array name="entries_cube_input_method_prefs">
@@ -53,10 +55,20 @@
     <string name="cube_is_solved">This cube is already solved!</string>
     
      <string name="solutionStepTitle">Step %1$s of %2$s</string>
+     
     <string-array name="rotationTexts">
         <item>90° clockwise</item>
         <item>180°</item>
         <item>90° counter-clockwise</item>
+    </string-array>
+    
+    <string-array name="rotationSide">
+        <item>front side</item>
+        <item>right side</item>
+        <item>back side</item>
+        <item>left side</item>
+        <item>down side</item>
+        <item>upper side</item>
     </string-array>
     
 </resources>

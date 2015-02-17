@@ -33,12 +33,9 @@ public class SolutionActivity extends Activity {
 	private String[] solutions;
 	private SolutionDisplay solver;
 	private int currentStep;
-	private int currentFace;
 	private int totalSteps;
 	private int width;
 	private int height;
-	private int xOffset;
-	private int padding;
 	private ArrayList<Rect> rectangles;
 	private Canvas canvas;
 	private TextView solutionTitle;
@@ -52,7 +49,6 @@ public class SolutionActivity extends Activity {
 
 
 	private ArrayList<RectF> rects;
-	private RotateAnimation[] animations;
 
 	public SolutionActivity() {
 		rects = new ArrayList<RectF>();
@@ -134,8 +130,6 @@ public class SolutionActivity extends Activity {
 		// Rectangles
 		LayoutCalculator lc = new LayoutCalculator(width, height);
 		rectangles = lc.calculateRectanglesCoordinates();
-		xOffset = lc.getXOffset();
-		padding = lc.getPadding();
 
 		// precalculate android.graphics.RectF
 		for (Rect rect : rectangles) {
@@ -158,26 +152,7 @@ public class SolutionActivity extends Activity {
 		drawCurrentFace();
 
 		solutionTitle.setText(getString(R.string.solutionStepTitle, currentStep + 1, totalSteps));
-
-		int rotationIndex = Character.getNumericValue(solutions[currentStep].charAt(1)) - 1;
-		String rotationText = getResources().getStringArray(R.array.rotationTexts)[rotationIndex];
-
-		// concatenate solution steps into single string, highlighting current step
-		StringBuilder solution = new StringBuilder();
-		for (int i = 0; i < solutions.length; i++) {
-			if (currentStep == i) {
-				solution.append("<b><i>" + solutions[i] + "</i></b>");
-			} else {
-				solution.append(solutions[i]);
-			}
-			solution.append(" ");
-		}
-		solution.append("<br><br>");
-		solution.append("Rotate ");
-		solution.append(solutions[currentStep].charAt(0));
-		solution.append(" " + rotationText);
-
-		solutionText.setText(Html.fromHtml(solution.toString()));
+		solutionText.setText(Html.fromHtml(createSolutionText()));
 
 		// set animation
 		switch (solutions[currentStep].charAt(1)) {
@@ -196,6 +171,57 @@ public class SolutionActivity extends Activity {
 
 	}
 
+	private String createSolutionText() {
+		int rotationIndex = Character.getNumericValue(solutions[currentStep].charAt(1)) - 1;
+		String rotationText = getResources().getStringArray(R.array.rotationTexts)[rotationIndex];
+
+		// concatenate solution steps into single string, highlighting current step
+		StringBuilder solution = new StringBuilder();
+		for (int i = 0; i < solutions.length; i++) {
+			if (currentStep == i) {
+				solution.append("<b><i>" + solutions[i] + "</i></b>");
+			} else {
+				solution.append(solutions[i]);
+			}
+			solution.append(" ");
+		}
+
+		// create concrete solution advice, e.g. "Rotate b 90° clockwise"
+		solution.append("<br><br>");
+		solution.append(getString(R.string.rotate) + " ");
+		solution.append(translateRotationToString(solutions[currentStep].charAt(0)));
+		solution.append(" " + rotationText);
+
+		return solution.toString();
+	}
+
+	private String translateRotationToString(char rotation) {
+		int sideIndex = 0;
+		switch (rotation) {
+		case 'f':
+			sideIndex = 0;
+			break;
+		case 'r':
+			sideIndex = 1;
+			break;
+		case 'b':
+			sideIndex = 2;
+			break;
+		case 'l':
+			sideIndex = 3;
+			break;
+		case 'd':
+			sideIndex = 4;
+			break;
+		case 'u':
+			sideIndex = 5;
+			break;
+		default:
+			sideIndex = 0;
+		}
+		return getResources().getStringArray(R.array.rotationSide)[sideIndex];
+	}
+
 	// show cube faces
 	private void drawCurrentFace() {
 		for (int i=0; i < rectangles.size(); i++) {
@@ -209,7 +235,5 @@ public class SolutionActivity extends Activity {
 	}
 
 	// show rotation arrow
-	// show step description
-
 
 }
