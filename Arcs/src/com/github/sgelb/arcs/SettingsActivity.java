@@ -11,7 +11,7 @@ public class SettingsActivity extends Activity {
 	public SettingsActivity() {
 		super();
 	}
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

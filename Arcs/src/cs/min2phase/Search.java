@@ -155,15 +155,15 @@ public class Search {
     public synchronized String solution(String facelets, int maxDepth, long probeMax, long probeMin, int verbose) {
         int check = verify(facelets);
         if (check != 0) {
-            return "Error " + Math.abs(check);
+            return "error " + Math.abs(check);
         }
-        this.sol = maxDepth + 1;
-        this.probe = 0;
+        sol = maxDepth + 1;
+        probe = 0;
         this.probeMax = probeMax;
         this.probeMin = Math.min(probeMin, probeMax);
         this.verbose = verbose;
-        this.solution = null;
-        this.isRecovery = false;
+        solution = null;
+        isRecovery = false;
 
         init();
 
@@ -217,11 +217,11 @@ public class Search {
     }
 
     public synchronized String next(long probeMax, long probeMin, int verbose) {
-        this.probe = 0;
+        probe = 0;
         this.probeMax = probeMax;
         this.probeMin = Math.min(probeMin, probeMax);
-        this.solution = null;
-        this.isRecovery = (this.verbose & OPTIMAL_SOLUTION) == (verbose & OPTIMAL_SOLUTION);
+        solution = null;
+        isRecovery = (this.verbose & OPTIMAL_SOLUTION) == (verbose & OPTIMAL_SOLUTION);
         this.verbose = verbose;
         return (verbose & OPTIMAL_SOLUTION) == 0 ? search() : searchopt();
     }
@@ -309,12 +309,12 @@ public class Search {
                             phase1(twist[urfIdx][preIdx] >>> 3, twist[urfIdx][preIdx] & 7,
                                    flip[urfIdx][preIdx] >>> 3, flip[urfIdx][preIdx] & 7,
                                    slice[urfIdx][preIdx] & 0x1ff, depth1, -1) == 0) {
-                        return solution == null ? "Error 8" : solution;
+                        return solution == null ? "error 8" : solution;
                     }
                 }
             }
         }
-        return solution == null ? "Error 7" : solution;
+        return solution == null ? "error 7" : solution.toLowerCase();
     }
 
     /**
@@ -395,10 +395,10 @@ public class Search {
                               twist[1][0] >>> 3, twist[1][0] & 7, flip[1][0] >>> 3, flip[1][0] & 7, slice[1][0] & 0x1ff,
                               twist[2][0] >>> 3, twist[2][0] & 7, flip[2][0] >>> 3, flip[2][0] & 7, slice[2][0] & 0x1ff,
                               length1, -1) == 0) {
-                return solution == null ? "Error 8" : solution;
+                return solution == null ? "error 8" : solution.toLowerCase();
             }
         }
-        return solution == null ? "Error 7" : solution;
+        return solution == null ? "error 7" : solution.toLowerCase();
     }
 
     /**

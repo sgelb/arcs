@@ -3,7 +3,7 @@
     xmlns:opencv="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="right" >
+    android:gravity="end" >
 
     <org.opencv.android.JavaCameraView
         android:id="@+id/java_camera_view"

@@ -35,10 +35,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.sgelb.arcs.cube.LayoutCalculator;
 import com.github.sgelb.arcs.cube.Rotator;
 import com.github.sgelb.arcs.cube.RubiksCube;
 import com.github.sgelb.arcs.input.FaceInputMethod;
 import com.github.sgelb.arcs.input.ManualFaceInputMethod;
+import com.github.sgelb.arcs.solution.SolutionActivity;
 
 import cs.min2phase.Search;
 
@@ -48,6 +50,11 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 	private static final String STATE_FACELETS = "cubeFacelets";
 
 	private static final Scalar BGCOLOR = new Scalar(70, 70, 70);
+
+	public static final String CUBE ="com.github.sgelb.arcs.CUBE";
+	public static final String SOLUTION ="com.github.sgelb.arcs.SOLUTION";
+	public static final String WIDTH ="com.github.sgelb.arcs.WIDTH";
+	public static final String HEIGHT ="com.github.sgelb.arcs.HEIGHT";
 
 	private Mat frame;
 	private CameraBridgeViewBase mOpenCvCameraView;
@@ -66,13 +73,15 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 	private RubiksCube cube;
 	private Integer currentFace;
 	private CubeSolver cubeSolver;
+	private int padding;
+	private int xOffset;
 
 	public MainActivity() {
 		Log.i(TAG, "Instantiated new " + this.getClass());
 		faceInputMethod = new ManualFaceInputMethod(this);
 	}
 
-	/** Called when the activity is first created. */
+	/* Called when activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -83,12 +92,12 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 		setContentView(R.layout.main_activity);
 
 		cube = new RubiksCube();
-		// Check whether we're recreating a previously destroyed instance
+		// Check if we're recreating a previously destroyed instance
 		if (savedInstanceState != null) {
-			Log.d(TAG, "Restored state");
 			// Restore cube from saved state
 			int[] colors = savedInstanceState.getIntArray(STATE_FACELETS);
 			cube.setFaceletColors(colors);
+			Log.d(TAG, "Restored state");
 		}
 		currentFace = Rotator.FRONT;
 
@@ -133,6 +142,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 
 		mOpenCvCameraView = (CameraBridgeViewBase) findViewById(R.id.java_camera_view);
 		mOpenCvCameraView.setVisibility(SurfaceView.VISIBLE);
+		// Use back camera
 		mOpenCvCameraView.setCameraIndex(0);
 		mOpenCvCameraView.setCvCameraViewListener(this);
 	}
@@ -224,9 +234,13 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 	public void onCameraViewStarted(int width, int height) {
 		this.width = width;
 		this.height = height;
-		faceInputMethod.init(height, cube.getFaceColor(currentFace));
+		LayoutCalculator lc = new LayoutCalculator(width, height);
+		faceInputMethod.init(lc.calculateRectanglesCoordinates(), cube.getFaceColor(currentFace));
+		xOffset = lc.getXOffset();
+		padding = lc.getPadding();
 		positionViews();
 	}
+
 
 	@Override
 	public void onCameraViewStopped() {
@@ -242,8 +256,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 
 	private void drawViewBackground() {
 		// draw solid rect as background for text/button on right side of layout
-		Core.rectangle(frame, new Point(faceInputMethod.getXOffset() - faceInputMethod.getPadding(), 0),
-				new Point(width, height), BGCOLOR, -1);
+		Core.rectangle(frame, new Point(xOffset - padding/2, 0), new Point(width, height), BGCOLOR, -1);
 	}
 
 	private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
@@ -281,9 +294,6 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 
 	private void positionViews() {
 		// Position views according to calculated size of rectangles
-		int xOffset = faceInputMethod.getXOffset();
-		int padding = faceInputMethod.getPadding();
-
 		LinearLayout layout = (LinearLayout) findViewById(R.id.linearView);
 		layout.setPadding(xOffset, padding, padding, padding);
 
@@ -309,7 +319,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 			forwardBtn.setImageResource(R.drawable.ic_launcher);
 			if (cube.hasUnsetFacelets()) {
 				disableButton(forwardBtn);
-				}
+			}
 		}
 	}
 
@@ -382,51 +392,37 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 		}
 
 		@Override
-	    protected void onPostExecute(String result) {
+		protected void onPostExecute(String result) {
 			enableButton(forwardBtn);
 			long runTime = System.currentTimeMillis() - startTime;
 			Log.d(TAG, "Found solution in " + runTime + "ms :" + result);
 			processResult(result);
-	    }
+		}
 	}
 
-	private void processResult(String result) {
-		if (result.contains("Error")) {
-			switch (result.charAt(result.length() - 1)) {
-			case '1':
-				result = "There are not exactly nine facelets of each color!";
-				break;
-			case '2':
-				result = "Not all 12 edges exist exactly once!";
-				break;
-			case '3':
-				result = "Flip error: One edge has to be flipped!";
-				break;
-			case '4':
-				result = "Not all 8 corners exist exactly once!";
-				break;
-			case '5':
-				result = "Twist error: One corner has to be twisted!";
-				break;
-			case '6':
-				result = "Parity error: Two corners or two edges have to be exchanged!";
-				break;
-			case '7':
-				result = "No solution exists for the given maximum move number!";
-				break;
-			case '8':
-				result = "Timeout, no solution found within given maximum time!";
-				break;
-			}
-			Toast.makeText(this, result, Toast.LENGTH_LONG).show();
-			return;
-		} else if (result.isEmpty()) {
-			result = "This cube is already solved!";
-			Toast.makeText(this, result, Toast.LENGTH_LONG).show();
+	private void processResult(String solution) {
+
+		// error handling
+		if (solution.startsWith("error")) {
+			int errorcode = Character.getNumericValue(solution.charAt(solution.length() - 1)) - 1;
+			solution = getResources().getStringArray(R.array.errors)[errorcode];
+			Toast.makeText(this, solution, Toast.LENGTH_LONG).show();
 			return;
 		}
-		instructionTitle.setText(getString(R.string.solution));
-		instructionContent.setText(result);
+
+		// solution is empty aka cube already solved
+		if (solution.isEmpty()) {
+			Toast.makeText(this, getString(R.string.cube_is_solved), Toast.LENGTH_LONG).show();
+			return;
+		}
+
+		// got valid solution, start SolutionActivity
+		Intent solutionIntent = new Intent(this, SolutionActivity.class);
+		solutionIntent.putExtra(CUBE, cube.getFaceletColors());
+		solutionIntent.putExtra(SOLUTION, solution.toLowerCase());
+		solutionIntent.putExtra(WIDTH, width);
+		solutionIntent.putExtra(HEIGHT, height);
+		startActivity(solutionIntent);
 	}
 
 

@@ -28,7 +28,6 @@ public class RubiksCubeTest  extends TestCase {
 		locationA = new FaceletLocation(-1, 1, 1);
 		locationB = new FaceletLocation(0, 1, 1);
 		locationC = new FaceletLocation(1, 1, 1);
-		cube.rotateFront();
 		assertTrue(Arrays.equals(locationA.getLocation(), cube.getFacelets()[0].getLocationsAsArray()));
 		assertTrue(Arrays.equals(locationB.getLocation(), cube.getFacelets()[1].getLocationsAsArray()));
 		assertTrue(Arrays.equals(locationC.getLocation(), cube.getFacelets()[2].getLocationsAsArray()));
@@ -39,7 +38,6 @@ public class RubiksCubeTest  extends TestCase {
 		locationA = new FaceletLocation(1, 1, 1);
 		locationB = new FaceletLocation(1, 1, 0);
 		locationC = new FaceletLocation(1, 1, -1);
-		cube.rotateRight();
 		assertTrue(Arrays.equals(locationA.getLocation(), cube.getFacelets()[9].getLocationsAsArray()));
 		assertTrue(Arrays.equals(locationB.getLocation(), cube.getFacelets()[10].getLocationsAsArray()));
 		assertTrue(Arrays.equals(locationC.getLocation(), cube.getFacelets()[11].getLocationsAsArray()));
@@ -51,7 +49,6 @@ public class RubiksCubeTest  extends TestCase {
 		locationA = new FaceletLocation(1, 1, -1);
 		locationB = new FaceletLocation(1, 0, -1);
 		locationC = new FaceletLocation(1, -1, -1);
-		cube.rotateBack();
 		assertTrue(Arrays.equals(locationA.getLocation(), cube.getFacelets()[18].getLocationsAsArray()));
 		assertTrue(Arrays.equals(locationB.getLocation(), cube.getFacelets()[21].getLocationsAsArray()));
 		assertTrue(Arrays.equals(locationC.getLocation(), cube.getFacelets()[24].getLocationsAsArray()));
@@ -63,7 +60,6 @@ public class RubiksCubeTest  extends TestCase {
 		locationA = new FaceletLocation(-1, 1, -1);
 		locationB = new FaceletLocation(-1, 1, 0);
 		locationC = new FaceletLocation(-1, 1, 1);
-		cube.rotateLeft();
 		assertTrue(Arrays.equals(locationA.getLocation(), cube.getFacelets()[27].getLocationsAsArray()));
 		assertTrue(Arrays.equals(locationB.getLocation(), cube.getFacelets()[28].getLocationsAsArray()));
 		assertTrue(Arrays.equals(locationC.getLocation(), cube.getFacelets()[29].getLocationsAsArray()));
@@ -74,7 +70,6 @@ public class RubiksCubeTest  extends TestCase {
 		locationA = new FaceletLocation(1, -1, 1);
 		locationB = new FaceletLocation(1, -1, 0);
 		locationC = new FaceletLocation(1, -1, -1);
-		cube.rotateDown();
 		assertTrue(Arrays.equals(locationA.getLocation(), cube.getFacelets()[38].getLocationsAsArray()));
 		assertTrue(Arrays.equals(locationB.getLocation(), cube.getFacelets()[41].getLocationsAsArray()));
 		assertTrue(Arrays.equals(locationC.getLocation(), cube.getFacelets()[44].getLocationsAsArray()));
@@ -85,12 +80,17 @@ public class RubiksCubeTest  extends TestCase {
 		locationA = new FaceletLocation(-1, 1, -1);
 		locationB = new FaceletLocation(-1, 1, 0);
 		locationC = new FaceletLocation(-1, 1, 1);
-		cube.rotateUp();
 		assertTrue(Arrays.equals(locationA.getLocation(), cube.getFacelets()[45].getLocationsAsArray()));
 		assertTrue(Arrays.equals(locationB.getLocation(), cube.getFacelets()[48].getLocationsAsArray()));
 		assertTrue(Arrays.equals(locationC.getLocation(), cube.getFacelets()[51].getLocationsAsArray()));
 	}
 
+	public void testInitialCube() {
+		cube = new RubiksCube();
+		for (Facelet facelet : cube.getFacelets()) {
+			assertEquals(ColorConverter.UNSET_COLOR, facelet.getColor());
+		}
+	}
 
 	public void testShouldUpdateCube() {
 		Facelet[] originalFrontFace = cube.getFace(Rotator.FRONT);
@@ -100,12 +100,6 @@ public class RubiksCubeTest  extends TestCase {
 		assertNotSame(originalFrontFace[0].getColor(), updatedFrontFace[0].getColor());
 	}
 
-	public void testInitialCube() {
-		cube = new RubiksCube();
-		for (Facelet facelet : cube.getFacelets()) {
-			assertEquals(ColorConverter.UNSET_COLOR, facelet.getColor());
-		}
-	}
 
 	public void testShouldRotateFrontAndUpdateCube() {
 		cube = new RubiksCube();
@@ -161,12 +155,5 @@ public class RubiksCubeTest  extends TestCase {
 		int color = face[0].getColor();
 		assertEquals(ColorConverter.BLUE, color);
 	}
-
-//	public void testShouldReturnFaces() {
-//		testShouldUpdateCube();
-//		for(int i = 0; i < 9; i++) {
-//			System.out.println(squares.getRightFace()[i].getColor());
-//		}
-//	}
 
 }
