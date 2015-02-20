@@ -1,0 +1,84 @@
+\documentclass[a4paper,DIV11,bibliography=totocnumbered,titlepage]{scrartcl}
+
+\usepackage[T1]{fontenc}  
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+
+\usepackage{multicol}         
+\usepackage{mathtools}       
+\usepackage{amssymb}
+\usepackage{listings}      
+\usepackage{csquotes}
+\usepackage{pifont}
+\usepackage[hyperfootnotes=false]{hyperref}
+
+% Tabellen
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{multicol}
+
+\usepackage{tocloft}
+\renewcommand{\cftfigpresnum}{Abb. }
+\settowidth{\cftfignumwidth}{Abb. 10\quad}
+
+
+\usepackage{ifthen}
+\newcommand{\forloop}[5][1]{%
+\setcounter{#2}{#3}%
+\ifthenelse{#4}{#5\addtocounter{#2}{#1}%
+\forloop[#1]{#2}{\value{#2}}{#4}{#5}}%
+{}}
+
+\newcounter{crcounter}
+
+\newcommand{\compensaterule}[1]{%
+\forloop{crcounter}{1}{\value{crcounter} < #1}%
+{\vspace*{-\aboverulesep}\vspace*{-\belowrulesep}}}
+
+\newcommand{\multirowbt}[3]{\multirow{#1}{#2}%
+{\compensaterule{#1}#3}}
+
+
+% bibtex
+\usepackage[natbib,bibencoding=auto,style=apa,backend=biber]{biblatex}
+\bibliography{references.bib}
+\DeclareLanguageMapping{ngerman}{ngerman-apa}
+
+
+%Schusterjungen und Hurenkinder
+\clubpenalty = 10000
+\widowpenalty = 10000
+
+%Farbnamen benutzen
+\usepackage[usenames,dvipsnames]{color}
+
+
+\usepackage{setspace}
+\onehalfspacing
+
+\setlength{\parindent}{1em}
+
+\usepackage{enumitem}
+\setlist{nolistsep} % or \setlist{noitemsep} to leave space around whole list
+
+% \begin{enumerate}[label=(\roman{*})]
+
+\newcommand{\HRule}[1]{\rule{\linewidth}{#1}} 	% Horizontal rule
+
+\makeatletter							% Title
+\def\printtitle{%						
+    {\centering \@title\par}}
+\makeatother									
+
+\makeatletter							% Author
+\def\printauthor{%					
+    {\centering \large \@author}}				
+\makeatother							
+
+\usepackage{lastpage}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\footrulewidth}{0.5pt}
+\renewcommand{\headrulewidth}{0.5pt}
+
