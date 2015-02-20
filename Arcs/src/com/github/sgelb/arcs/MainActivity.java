@@ -299,8 +299,10 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 		LinearLayout layout = (LinearLayout) findViewById(R.id.linearView);
 		layout.setPadding(xOffset, padding, padding, padding);
 
-		instructionContent.setMaxWidth(width - padding - xOffset);
-		instructionContent.setMinWidth(width - padding - xOffset);
+//		instructionContent.setMaxWidth(width - padding - xOffset);
+//		instructionContent.setMinWidth(width - padding - xOffset);
+		instructionContent.setMinWidth(width);
+		instructionContent.setMaxWidth(width);
 	}
 
 	private void forwardBtnAction() {
