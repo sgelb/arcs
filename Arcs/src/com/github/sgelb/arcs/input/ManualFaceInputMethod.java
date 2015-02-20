@@ -28,38 +28,28 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 
 	private static final String TAG = "ARCS::ManualCubeInputActivity";
 
-
 	// Array holding coordinates of rectangle overlays
-    private ArrayList<Rect> rectangles;
-    // Array holding coordinates of color line
-    private ArrayList<Point> colorLine;
+	private ArrayList<Rect> rectangles;
+	// Array holding coordinates of color line
+	private ArrayList<Point> colorLine;
 	private Scalar unsetColor = new Scalar(0, 0, 0);
-	private Scalar orange = new Scalar(255, 165, 0);
-	private Scalar blue = new Scalar(0, 0, 255);
-	private Scalar red = new Scalar(255, 0, 0);
-	private Scalar green = new Scalar(0, 255, 0);
-	private Scalar white = new Scalar(255, 255, 255);
-	private Scalar yellow = new Scalar(255, 255, 0);
-	private ArrayList<Scalar> colorChoices;
 
 	private Context mContext;
-	private int xOffset;
-	private int padding;
 	private int maxRows;
 	private int maxCols;
 	private int rowStart;
 	private int colStart;
 
 
-    // We are only interested in colors, so face is just an array of
-    // ints aka ColorSquare.COLOR
-    private ArrayList<Integer> face;
+	// We are only interested in colors, so face is just an array of
+	// ints aka ColorSquare.COLOR
+	private ArrayList<Integer> face;
 
-    private Integer currentFace;
+	private Integer currentFace;
 
-    private int detectingColorsCountdown;
-    private int detectingColorRounds;
-    private ArrayList<HashMap<String, Double>> detectedColors;
+	private int detectingColorsCountdown;
+	private int detectingColorRounds;
+	private ArrayList<HashMap<String, Double>> detectedColors;
 
 	public ManualFaceInputMethod(Context mContext) {
 		this.mContext = mContext;
@@ -70,9 +60,8 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 
 	@Override
 	public void init(ArrayList<Rect> rectangles, ArrayList<Integer> face) {
-		colorChoices = new ArrayList<Scalar>(6);
 		detectingColorsCountdown = 0;
-		detectingColorRounds = 1;
+		detectingColorRounds = 2;
 		currentFace = Rotator.FRONT;
 		if (face != null) {
 			this.face = face;
@@ -80,6 +69,13 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 			this.face = new ArrayList<Integer>(Collections.nCopies(9, ColorConverter.UNSET_COLOR));
 		}
 		this.rectangles = rectangles;
+
+		// Values needed by detectColors
+		maxRows = rectangles.get(0).height - 1;
+		maxCols = rectangles.get(0).width - 1;
+		rowStart = (int) Math.ceil(maxRows/3.0);
+		colStart = (int) Math.ceil(maxCols/3.0);
+
 		colorLine.add(0, new Point(rectangles.get(1).tl().x, rectangles.get(1).tl().y/2));
 		colorLine.add(1, new Point(rectangles.get(1).br().x, rectangles.get(1).tl().y/2));
 		addObserver((Observer) mContext);
@@ -88,6 +84,8 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 
 	@Override
 	public void drawOverlay(Mat frame) {
+
+		// get known color from middle facelet and precalc range of other colors
 
 		// draw rectangles
 		for (int i=0; i<rectangles.size(); i++) {
@@ -235,7 +233,7 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 		Imgproc.cvtColor(facelet, facelet, Imgproc.COLOR_BGR2HLS);
 
 		// We read hue and luminance values from 5 points, which are arranged like the "5" dots on a dice
-		// and calculate the mean over a period of 60 frames
+		// and calculate the mean over a period of $detectingColorRounds frames
 		double hue = facelet.get(maxRows/2, maxCols/2)[0];
 		double lum = facelet.get(maxRows/2, maxCols/2)[1];
 		for (int row=rowStart; row < maxRows; row = row + rowStart) {
@@ -270,8 +268,7 @@ public class ManualFaceInputMethod extends Observable implements FaceInputMethod
 			color = ColorConverter.WHITE;
 		}
 
-		Log.d(TAG, "COLOR: " + faceletId + ":"+ color);
-		Log.d(TAG, "COLOR H: " + hue + "L: " + lum);
+		Log.d(TAG, "COLOR: " + faceletId + ":"+ ColorConverter.getColorName(color) + ", H:" + hue + ", L:" + lum);
 		face.set(faceletId, color);
 
 		// test if all facelets on face are set

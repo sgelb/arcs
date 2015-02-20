@@ -11,8 +11,11 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.View;
-import android.widget.Button;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -30,17 +33,19 @@ public class SolutionActivity extends Activity {
 	private String[] solutions;
 	private SolutionDisplay solver;
 	private int currentStep;
-	private int currentFace;
 	private int totalSteps;
 	private int width;
 	private int height;
-	private int xOffset;
-	private int padding;
 	private ArrayList<Rect> rectangles;
 	private Canvas canvas;
 	private TextView solutionTitle;
 	private TextView solutionText;
 	private Facelet[] currentFacelets;
+	private ImageView imageView;
+
+	private RotateAnimation rotate90cw;
+	private RotateAnimation rotate180;
+	private RotateAnimation rotate90ccw;
 
 
 	private ArrayList<RectF> rects;
@@ -61,35 +66,56 @@ public class SolutionActivity extends Activity {
 		cube.setFaceletColors(intent.getIntArrayExtra(MainActivity.CUBE));
 		solver = new SolutionDisplay(cube);
 
+		// define animations
+		rotate90cw = new RotateAnimation(0, 90,
+				Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
+				0.5f);
+		rotate90cw.setRepeatCount(-1);
+		rotate90cw.setDuration(3000);
+
+		rotate180 = new RotateAnimation(0, 180,
+				Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
+				0.5f);
+		rotate180.setRepeatCount(-1);
+		rotate180.setDuration(6000);
+
+		rotate90ccw = new RotateAnimation(0, -90,
+				Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
+				0.5f);
+		rotate90ccw.setRepeatCount(-1);
+		rotate90ccw.setDuration(3000);
+
 		solution = intent.getStringExtra(MainActivity.SOLUTION);
 		width = intent.getIntExtra(MainActivity.WIDTH, 0);
 		height = intent.getIntExtra(MainActivity.HEIGHT, 0);
 
 
-		ImageView imageView = (ImageView) findViewById(R.id.imageView);
+		imageView = (ImageView) findViewById(R.id.imageView);
 		imageView.getLayoutParams().width = height;
 
 		solutionTitle = (TextView) findViewById(R.id.solutionTitle);
 		solutionText = (TextView) findViewById(R.id.solutionText);
 
 		// create canvas
-		Bitmap bitmap = Bitmap.createBitmap(height, height, Bitmap.Config.ARGB_8888);
+		int h = (int) Math.sqrt((2*height*height));
+		Bitmap bitmap = Bitmap.createBitmap(h, h, Bitmap.Config.ARGB_8888);
 		canvas = new Canvas(bitmap);
 		imageView.setImageBitmap(bitmap);
 
-		// FIXME: correct calculation of previous rotation
-		Button prevBtn = (Button) findViewById(R.id.solPrevBtn);
-//		prevBtn.setOnClickListener(new View.OnClickListener() {
-//			@Override
-//			public void onClick(View v) {
-//				if (currentStep > 0) {
-//					currentStep--;
-//					drawSolutionStep();
-//				}
-//			}
-//		});
 
-		Button forwardBtn = (Button) findViewById(R.id.solFwdBtn);
+		// FIXME: correct calculation of previous rotation
+		ImageButton prevBtn = (ImageButton) findViewById(R.id.solPrevBtn);
+		//		prevBtn.setOnClickListener(new View.OnClickListener() {
+		//			@Override
+		//			public void onClick(View v) {
+		//				if (currentStep > 0) {
+		//					currentStep--;
+		//					drawSolutionStep();
+		//				}
+		//			}
+		//		});
+
+		ImageButton forwardBtn = (ImageButton) findViewById(R.id.solFwdBtn);
 		forwardBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -104,13 +130,11 @@ public class SolutionActivity extends Activity {
 		// Rectangles
 		LayoutCalculator lc = new LayoutCalculator(width, height);
 		rectangles = lc.calculateRectanglesCoordinates();
-		xOffset = lc.getXOffset();
-		padding = lc.getPadding();
 
 		// precalculate android.graphics.RectF
 		for (Rect rect : rectangles) {
-			rects.add(new RectF((float) rect.tl().x, (float) rect.tl().y,
-					(float) rect.br().x, (float) rect.br().y));
+			rects.add(new RectF((float) rect.tl().x+(h-height)/2, (float) rect.tl().y+(h-height)/2,
+					(float) rect.br().x+(h-height)/2, (float) rect.br().y+(h-height)/2));
 		}
 
 		// split solution string
@@ -127,15 +151,75 @@ public class SolutionActivity extends Activity {
 		currentFacelets = solver.getNextStep(solutions[currentStep]);
 		drawCurrentFace();
 
-		// FIXME: use R.strings
-		solutionTitle.setText("Step " + (currentStep + 1) + " of " + totalSteps);
-		solutionText.setText(
-				solution + "\n\n"
-				+ "Rotate "
-				+ solutions[currentStep].charAt(0)
-				+ " "
-				+ 90*Character.getNumericValue(solutions[currentStep].charAt(1))
-				+ "° clockwise.");
+		solutionTitle.setText(getString(R.string.solutionStepTitle, currentStep + 1, totalSteps));
+		solutionText.setText(Html.fromHtml(createSolutionText()));
+
+		// set animation
+		switch (solutions[currentStep].charAt(1)) {
+		case '1':
+			imageView.setAnimation(rotate90cw);
+			break;
+		case '2':
+			imageView.setAnimation(rotate180);
+			break;
+		case '3':
+			imageView.setAnimation(rotate90ccw);
+			break;
+		default:
+			imageView.setAnimation(null);
+		}
+
+	}
+
+	private String createSolutionText() {
+		int rotationIndex = Character.getNumericValue(solutions[currentStep].charAt(1)) - 1;
+		String rotationText = getResources().getStringArray(R.array.rotationTexts)[rotationIndex];
+
+		// concatenate solution steps into single string, highlighting current step
+		StringBuilder solution = new StringBuilder();
+		for (int i = 0; i < solutions.length; i++) {
+			if (currentStep == i) {
+				solution.append("<b><i>" + solutions[i] + "</i></b>");
+			} else {
+				solution.append(solutions[i]);
+			}
+			solution.append(" ");
+		}
+
+		// create concrete solution advice, e.g. "Rotate b 90° clockwise"
+		solution.append("<br><br>");
+		solution.append(getString(R.string.rotate) + " ");
+		solution.append(translateRotationToString(solutions[currentStep].charAt(0)));
+		solution.append(" " + rotationText);
+
+		return solution.toString();
+	}
+
+	private String translateRotationToString(char rotation) {
+		int sideIndex = 0;
+		switch (rotation) {
+		case 'f':
+			sideIndex = 0;
+			break;
+		case 'r':
+			sideIndex = 1;
+			break;
+		case 'b':
+			sideIndex = 2;
+			break;
+		case 'l':
+			sideIndex = 3;
+			break;
+		case 'd':
+			sideIndex = 4;
+			break;
+		case 'u':
+			sideIndex = 5;
+			break;
+		default:
+			sideIndex = 0;
+		}
+		return getResources().getStringArray(R.array.rotationSide)[sideIndex];
 	}
 
 	// show cube faces
@@ -147,10 +231,9 @@ public class SolutionActivity extends Activity {
 			paint.setColor(ColorConverter.getAndroidColor(currentFacelets[i].getColor()));
 			canvas.drawRect(rects.get(i), paint);
 		}
+
 	}
 
 	// show rotation arrow
-	// show step description
-
 
 }

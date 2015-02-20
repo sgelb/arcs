@@ -10,7 +10,7 @@ public class Rotator {
 	 * This code is heavily inspired by:
 	 * http://www.algosome.com/articles/rubiks-cube-computer-simulation.html
 	 * Big thanks to www.algosome.com!
-	*/
+	 */
 
 	@SuppressWarnings("unused")
 	private static final String TAG = "ARCS::Rotator";
@@ -121,27 +121,27 @@ public class Rotator {
 			// Front
 			if (face == FRONT) {
 				// we do not need to rotate for front face
-			// Right
+				// Right
 			} else if (face == RIGHT) {
 				for(Facelet facelet : faceletsForEachFace) {
-				rotateFacelet(facelet, "y", Math.PI / 2);
+					rotateFacelet(facelet, "y", Math.PI / 2);
 				}
-			// Back
+				// Back
 			} else if (face == BACK) {
 				for(Facelet facelet : faceletsForEachFace) {
 					rotateFacelet(facelet, "y", Math.PI);
 				}
-			// Left
+				// Left
 			} else if (face == LEFT) {
 				for(Facelet facelet : faceletsForEachFace) {
 					rotateFacelet(facelet, "y", -Math.PI / 2);
 				}
-			// Down
+				// Down
 			} else if (face == DOWN) {
 				for(Facelet facelet : faceletsForEachFace) {
 					rotateFacelet(facelet, "x", Math.PI / 2);
 				}
-			// Up
+				// Up
 			} else if (face == UP) {
 				for(Facelet facelet : faceletsForEachFace) {
 					rotateFacelet(facelet, "x", -Math.PI / 2);

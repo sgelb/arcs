@@ -20,7 +20,7 @@ public class SolutionDisplay {
 
 	public Facelet[] getNextStep(String step) {
 
-		/* step is a string that looks like "R3".
+		/* step is a string that looks like "r3".
 		 * The first char is the rotation and the second
 		 * char is the count, how often this rotation
 		 * should be done.

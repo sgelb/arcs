@@ -10,11 +10,10 @@ public class LayoutCalculator {
 
 	private int padding;
 	private int xOffset;
-	private int width;
 	private int height;
 
 	public LayoutCalculator(int width, int height) {
-		this.width = width;
+		// width is unused this time
 		this.height = height;
 	}
 

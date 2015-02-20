@@ -155,8 +155,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 	}
 
 	@Override
-	public void onPause()
-	{
+	public void onPause() {
 		super.onPause();
 		if (mOpenCvCameraView != null) {
 			mOpenCvCameraView.disableView();
@@ -167,8 +166,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 	}
 
 	@Override
-	public void onResume()
-	{
+	public void onResume() {
 		super.onResume();
 		OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_9,
 				this, mLoaderCallback);
@@ -323,7 +321,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 			forwardBtn.setImageResource(R.drawable.ic_launcher);
 			if (cube.hasUnsetFacelets()) {
 				disableButton(forwardBtn);
-				}
+			}
 		}
 	}
 
@@ -396,50 +394,31 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Obs
 		}
 
 		@Override
-	    protected void onPostExecute(String result) {
+		protected void onPostExecute(String result) {
 			enableButton(forwardBtn);
 			long runTime = System.currentTimeMillis() - startTime;
 			Log.d(TAG, "Found solution in " + runTime + "ms :" + result);
 			processResult(result);
-	    }
+		}
 	}
 
 	private void processResult(String solution) {
-		if (solution.contains("Error")) {
-			switch (solution.charAt(solution.length() - 1)) {
-			case '1':
-				solution = "There are not exactly nine facelets of each color!";
-				break;
-			case '2':
-				solution = "Not all 12 edges exist exactly once!";
-				break;
-			case '3':
-				solution = "Flip error: One edge has to be flipped!";
-				break;
-			case '4':
-				solution = "Not all 8 corners exist exactly once!";
-				break;
-			case '5':
-				solution = "Twist error: One corner has to be twisted!";
-				break;
-			case '6':
-				solution = "Parity error: Two corners or two edges have to be exchanged!";
-				break;
-			case '7':
-				solution = "No solution exists for the given maximum move number!";
-				break;
-			case '8':
-				solution = "Timeout, no solution found within given maximum time!";
-				break;
-			}
-			Toast.makeText(this, solution, Toast.LENGTH_LONG).show();
-			return;
-		} else if (solution.isEmpty()) {
-			solution = "This cube is already solved!";
+
+		// error handling
+		if (solution.startsWith("error")) {
+			int errorcode = Character.getNumericValue(solution.charAt(solution.length() - 1)) - 1;
+			solution = getResources().getStringArray(R.array.errors)[errorcode];
 			Toast.makeText(this, solution, Toast.LENGTH_LONG).show();
 			return;
 		}
 
+		// solution is empty aka cube already solved
+		if (solution.isEmpty()) {
+			Toast.makeText(this, getString(R.string.cube_is_solved), Toast.LENGTH_LONG).show();
+			return;
+		}
+
+		// got valid solution, start SolutionActivity
 		Intent solutionIntent = new Intent(this, SolutionActivity.class);
 		solutionIntent.putExtra(CUBE, cube.getFaceletColors());
 		solutionIntent.putExtra(SOLUTION, solution.toLowerCase());

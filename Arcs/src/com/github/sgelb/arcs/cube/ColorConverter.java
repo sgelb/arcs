@@ -5,8 +5,6 @@ import org.opencv.core.Scalar;
 import android.graphics.Color;
 
 
-
-
 public class ColorConverter {
 
 	public static final int UNSET_COLOR = -1;
@@ -17,7 +15,6 @@ public class ColorConverter {
 	public static final int WHITE = 4;
 	public static final int YELLOW = 5;
 
-	private static Scalar unsetColor = new Scalar(0, 0, 0);
 	private static Scalar orange = new Scalar(255, 165, 0);
 	private static Scalar blue = new Scalar(0, 0, 255);
 	private static Scalar red = new Scalar(255, 0, 0);
