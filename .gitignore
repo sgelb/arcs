@@ -30,3 +30,12 @@ proguard/
 *~
 *.swp
 *.bak
+
+# tex files in doku/
+doku/*.aux
+doku/*.bcf
+doku/*.lof
+doku/*.log
+doku/*.pdf
+doku/*.run.xml
+doku/*.toc
