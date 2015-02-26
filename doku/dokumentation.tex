@@ -19,74 +19,63 @@ Vermutlich brauchen wir hierfür kein Abstrakt, aber ich lasse es erstmal drin.
 \tableofcontents
 \newpage
 
-\section{Beispielkrams}
-Beispielabschnitt, in den ich die am meisten benutzen Auszeichnungen nutze:
+\section{Idee}  % sgelb 90%
+Die grundlegende Idee ist simpel und mit drei Schritten erklärt:
 
-\emph{Betonung, kursiv}
+\begin{enumerate}
+
+  \item Nehme einen ungelösten \emph{Rubik's Cube}
+
+  \item Lese seine Seiten über die Kamera eines Smartphones ein
+
+  \item Folge den Anweisungen und löse den Würfel
+
+\end{enumerate}
+
+Hauptaugenmerk lag hierbei auf dem möglichst einfachen Einlesen der sechs
+Würfelseiten mit den insgesamt 54 Farbflächen.
+
+\section{Der Würfel}  % sgelb
 
 \begin{figure}[ht!]
-    \centering
-    \includegraphics[width=\textwidth]{pics/test.png}
-    \caption{Eine Beispielunterschrift unter einem Beispielbild}
-    \label{fig:test}
+  \centering
+  \includegraphics[width=\textwidth]{pics/rubikcube1977.jpg}
+  \caption{Die ersten Exemplare wurden 1977 in Budapest verkauft
+  (\cite{rubik:history})}
+  \label{fig:rubik1977}
 \end{figure}
 
-Benötigte Pakete:
-\begin{itemize}
+Der \emph{Rubik's Cube} oder \emph{Zauberwürfel} wurde 1974 durch den
+ungarischen Architekturprofessor Ernő Rubik erfunden, um seinen Studierenden
+räumliche Verhältnisse anschaulicher präsentieren zu können. Seitdem beschäftigt
+sich nicht nur die Mathematik immer wieder damit, der Würfel hat auch seinen
+eigenen Sport, das \emph{Speedcubing} geschaffen.\footcite{rubik:history} 
 
-  \item texlive-bibtexextra
-  \item texlive-core
-  \item texlive-latexextra
-  \item texlive-science
-  \item Alle Pakete gibt es auch für Debian
-  \item (für eine nummerierte Liste nutzt man \emph{enumerate} anstelle von
-    \emph{itemize})
+\subsection{Aufbau}  % 100% sgelb
 
-\end{itemize}
+Der klassische sechsseitige Würfel aus Abbildung~\ref{fig:rubik1977} besteht aus
+insgesamt 26 Teilen. Jede der sechs mittleren Flächen auf jeder Seite – die
+\emph{Mittelteile} – hat eine eigene Farbe.\footnote{In der Regel sind dies
+Orange, Blau, Rot, Grün, Weiß und Gelb} Sie lassen sich nicht rotieren, ihr
+Position zueinander ist also festgelegt. Desweiteren gibt es zwölf
+\emph{Kantensteine}, die zwei über eine Kante verbundene \emph{facelets}
+verbinden und acht \emph{Ecksteine}, die drei \emph{facelets} über eine Ecke
+verbinden.
 
-Technische Begriffe\footnote{Das ist eine Fußnote} oder Code im Fließtext:
-\texttt{com.github.sgelb.arcs}
+\subsection{Lösungsalgorithmen}  % 0% sgelb
 
-Auf das Label aus der Abbildung kann man sich beziehen, die Nummerierung
-geschieht automatisch: siehe Abbildung~\ref{fig:test}).
+Insgesamt ergeben sich rund \( 4,3 \cdot {10}^{19} \) verschiedene
+Kombinationen.
 
+Lösungsansätze blabla, gewählt haben wir x weil y
 
-\textbf{Codeblock:}
+\subsection{Notation}  % sgelb
 
-\begin{lstlisting}
-connect(ui->nextBtn, &QPushButton::clicked, this,
-        &MainWindow::nextTrack);
-\end{lstlisting}
+F, R, B, L, D, U etc
 
-Am Ende noch eine URL, die sich natürlich im pdf Anklicken lässt:
-\url{http://qt-project.org/doc/qt-5/qmediaplayer.html}
-
-Mein workflow sieht in der Regel so aus, dass ich aus vim heraus das pdf
-erstelle:
-
-\texttt{:!pdflatex \%}\footnote{das Ausrufezeichen ruft einen
-externen Befehl auf, das Prozentzeichen steht für das gesamte Dokument}
-
-Einmal erstellt, öffne ich das pdf und da die meisten pdf-Viewer Änderungen
-erkennen, wird das angezeigte pdf bei jeder Neugenerierung aktualisiert.
-Manchmal sind zwei oder drei Aufrufe von \texttt{pdflatex} nötig, um
-Inhaltsverzeichnis etc korrekt zu erstellen.
-
-Quellenangaben sind in \texttt{references.bib} im BibText-Format
-\citep{wiki:bibtex} gelistet und können mit dem entsprechen Befehl eingefügt
-werden. Das ist ein absolutes Killerfeature von Tex, aber werden wir nicht
-brauchen, darum gehe ich da nicht weiter drauf ein. Geiler Scheiß:
-\url{http://www.rtwilson.com/academic/autozotbib},
-\url{http://manas.tungare.name/software/isbn-to-bibtex/} und
-\url{http://lead.to/amazon/en/?key=OpenCV&si=owb&op=bt&bn=&so=ta&ht=de}
-
-
-
-
-\section{Einleitung}  % sgelb 0%
-\subsection{Idee}  % sgelb 0%
 
 \section{Umsetzung}  % sgelb 0%
+
 \subsection{Bibliotheken und Tools}  % colin 0%
 In diesem Kapitel werden die in diesem Projekt verwendeten Bibliotheken und Hilfswerkzeuge
 vorgestellt, ohne deren Hilfe das Projekt kaum Umsetzbar gewesen wäre.
