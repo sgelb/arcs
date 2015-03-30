@@ -162,13 +162,12 @@ Wir haben bewusst auf das EGit Plugin für Eclipse verzichtet. Stattdessen haben
 wir auf das \emph{Ur-Git}, dem Kommandozeilenprogram, zurückgegriffen. Da beide
 Projektmitglieder Linux zur Entwicklung nutzen, stellte das kein Problem dar.
 
-
 \begin{figure}[ht!]
   \centering
-  \includegraphics[width=\textwidth]{pics/arcs_solving.png}
-  \caption{Ansicht des ersten Lösungsschrittes. Die Würfelansicht ist animiert.
+  \includegraphics[width=\textwidth]{pics/arcs_unsolved}
+  \caption{Das graphische Interface zum Einlesen der Würfelseiten.
   (Selbst erstellter Screenshot)}
-  \label{fig:arcs_solving}
+  \label{fig:arcs_unsolved}
 \end{figure}
 
 
@@ -192,17 +191,12 @@ Am Anfang stand die Planung der zu erreichenden Ziele. Wir haben vier große
 Milestones definiert:
 
 \begin{itemize}
-
   \item Implementierung des Code-Grundgerüstes, also der Klassen für den Würfel,
     die Rotation u.ä. sowie die dazugehörigen Tests
   \item manuelle und automatisierte Eingabemöglichkeiten für den Würfel
   \item Berechnung der Lösung
   \item Anzeigen der Lösung
 \end{itemize}
-
-Jeder Milestone setzte sich aus mehreren Issues zusammen.
-Abbildung~\ref{fig:github_issues} zeigt die Issues für den ersten Milestone und
-wer sich für das Lösen verantwortlich zeigt.
 
 \begin{figure}[ht!]
   \centering
@@ -211,6 +205,10 @@ wer sich für das Lösen verantwortlich zeigt.
   (Selbst erstellter Screenshot)}
   \label{fig:github_issues}
 \end{figure}
+
+Jeder Milestone setzte sich aus mehreren Issues zusammen.
+Abbildung~\ref{fig:github_issues} zeigt die Issues für den ersten Milestone und
+wer sich für das Lösen verantwortlich zeigt.
 
 Aus unseren Erfahrungen mit den vorherigen Projekten beschlossen wir, uns
 regelmässig einmal die Woche zu treffen. Diese Treffen erfüllten mehrere Ziele:
@@ -222,7 +220,7 @@ welche Issues wir als nächstes angehen sollten. Am Ende stand oftmals das
 Vereinbaren eines Termines zum gemeinsamen Programmierens.
 
 
-\section{Benutzerhandbuch}  % colin 0%
+\section{Benutzung}  % colin 0%
 
 Die Android-App \emph{A.R.C.S.} ist eine App zur Lösung eines Rubiks Cube.
 Nach dem Starten der App bekommt der User eine GUI im Querformat zu sehen.
@@ -237,13 +235,18 @@ oberen Rand bestimmen. Der Farbbalken zeigt die Farbe (des mittleren
 Feldes) der oberen Seite an und ermöglicht so eine eindeutige Ausrichtung der
 Seiten.
 
-
-% TODO: add image w/ camera input
-
 Der User hält nun die richtige Seite in die Kamera und achtet darauf, dass sich
 jedes Feld auf dem Würfel in einem Quadrat auf dem Bildschirm befindet. Hat der
 User den Würfel richtig positioniert, so kann er auf den Button mit Kamerasymbol
 klicken. Es wird nun versucht, die korrekten Farben zu erkennen. 
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=\textwidth]{pics/arcs_solving.png}
+  \caption{Ansicht des ersten Lösungsschrittes. Die Würfelansicht ist animiert.
+  (Selbst erstellter Screenshot)}
+  \label{fig:arcs_solving}
+\end{figure}
 
 Es ist auch möglich, jedes Feld manuell zu setzen. Ein Touch auf ein Feld öffnet
 ein Auswahlmenü mit den sechs Farben.\footnote{Ein Touch auf das mittlere, bereits
