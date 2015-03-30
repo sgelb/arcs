@@ -12,14 +12,10 @@
 \printauthor								% Print the author data as defined above
 \newpage
 
-\begin{abstract}
-Vermutlich brauchen wir hierfür kein Abstrakt, aber ich lasse es erstmal drin.
-\end{abstract}
-
 \tableofcontents
 \newpage
 
-\section{Idee}  % sgelb 90%
+\section{Idee}  % sgelb 100%
 Die grundlegende Idee ist simpel und mit drei Schritten erklärt:
 
 \begin{enumerate}
@@ -35,7 +31,7 @@ Die grundlegende Idee ist simpel und mit drei Schritten erklärt:
 Hauptaugenmerk lag hierbei auf dem möglichst einfachen Einlesen der sechs
 Würfelseiten mit den insgesamt 54 Farbflächen.
 
-\section{Der Würfel}  % sgelb
+\section{Der Würfel}  % 100% sgelb
 
 \begin{figure}[ht!]
   \centering
@@ -106,11 +102,23 @@ Die Kombination \textbf{F2 B R' L} bedeutet also:
 \end{itemize}
 
 
-\section{Umsetzung}  % sgelb 0%
+\section{Umsetzung}  % sgelb 5/7%
 
 \subsection{Bibliotheken und Tools}  % colin 0%
 In diesem Kapitel werden die in diesem Projekt verwendeten Bibliotheken und
 Hilfswerkzeuge vorgestellt.
+
+\subsubsection{Java}  % 100%
+
+Wenig überraschend wurde als Programmiersprache Java benutzt, das de facto den
+Standard für die Androidprogrammierung darstellt.
+
+\subsubsection{ADT/NDK}  % 100%
+
+Ohne die \emph{Android Development Tools} und ihrer Vielzahl an in Eclipse
+integrierten Tools wäre die Entwicklung nicht denkbar gewesen. Der Einsatz des
+\emph{Native Development Kit} war notwendig, da das OpenCV SDK auf
+C++-Bibliotheken aufbaut, über die so zugegriffen werden konnte.
 
 \subsubsection{OpenCV}  % 100%
 
@@ -155,19 +163,19 @@ Wir haben bewusst auf das EGit Plugin für Eclipse verzichtet. Stattdessen haben
 wir auf das \emph{Ur-Git}, dem Kommandozeilenprogram, zurückgegriffen. Da beide
 Projektmitglieder Linux zur Entwicklung nutzen, stellte das kein Problem dar.
 
-\subsubsection{ADT/NDK}  % 100%
-
-Ohne die \emph{Android Development Tools} und ihrer Vielzahl an in Eclipse
-integrierten Tools wäre die Entwicklung nicht denkbar gewesen. Der Einsatz des
-\emph{Native Development Kit} war notwendig, da das OpenCV SDK auf
-C++-Bibliotheken aufbaut, über die so zugegriffen werden konnte.
-
-\subsubsection{Java}  % 100%
-
-Wenig überraschend wurde als Programmiersprache Java benutzt, das de facto den
-Standard für die Androidprogrammierung darstellt.
-
 \subsection{Gestaltung}  % sgelb 0%
+
+Auch wenn die Gestaltung des Programmes nicht im Vordergrund stand, sollte die
+Bedienung unkompliziert und nach Möglichkeit selbsterklärend sein. Es gibt zwei
+Hauptansichten: eine für das Einlesen eines Würfels, eine für das Präsentieren
+der Lösungsschritte. Der grundlegende Aufbau der Oberfläche ist bei beiden der
+gleiche. Die Anzeige erfolgt im Querformat. Auf der linken Seite wird eine
+Würfelseite angezeigt. Auf der rechten Seite gibt konkrete Anweisungen für den
+User. Unter den Anweisungen sind, leicht mit dem Daumen der rechten Hand zu
+bedienen, die notwendigen Buttons angezeigt.
+
+% TODO: image!
+
 \subsection{Arbeitsprozess}  % sgelb 0%
 
 \section{Benutzerhandbuch}  % colin 0%
