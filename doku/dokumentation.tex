@@ -101,7 +101,7 @@ Die Kombination \textbf{F2 B R' L} bedeutet also:
 \end{itemize}
 
 
-\section{Umsetzung}  % sgelb 5/7%
+\section{Umsetzung}  % sgelb 100%
 
 \subsection{Bibliotheken und Tools}  % colin 0%
 In diesem Kapitel werden die in diesem Projekt verwendeten Bibliotheken und
@@ -162,7 +162,7 @@ Wir haben bewusst auf das EGit Plugin für Eclipse verzichtet. Stattdessen haben
 wir auf das \emph{Ur-Git}, dem Kommandozeilenprogram, zurückgegriffen. Da beide
 Projektmitglieder Linux zur Entwicklung nutzen, stellte das kein Problem dar.
 
-\subsection{Gestaltung}  % sgelb 0%
+\subsection{Gestaltung}  % sgelb 100%
 
 Auch wenn die Gestaltung des Programmes nicht im Vordergrund stand, sollte die
 Bedienung unkompliziert und nach Möglichkeit selbsterklärend sein. Es gibt zwei
@@ -186,6 +186,41 @@ OpenCV-API realisiert.
 
 
 \subsection{Arbeitsprozess}  % sgelb 0%
+
+Am Anfang stand die Planung der zu erreichenden Ziele. Wir haben vier große
+Milestones definiert:
+
+\begin{itemize}
+
+  \item Implementierung des Code-Grundgerüstes, also der Klassen für den Würfel,
+    die Rotation u.ä. sowie die dazugehörigen Tests
+  \item manuelle und automatisierte Eingabemöglichkeiten für den Würfel
+  \item Berechnung der Lösung
+  \item Anzeigen der Lösung
+\end{itemize}
+
+Jeder Milestone setzte sich aus mehreren Issues zusammen.
+Abbildung~\ref{fig:github_issues} zeigt die Issues für den ersten Milestone und
+wer sich für das Lösen verantwortlich zeigt.
+
+Aus unseren Erfahrungen mit den vorherigen Projekten beschlossen wir, uns
+regelmässig einmal die Woche zu treffen. Diese Treffen erfüllten mehrere Ziele:
+in einer Nachbetrachtungsphase berichteten und zeigten wir einander, an was wir
+seit dem letzten Treffen gearbeitet hatten und versuchten, uns auf den gleichen
+Stand in Bezug auf die Kenntnis des Codes zu bringen. In der Planungsphase
+überlegten wir uns Lösungsansätze für eventuell aufgetretende Probleme und
+welche Issues wir als nächstes angehen sollten. Am Ende stand oftmals das
+Vereinbaren eines Termines zum gemeinsamen Programmierens.
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=\textwidth]{pics/github_issues.png}
+  \caption{Die sechs Issues des ersten Milestones in der Github-Ansicht.
+  (Selbst erstellter Screenshot)}
+  \label{fig:github_issues}
+\end{figure}
+
+
 
 \section{Benutzerhandbuch}  % colin 0%
 
