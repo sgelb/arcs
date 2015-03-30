@@ -62,12 +62,20 @@ Position zueinander ist also festgelegt. Desweiteren gibt es zwölf
 verbinden und acht \emph{Ecksteine}, die drei \emph{facelets} über eine Ecke
 verbinden.
 
-\subsection{Lösungsalgorithmen}  % 0% sgelb
+\subsection{Lösungsalgorithmen}  % 100% sgelb
 
 Insgesamt ergeben sich rund \( 4,3 \cdot {10}^{19} \) verschiedene
-Kombinationen.
+Kombinationen. Die maximale Anzahl von Zügen, um jeden beliebigen Würfel zu
+lösen, wird \emph{God's number} genannt. Erst 2010 wurde durch ein Brute
+Force-Verfahren durch ein Team um Herbert Kociemba bewiesen, daß diese Nummer
+Gottes exakt 20 beträgt \citep{rubik:godsnumber}.
 
-Lösungsansätze blabla, gewählt haben wir x weil y
+Zum Finden der optimalen Lösung kommt der \emph{Two-Phase}-Algorithmus zum
+Einsatz. Dieser wurde erstmals von Herbert Kociemba vorgestellt
+\citep{rubik:kociemba}. Wir nutzen eine Teile der optimierten Implementierung
+von Shuang Chen , die er unter der GPLv3 auf github.com veröffentlicht
+\citep{rubik:chen}.
+
 
 \subsection{Notation}  % sgelb
 
@@ -77,33 +85,63 @@ F, R, B, L, D, U etc
 \section{Umsetzung}  % sgelb 0%
 
 \subsection{Bibliotheken und Tools}  % colin 0%
-In diesem Kapitel werden die in diesem Projekt verwendeten Bibliotheken und Hilfswerkzeuge
-vorgestellt, ohne deren Hilfe das Projekt kaum Umsetzbar gewesen wäre.
-\subsubsection{OpenCV}  % 0%
-OpenCV ist eine Bibliothek, die eine große Fülle an Funktionen, unter Anderem zur Bildbearbeitung, zur Verfügung stellt.
-Daher war sie für dieses Projekt unverzichtbar. Gerade Farberkennung eines mit dem Smartphone aufgenommenen Bildes
-war mittels OpenCV um ein vielfaches einfacher zu implementieren.
-\subsubsection{Eclipse}  % 0%
-Als IDE haben wir Eclipse Juno verwendet, da Juno kompatibler mit der Einbindung der Android Plugins war.
-Mittels des Android SDK Manager konnte man die APIs der jeweiligen Android Version einfach einbinden.
-OpenCV, ADT und NDK wurden seperat dem Projekt hinzugefügt.
-Eclipse bietet zudem auch die Möglichkeit sehr einfach Tests mittels JUnit zu schreiben.
-Gerade Tests sind sehr wichtig für dieses Projekt gewesen, in dem sich durch Änderungen Fehler aller Art
-entwickeln konnten. Das diese Fehler überhaupt vorhanden sind, ließ sich durch die TestCases gut identifizieren.
-\subsubsection{Git}  % 0%
-Als Versionsverwaltungssoftware haben wir Git gewählt. Auf GitHub haben wir ein Repository angelegt.
-Die Branchstruktur liegt dieser Idee zugrunde: <LINK HIER ICH FIND DEN GERADE NICHT>
-Git bietet zudem den Vorteil, dass alle Mitglieder des Projekts Zugriff auf den Code haben und
-seperat daran Arbeiten konnten.
-Wir haben bewusst auf das EGit Plugin für Eclipse verzichtet, da dieses mehr Probleme schafft als es diese löst.
-Stattdessen haben wir traditionell die Konsole benutzt.
-\subsubsection{ADT/NDK}  % 0%
-Die Android Development Tools bieten eine Vielzahl an GUI Funktionen zur Entwicklung von Android Apps unter Eclipse.
-KP man, LATER
-\subsubsection{Java}  % 0%
-Als Programmiersprache wurde Java benutzt. Java bietet sich sehr für App Entwicklung an, da auch OpenCV
-damit kompatibel ist und, App Entwicklung an sich, auch ohne Zuzug von OpenCV, mittels Java realisierbar
-ist.
+In diesem Kapitel werden die in diesem Projekt verwendeten Bibliotheken und
+Hilfswerkzeuge vorgestellt.
+
+\subsubsection{OpenCV}  % 100%
+
+OpenCV ist eine in C und C++ geschriebene Bibliothek. Sie stellt eine große
+Fülle an Funktionen zur Bildmanipulation und -erkennung zur Laufzeit zur
+Verfügung. Mittels der \emph{OpenCV for Android
+SDK}\footnote{\url{opencv.org/platforms/android.html}} wurden hiermit die Farben
+der einzelnen Würfelflächen erkannt. Zum Einsat kam OpenCV in der Version 2.4.9.
+
+\subsubsection{Eclipse}  % 100%
+
+Zur Programmierung haben wir auf Eclipse zurückgegriffen. Dafür sprachen mehrere
+Gründe: zum damaligen Zeitpunkt war Eclipse die Standard-IDE zur
+Androidentwicklung\footnoote{Zumindestens nach Wünschen von Google soll diese
+Rolle in Zukunft von \emph{Android Studio} eingenommen werden.}, das OpenCV SDK
+war hierfür entwickelt worden und zu guter Letzt waren wir beide damit vertraut.
+
+Eclipse bietet zudem die Möglichkeit, sehr einfach Tests mittels JUnit zu
+schreiben. Tests sind sehr wichtig für dieses Projekt gewesen und haben mehrere
+Male Fehler entdeckt, die leicht zu übersehen, auf längere Frist aber
+schwerwiegend gewesen wären.
+
+\subsubsection{Git}  % 100%
+
+Als Versionsverwaltungssoftware haben wir Git gewählt. Als Plattform zur
+gemeinsamen Codeverwaltung haben wir GitHub gewählt. 
+
+GitHub bietet zudem den Vorteil, dass es das Werkzeuge zur Projektplanung zur
+Verfügung stellt. So ist es möglich, in einem Webinterface Milestones zu
+definieren, Issues anzulegen und Aufgaben zuzuordnen.
+
+Unsere Branching-Struktur folgt in einer vereinfachten Form dem Vorschlag von
+Vincent Driessen \citep{git:driessen}: es gibt einen master-Branch, von dem aus
+für vorher festgelegte Aufgaben (in Github \emph{Issues} genannt) ein Branch
+erstellt wird. Ist die Aufgabe umgesetzt, wird der Branch wieder in den master
+zurück gemergt. So bleiben die einzelnen Arbeiten voneinander getrennt, es gibt
+mit master einen immer stabilen Zweig und das parallele Arbeiten gelingt fast
+immer ohne Probleme.
+
+Wir haben bewusst auf das EGit Plugin für Eclipse verzichtet, da dieses mehr
+Probleme schafft als es diese löst. Stattdessen haben wir auf urprüngliche
+Kommandozeilenprogram git zurückgegriffen. Da beide Projektmitglieder Linux zur
+Entwicklung nutzen, stellte das kein Problem dar.
+
+\subsubsection{ADT/NDK}  % 100%
+
+Ohne die \emph{Android Development Tools} und ihrer Vielzahl an in Eclipse
+integrierten Tools wäre die Entwicklung nicht denkbar gewesen. Der Einsatz des
+\emph{Native Development Kit} war notwendig, da das OpenCV SDK auf
+C++-Bibliotheken aufbaut, über die so zugegriffen werden konnte.
+
+\subsubsection{Java}  % 100%
+
+Wenig überraschend wurde als Programmiersprache Java benutzt, das de facto den
+Standard für die Androidprogrammierung darstellt.
 
 \subsection{Gestaltung}  % sgelb 0%
 \subsection{Arbeitsprozess}  % sgelb 0%
