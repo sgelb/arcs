@@ -72,8 +72,8 @@ Gottes exakt 20 beträgt \citep{rubik:godsnumber}.
 
 Zum Finden der optimalen Lösung kommt der \emph{Two-Phase}-Algorithmus zum
 Einsatz. Dieser wurde erstmals von Herbert Kociemba vorgestellt
-\citep{rubik:kociemba}. Wir nutzen eine Teile der optimierten Implementierung
-von Shuang Chen , die er unter der GPLv3 auf github.com veröffentlicht
+\citep{rubik:kociemba}. Wir nutzen Teile der optimierten Implementierung
+von Shuang Chen, die er unter der GPLv3 auf github.com veröffentlicht
 \citep{rubik:chen}.
 
 
@@ -94,13 +94,13 @@ OpenCV ist eine in C und C++ geschriebene Bibliothek. Sie stellt eine große
 Fülle an Funktionen zur Bildmanipulation und -erkennung zur Laufzeit zur
 Verfügung. Mittels der \emph{OpenCV for Android
 SDK}\footnote{\url{opencv.org/platforms/android.html}} wurden hiermit die Farben
-der einzelnen Würfelflächen erkannt. Zum Einsat kam OpenCV in der Version 2.4.9.
+der einzelnen Würfelflächen erkannt. Zum Einsatz kam OpenCV in der Version 2.4.9.
 
 \subsubsection{Eclipse}  % 100%
 
 Zur Programmierung haben wir auf Eclipse zurückgegriffen. Dafür sprachen mehrere
 Gründe: zum damaligen Zeitpunkt war Eclipse die Standard-IDE zur
-Androidentwicklung\footnoote{Zumindestens nach Wünschen von Google soll diese
+Androidentwicklung\footnote{Zumindestens nach Wünschen von Google soll diese
 Rolle in Zukunft von \emph{Android Studio} eingenommen werden.}, das OpenCV SDK
 war hierfür entwickelt worden und zu guter Letzt waren wir beide damit vertraut.
 
@@ -111,25 +111,25 @@ schwerwiegend gewesen wären.
 
 \subsubsection{Git}  % 100%
 
-Als Versionsverwaltungssoftware haben wir Git gewählt. Als Plattform zur
-gemeinsamen Codeverwaltung haben wir GitHub gewählt. 
+Als Versionsverwaltungssoftware haben wir Git gewählt, zur gemeinsamen
+Codeverwaltung griffen wir auf GitHub zurück.
 
-GitHub bietet zudem den Vorteil, dass es das Werkzeuge zur Projektplanung zur
+GitHub bietet zudem den Vorteil, dass es diverse Werkzeuge zur Projektplanung zur
 Verfügung stellt. So ist es möglich, in einem Webinterface Milestones zu
-definieren, Issues anzulegen und Aufgaben zuzuordnen.
+definieren, Issues anzulegen und Aufgaben zuzuordnen. Das vereinfacht die
+Planung ungemein.
 
 Unsere Branching-Struktur folgt in einer vereinfachten Form dem Vorschlag von
 Vincent Driessen \citep{git:driessen}: es gibt einen master-Branch, von dem aus
 für vorher festgelegte Aufgaben (in Github \emph{Issues} genannt) ein Branch
 erstellt wird. Ist die Aufgabe umgesetzt, wird der Branch wieder in den master
 zurück gemergt. So bleiben die einzelnen Arbeiten voneinander getrennt, es gibt
-mit master einen immer stabilen Zweig und das parallele Arbeiten gelingt fast
-immer ohne Probleme.
+mit master einen immer stabilen Zweig und das parallele Arbeiten gelingt zumeist
+ohne Probleme.
 
-Wir haben bewusst auf das EGit Plugin für Eclipse verzichtet, da dieses mehr
-Probleme schafft als es diese löst. Stattdessen haben wir auf urprüngliche
-Kommandozeilenprogram git zurückgegriffen. Da beide Projektmitglieder Linux zur
-Entwicklung nutzen, stellte das kein Problem dar.
+Wir haben bewusst auf das EGit Plugin für Eclipse verzichtet. Stattdessen haben
+wir auf das \emph{Ur-Git}, dem Kommandozeilenprogram, zurückgegriffen. Da beide
+Projektmitglieder Linux zur Entwicklung nutzen, stellte das kein Problem dar.
 
 \subsubsection{ADT/NDK}  % 100%
 
