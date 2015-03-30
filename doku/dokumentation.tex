@@ -62,16 +62,15 @@ verbinden.
 
 Insgesamt ergeben sich rund \( 4,3 \cdot {10}^{19} \) verschiedene
 Kombinationen. Die maximale Anzahl von Zügen, um jeden beliebigen Würfel zu
-lösen, wird \emph{God's number} genannt. Erst 2010 wurde durch ein Brute
-Force-Verfahren durch ein Team um Herbert Kociemba bewiesen, daß diese Nummer
-Gottes exakt 20 beträgt \citep{rubik:godsnumber}.
+lösen, wird \emph{God's number} genannt. Erst 2010 hat ein Team um Herbert
+Kociemba durch ein Brute Force-Verfahren bewiesen, daß diese Nummer Gottes exakt
+20 beträgt \citep{rubik:godsnumber}.
 
 Zum Finden der optimalen Lösung kommt der \emph{Two-Phase}-Algorithmus zum
 Einsatz. Dieser wurde erstmals von Herbert Kociemba vorgestellt
 \citep{rubik:kociemba}. Wir nutzen Teile der optimierten Implementierung
 von Shuang Chen, die er unter der GPLv3 auf github.com veröffentlicht
 \citep{rubik:chen}.
-
 
 \subsection{Notation}  % 100 % sgelb
 
@@ -95,7 +94,7 @@ bezogen.
 
 Die Kombination \textbf{F2 B R' L} bedeutet also:
 \begin{itemize}
-  \item Drehe die Vorderseite um $90^\circ$
+  \item Drehe die Vorderseite um $180^\circ$
   \item Drehe die Rückseite um $90^\circ$ im Uhrzeigersinn
   \item Drehe die rechte Seite $90^\circ$ gegen den Uhrzeigersinn
   \item Drehe die linke Seite um $90^\circ$ im Uhrzeigersinn
@@ -165,56 +164,76 @@ Projektmitglieder Linux zur Entwicklung nutzen, stellte das kein Problem dar.
 
 \subsection{Gestaltung}  % sgelb 0%
 
-\begin{figure}[ht!]
-  \centering
-  \includegraphics[width=\textwidth]{pics/arcs_solving.png}
-  \caption{Ansicht des ersten Lösungsschrittes. Die Würfelansicht ist animiert.}
-  \label{fig:arcs_solving}
-\end{figure}
-
 Auch wenn die Gestaltung des Programmes nicht im Vordergrund stand, sollte die
 Bedienung unkompliziert und nach Möglichkeit selbsterklärend sein. Es gibt zwei
 Hauptansichten: eine für das Einlesen eines Würfels, eine für das Präsentieren
-der Lösungsschritte. Der grundlegende Aufbau der Oberfläche ist bei beiden der
-gleiche. Die Anzeige erfolgt im Querformat. Auf der linken Seite wird eine
-Würfelseite angezeigt. Auf der rechten Seite gibt konkrete Anweisungen für den
-User. Unter den Anweisungen sind, leicht mit dem Daumen der rechten Hand zu
-bedienen, die notwendigen Buttons angezeigt.
+der Lösungsschritte (siehe Abbildung~\ref{fig:arcs_solving}). Der grundlegende
+Aufbau der Oberfläche ist bei beiden der gleiche. Die Anzeige erfolgt im
+Querformat. Auf der linken Seite wird eine Würfelseite angezeigt. Auf der
+rechten Seite gibt konkrete Anweisungen für den User. Unter den Anweisungen
+sind, leicht mit dem Daumen der rechten Hand zu bedienen, die notwendigen
+Buttons angezeigt. Für die Darstellung wurde wenn möglich auf Standardelemente
+der Android-API zurückgegriffen, das Einblenden der Kameransicht wurde über die
+OpenCV-API realisiert.
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=\textwidth]{pics/arcs_solving.png}
+  \caption{Ansicht des ersten Lösungsschrittes. Die Würfelansicht ist animiert.
+  (Selbst erstellter Screenshot)}
+  \label{fig:arcs_solving}
+\end{figure}
 
 
 \subsection{Arbeitsprozess}  % sgelb 0%
 
 \section{Benutzerhandbuch}  % colin 0%
-Die App A.R.C.S. ist eine App zur Lösung eines Rubiks Cube.
-Nach dem Starten der App bekommt der User beim Queer halten des Smartpones links das Kamerafeld und rechts
-eine Beschreibung sowie einige Funktionen zu sehen. Auf dem Kamerafeld links befinden sich 9 Quadrate.
-Der User hat die Wahl den Würfel mittels der Kamera einzulesen, oder manuell. Möchte er dies automatisch tun,
-so hält er den Würfel in die Kamera und achtet darauf, dass sich jedes Feld auf dem Würfel in einem Quadrat
-auf dem Bildschirm befindet. Wie der User den Würfel halten muss, wird mit einer Beschreibung rechts verdeutlicht.
-Zudem befindet sich über den 9 Quadraten ein Farblick makierter Strich, der zeigt, welche Farbe (mittleres Feld
-des Würfels) oben liegen soll. Das Mittlere der 9 Quadrate ist auch Farblich markiert. So kann eine eindeutige
-Position des Würfels ermittelt werden. Hat der User den Würfel richtig positioniert, so kann er rechts auf einen
-Button klicken, der die Farben des Würfels erkennt. Die Quadrate bekommen nun die Farben der erkannten Felder.
-Sollte eine Farbe nicht richtig erkannt worden sein, so kann er entweder erneut den Button betätigen oder manuell
-die Farbe ändern indem er auf das Quadrat klickt. Der User bekommt nun eine Liste mit 9 Farben aus der er die
-gewünscht Farbe selektieren kann. Stimmen alle Farben, so kann der User auf einen Butten mit einem "weiter"
-Pfeil drücken. Nun bekommt er die nächste Seite des Würfels. Die Hinweise zur richtigen Ausrichtung des Würfels
-sind für jede Seite angepasst. Möchte der User eine Seite zurück gehen, so gibt es auch analog zum "weiter" Button
-auch einen "zurück" Button. Die vorher eingelesenen Farben sind dort noch gespeichert und können editiert werden.
-Nachdem der User alle Seiten eingelesen hat, kann er den Würfel mittels eines Buttons auf der rechten Seite lösen
-lassen. Wurde der Würfel nicht rictig eingelesen, so bekommt der User einen Hinweis das es z.B. nicht genau 9
-Felder von jeder Farbe gibt. Der User kann dann den Würfel nochmals überprüfen. Ist alles richtig, so schaltet
-die App in den Lösungsmodus. Im Lösungsmodus hat der User links die Felder wie sie nach einer Drehung aussehen
-sollten. Rechts hat er eine Anleitung mit den Lösungsschritten. Jeder Schritt kann mit Navigationsbuttons
-nacheinander aufgerufen werden. Nachdem der User alle Schritte befolgt hat, sollte der Rubiks Cube gelöst sein.
+
+Die App A.R.C.S. ist eine App zur Lösung eines Rubiks Cube. Nach dem Starten der
+App bekommt der User beim quer halten des Smartpones links das Kamerafeld und
+rechts eine Beschreibung sowie einige Funktionen zu sehen. Auf dem Kamerafeld
+links befinden sich 9 Quadrate. Der User hat die Wahl den Würfel mittels der
+Kamera einzulesen, oder manuell. Möchte er dies automatisch tun, so hält er den
+Würfel in die Kamera und achtet darauf, dass sich jedes Feld auf dem Würfel in
+einem Quadrat auf dem Bildschirm befindet. Wie der User den Würfel halten muss,
+wird mit einer Beschreibung rechts verdeutlicht. Zudem befindet sich über den 9
+Quadraten ein Farblick makierter Strich, der zeigt, welche Farbe (mittleres Feld
+des Würfels) oben liegen soll. Das Mittlere der 9 Quadrate ist auch Farblich
+markiert. So kann eine eindeutige Position des Würfels ermittelt werden. Hat der
+User den Würfel richtig positioniert, so kann er rechts auf einen Button
+klicken, der die Farben des Würfels erkennt. Die Quadrate bekommen nun die
+Farben der erkannten Felder. Sollte eine Farbe nicht richtig erkannt worden
+sein, so kann er entweder erneut den Button betätigen oder manuell die Farbe
+ändern indem er auf das Quadrat klickt. Der User bekommt nun eine Liste mit 9
+Farben aus der er die gewünscht Farbe selektieren kann. Stimmen alle Farben, so
+kann der User auf einen Butten mit einem "weiter" Pfeil drücken. Nun bekommt er
+die nächste Seite des Würfels. Die Hinweise zur richtigen Ausrichtung des
+Würfels sind für jede Seite angepasst. Möchte der User eine Seite zurück gehen,
+so gibt es auch analog zum "weiter" Button auch einen "zurück" Button. Die
+vorher eingelesenen Farben sind dort noch gespeichert und können editiert
+werden. Nachdem der User alle Seiten eingelesen hat, kann er den Würfel mittels
+eines Buttons auf der rechten Seite lösen lassen. Wurde der Würfel nicht rictig
+eingelesen, so bekommt der User einen Hinweis das es z.B. nicht genau 9 Felder
+von jeder Farbe gibt. Der User kann dann den Würfel nochmals überprüfen. Ist
+alles richtig, so schaltet die App in den Lösungsmodus. Im Lösungsmodus hat der
+User links die Felder wie sie nach einer Drehung aussehen sollten. Rechts hat er
+eine Anleitung mit den Lösungsschritten. Jeder Schritt kann mit
+Navigationsbuttons nacheinander aufgerufen werden. Nachdem der User alle
+Schritte befolgt hat, sollte der Rubiks Cube gelöst sein.
 
 \section{Architektur}  % colin 0%
-\subsection{Hierarchie}  % 0%
-\subsection{Prinzipien}  % 0%
 
-\section{Auswertung}  % sgelb 0%
-\subsection{Ausblick}  % 0%
-\subsection{Fazit}  % 0%
+\subsection{Hierarchie}  % 0%
+Hier kommen die schicken UML-Diagramme unter.
+
+\subsection{Prinzipien}  % 0%
+das übliche OO-Blabla
+
+\section{Auswertung und Fazit}  % sgelb 0%
+
+Es ist uns gelungen, die gesetzten Ziele umzusetzen.
+
+
 
 
 % Am Ende Bild- und Quellenverzeichnis
