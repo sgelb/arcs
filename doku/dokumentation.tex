@@ -77,9 +77,31 @@ von Shuang Chen, die er unter der GPLv3 auf github.com veröffentlicht
 \citep{rubik:chen}.
 
 
-\subsection{Notation}  % sgelb
+\subsection{Notation}  % 100 % sgelb
 
-F, R, B, L, D, U etc
+Um die verschiedenen Züge, die es zur Lösung eines Würfels benötigt, zu
+notieren, wird in der Regel auf folgendes Schema zurückgegriffen. Wenn nicht
+anders angemerkt, wird sich auf eine Drehung um 90° im Uhrzeigersinn bezogen.
+
+\begin{itemize}
+  \item \emph{F}ront bzw. Vorderseite
+  \item \emph{R}ight bzw. rechte Seite
+  \item \emph{B}ack bzw Rückseite
+  \item \emph{L}eft bzw. linke Seite
+  \item \emph{D}own bzw. Unterseite
+  \item \emph{U}p bzw. Oberseite
+  \item ein nachgestelltes Hochkomma \' ändert die Rotationsrichtung gegen den
+    Uhrzeigersinn
+  \item eine nachgestellte \emph{2} führt die Drehung zweimal, also um 180° aus
+\end{itemize}
+
+Die Kombination \emph{F2 B R' L} bedeutet also:
+\begin{itemize}
+  \item Drehe die Vorderseite um 180°
+  \item Drehe die Rückseite um 90° im Uhrzeigersinn
+  \item Drehe die rechte Seite 90° gegen den Uhrzeigersinn
+  \item Drehe die linke Seite um 90° im Uhrzeigersinn
+\end{itemize}
 
 
 \section{Umsetzung}  % sgelb 0%
@@ -98,7 +120,7 @@ der einzelnen Würfelflächen erkannt. Zum Einsatz kam OpenCV in der Version 2.4
 
 \subsubsection{Eclipse}  % 100%
 
-Zur Programmierung haben wir auf Eclipse zurückgegriffen. Dafür sprachen mehrere
+
 Gründe: zum damaligen Zeitpunkt war Eclipse die Standard-IDE zur
 Androidentwicklung\footnote{Zumindestens nach Wünschen von Google soll diese
 Rolle in Zukunft von \emph{Android Studio} eingenommen werden.}, das OpenCV SDK
