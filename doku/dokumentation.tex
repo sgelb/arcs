@@ -278,15 +278,52 @@ sollte der Rubiks Cube gelöst sein.
 \section{Architektur}  % colin 0%
 
 \subsection{Hierarchie}  % 0%
-Hier kommen die schicken UML-Diagramme unter.
+Der Aufbau des Projekts ist in die fünf folgenden Bereiche unterteilt. Die
+Aktivities, dem Würfel, der Eingabe, dem Lösungsweg und dem Lösungsalgorithmus
+Die Aktivities handeln die Android spezifischen Funktionen und das Layout der
+App. Zudem enthällt sie die zwei Objekte RubiksCube und CubeSolver. Der RubiksCube
+unter wiederum enthält eine Vielzahl von anderen Objekten, dazu später. der
+CubeSolver ist eine geschachtelte Klasse, welche die Funktion des Lösens mittels
+des Two Phase Algorithmus besitzt. Sie läuft asynchron um die App nicht anzuhalten
+während der Würfel gelöst wird.
+Die Usereingabe wird duch die Input Klassen bereitgestellt. Sie berechnen auch
+die Farben des automatische Einlesen über die Kamera. Auch sie werden in der
+MainActivity instanziiert.
+Der Würfel an sich besteht aus mehreren Komponenten, dem Rotator, dem CubeUpdator
+und den Facelets, alles eigene Klassen. Bei den Facelets handelt es sich um ein
+Array der größe 54. 54 deshalb, weil dass die Anzahl der Felder ist, die ein
+Rubiks Cube hat. Jedes dieser Facelets ist eine eigene Instanz des Facelet Objekts.
+Facelets sind die Elementarsten bestandteile des Würfels. Sie enthalten die
+Position des Feldes, die Richtung, in die sie zeigt und ihre Farbe. Position und
+Ausrichtung sind wieder eigene Objekte, die einfache Integerwerte zu dieser
+Bestimmung enthalten.
+Der Rotator, der mit den Facelets arbeitet, besitzt die Funktionen, diese Facelets
+zu drehen. Aufgrund der mathematischen Eigenschaften der Facelets ist es möglich
+anhand ihrer Position einfache Drehungen im Raub auszuführen, wenn man diese
+Position als einen Vektor vom Uhrsprung aus betrachtet, der im Zentrum des Würfels
+liegt.
+Der CubeUpdater hat die Aufgabe, die in dem Rotator gedrehten Facelets auf dem
+RubiksCube zu übertragen. RubiksCube und Rotator haben somit ihre eigenen Facelets,
+welche durch diese Klasse synchron gehalten werden.
+Die SolutionActivity ist eine eigene Activity, welche die Darstellung des
+Lösungsweges anzeigen soll.
+All diese Objekte, in stark vereinfachtet Darstellung, bilden das Grundgerüst
+für diese App.
 
 \subsection{Prinzipien}  % 0%
-das übliche OO-Blabla
+Alle Prinzipien, namentlich Single Responsibility Principle (SRP), Open Closed
+Principle (OCP) und Dont Repeat Yourself (DRP), wurden nach besten Gewissen stets
+eingehalten und ziehen sich durch dieses Projekt.
 
 \section{Auswertung und Fazit}  % sgelb 0%
-
-Es ist uns gelungen, die gesetzten Ziele umzusetzen.
-
+Das Projekt ist zu unserer Zufriedenheit verlaufen und wir konnten alle festgelegten
+Ziele und Features umsetzen. Wir haben viel gelernt was App Entwicklung angeht, mit
+allen seinen Facetten, z.B. Design und Layout, aber auch das Programmieren hat uns
+vor Aufgaben gestellt, die uns forderten und förderten, und der Mensch wächst schließlich
+mit seinen Aufgaben und Herausforderungen. Die Zusammenarbeit funktionierte einwandfrei
+und war stets motivierend, was die Voraussetzung eines erfolgreichen Projektes bildet.
+Das wichtigste jedoch ist die Aussage, dass wir zufrieden mit dem Erreichten sind
+und wir sind zufrieden.
 
 
 
