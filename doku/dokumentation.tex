@@ -187,16 +187,15 @@ OpenCV-API realisiert.
 
 \subsection{Arbeitsprozess}  % sgelb 100%
 
-Am Anfang stand die Planung der zu erreichenden Ziele. Wir haben vier große
-Milestones definiert:
+Am Anfang stand die Planung der zu erreichenden Ziele. Wir haben vier Milestones definiert:
 
-\begin{itemize}
+\begin{enumerate}
   \item Implementierung des Code-Grundgerüstes, also der Klassen für den Würfel,
-    die Rotation u.ä. sowie die dazugehörigen Tests
+    die Rotation u.ä.
   \item manuelle und automatisierte Eingabemöglichkeiten für den Würfel
   \item Berechnung der Lösung
   \item Anzeigen der Lösung
-\end{itemize}
+\end{enumerate}
 
 \begin{figure}[ht!]
   \centering
@@ -278,37 +277,132 @@ sollte der Rubiks Cube gelöst sein.
 \section{Architektur}  % colin 0%
 
 \subsection{Hierarchie}  % 0%
-Der Aufbau des Projekts ist in die fünf folgenden Bereiche unterteilt. Die
-Aktivities, dem Würfel, der Eingabe, dem Lösungsweg und dem Lösungsalgorithmus
-Die Aktivities handeln die Android spezifischen Funktionen und das Layout der
-App. Zudem enthällt sie die zwei Objekte RubiksCube und CubeSolver. Der RubiksCube
-unter wiederum enthält eine Vielzahl von anderen Objekten, dazu später. der
-CubeSolver ist eine geschachtelte Klasse, welche die Funktion des Lösens mittels
-des Two Phase Algorithmus besitzt. Sie läuft asynchron um die App nicht anzuhalten
-während der Würfel gelöst wird.
-Die Usereingabe wird duch die Input Klassen bereitgestellt. Sie berechnen auch
-die Farben des automatische Einlesen über die Kamera. Auch sie werden in der
-MainActivity instanziiert.
-Der Würfel an sich besteht aus mehreren Komponenten, dem Rotator, dem CubeUpdator
-und den Facelets, alles eigene Klassen. Bei den Facelets handelt es sich um ein
-Array der größe 54. 54 deshalb, weil dass die Anzahl der Felder ist, die ein
-Rubiks Cube hat. Jedes dieser Facelets ist eine eigene Instanz des Facelet Objekts.
+
+Das Projekt lässt sich in vier logische Bereiche unterteilen, die in eigenen
+\emph{packages} zusammengefasst sind:
+
+\begin{itemize}
+  \item der \emph{Würfel} (\texttt{com.github.sgelb.arcs.cube})
+  \item die \emph{Eingabe} (\texttt{com.github.sgelb.arcs.input})
+  \item der \emph{Lösungsalgorithmus} (\texttt{cs.min2phase})
+  \item der \emph{Lösungsweg} (\texttt{com.github.sgelb.arcs.solution})
+\end{itemize}
+
+Die Klassen in \texttt{arcs.cube} sind für die (interne) Darstellung des Würfels
+und der auf ihn anwendbaren Operationen wie der diversen Rotationsmöglichkeiten
+zuständig.
+
+Im Paket \texttt{arcs.input} ist eine Klasse für das Einlesen des Würfels
+definiert. Der Zugriff läuft, entsprechend dem Strategiemuster, über eine
+\emph{Interface}-Klasse. So ist sichergestellt, dass das Implementieren
+zusätzlicher Einlesemöglichkeiten relativ unkompliziert möglich ist.
+
+Für das Finden der optimalen Lösung nutzen wir die in \texttt{cs.min2phase}
+enthaltenen Klassen.
+
+\texttt{arcs.solution} enthält alles, um die Lösung schrittweise zu
+präsentieren.
+
+\subsection{Activites}
+
+Aus der Perspektive des Users betrachtet besteht das Projekt aus vier
+verschiedene Ansichten und somit auch vier verschiedene \emph{Activities}:
+
+\begin{itemize}
+  \item MainActivity
+  \item SolutionActivity
+  \item SettingsActivity
+  \item AboutActivity
+\end{itemize}
+
+Wie in \emph{Android}-Projekten üblich, ist \texttt{MainActivity} in
+\texttt{AndroidManifest.xml} als \emph{Launcher} definiert und stellt somit den
+Einstieg in das Programm dar.
+
+Die Hauptfunktion der \texttt{MainActivity} ist neben der Initialisierung der
+App das Einlesen der Würfelseiten.
+
+Hierfür stellt sie die graphische Oberfläche dar, wie sie in
+Abbildung~\ref{fig:arcs_unsolved} zu sehen ist und ermöglicht darüber die
+Interaktion mit dem User.
+
+Um das Bild der Kamera in Echtzeit darzustellen, erbt \texttt{MainActivity} von
+der \emph{OpenCV}-Klasse \texttt{CvCameraViewListener2}. Da der Kamerainput auch
+zur automatische Erkennung der Farben notwendig ist, wird jeder Frame an eine
+Instanz von \texttt{FaceInputMethod} weitergegeben.
+
+Zur Verwaltung der aktuellen Würfeldefinition dient ein Objekt vom Typ
+\texttt{RubiksCube}.
+
+Die Anweisungstexte werden über diverse \emph{Views} angezeigt. Die drei Buttons
+sind über \emph{EventListener} mit entsprechenden Funktionen verbunden. Im Falle
+der \emph{Next}- und \emph{Previous}-Buttons wird getestet, ob eine vorherige
+oder nächste Seite angezeigt werden kann und gegebenfalls die Ansicht geändert.
+Ist der gesamte Würfel eingegeben, ruft der \emph{Solve}-Button die innere
+Klasse \texttt{CubeSolver} auf. Diese übergibt die Würfeldefiniton an
+\texttt{Search.soltuion()}. Damit das Userinterface nicht blockiert wird, erbt
+\texttt{CubeSolver} von \texttt{AsyncTask}, läuft also in einem eigenen Thread.
+
+Ist eine Lösung gefunden, wird diese über \texttt{Intent.putExtra()} an
+\texttt{SolutionActivity} weitergegeben, welche dann gestartet wird. Hier wird
+der Lösungsweg in seine einzelnen Schritte unterteilt und der Text und Animation
+angezeigt.
+
+
+% Bis hierher fertig
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=\textwidth]{pics/uml.png}
+  \caption{UML-Diagram (selbst erstellt)}
+  \label{fig:uml}
+\end{figure}
+
+
+\subsection{Würfel}
+
+Der Würfel an sich besteht aus mehreren Komponenten, dem Rotator, dem
+CubeUpdator und den Facelets, alles eigene Klassen. Bei den Facelets handelt es
+sich um ein Array der größe 54. 54 deshalb, weil dass die Anzahl der Felder ist,
+die ein Rubiks Cube hat. Jedes dieser Facelets ist eine eigene Instanz des
+Facelet Objekts.
+
+\subsubsection{Facelets}
+
 Facelets sind die Elementarsten bestandteile des Würfels. Sie enthalten die
 Position des Feldes, die Richtung, in die sie zeigt und ihre Farbe. Position und
 Ausrichtung sind wieder eigene Objekte, die einfache Integerwerte zu dieser
 Bestimmung enthalten.
-Der Rotator, der mit den Facelets arbeitet, besitzt die Funktionen, diese Facelets
-zu drehen. Aufgrund der mathematischen Eigenschaften der Facelets ist es möglich
-anhand ihrer Position einfache Drehungen im Raub auszuführen, wenn man diese
-Position als einen Vektor vom Uhrsprung aus betrachtet, der im Zentrum des Würfels
-liegt.
+
+\subsubsection{Rotator}
+
+Der Rotator, der mit den Facelets arbeitet, besitzt die Funktionen, diese
+Facelets zu drehen. Aufgrund der mathematischen Eigenschaften der Facelets ist
+es möglich anhand ihrer Position einfache Drehungen im Raub auszuführen, wenn
+man diese Position als einen Vektor vom Uhrsprung aus betrachtet, der im Zentrum
+des Würfels liegt.
+
+\subsubsection{CubeUpdater}
+
 Der CubeUpdater hat die Aufgabe, die in dem Rotator gedrehten Facelets auf dem
-RubiksCube zu übertragen. RubiksCube und Rotator haben somit ihre eigenen Facelets,
-welche durch diese Klasse synchron gehalten werden.
-Die SolutionActivity ist eine eigene Activity, welche die Darstellung des
-Lösungsweges anzeigen soll.
+RubiksCube zu übertragen. RubiksCube und Rotator haben somit ihre eigenen
+Facelets, welche durch diese Klasse synchron gehalten werden.
+
 All diese Objekte, in stark vereinfachtet Darstellung, bilden das Grundgerüst
 für diese App.
+
+\subsection{Input}
+
+Die Usereingabe wird duch die Input Klassen bereitgestellt. Sie berechnen auch
+die Farben des automatische Einlesen über die Kamera. Auch sie werden in der
+MainActivity instanziiert.
+
+\subsection{Solution}
+
+BLABLA
+
+
+
 
 \subsection{Prinzipien}  % 0%
 Alle Prinzipien, namentlich Single Responsibility Principle (SRP), Open Closed
@@ -316,15 +410,16 @@ Principle (OCP) und Dont Repeat Yourself (DRP), wurden nach besten Gewissen stet
 eingehalten und ziehen sich durch dieses Projekt.
 
 \section{Auswertung und Fazit}  % sgelb 0%
-Das Projekt ist zu unserer Zufriedenheit verlaufen und wir konnten alle festgelegten
-Ziele und Features umsetzen. Wir haben viel gelernt was App Entwicklung angeht, mit
-allen seinen Facetten, z.B. Design und Layout, aber auch das Programmieren hat uns
-vor Aufgaben gestellt, die uns forderten und förderten, und der Mensch wächst schließlich
-mit seinen Aufgaben und Herausforderungen. Die Zusammenarbeit funktionierte einwandfrei
-und war stets motivierend, was die Voraussetzung eines erfolgreichen Projektes bildet.
-Das wichtigste jedoch ist die Aussage, dass wir zufrieden mit dem Erreichten sind
-und wir sind zufrieden.
 
+Das Projekt ist zu unserer Zufriedenheit verlaufen und wir konnten alle
+festgelegten Ziele und Features umsetzen. Wir haben viel gelernt was App
+Entwicklung angeht, mit allen seinen Facetten, z.B. Design und Layout, aber auch
+das Programmieren hat uns vor Aufgaben gestellt, die uns forderten und
+förderten, und der Mensch wächst schließlich mit seinen Aufgaben und
+Herausforderungen. Die Zusammenarbeit funktionierte einwandfrei und war stets
+motivierend, was die Voraussetzung eines erfolgreichen Projektes bildet. Das
+wichtigste jedoch ist die Aussage, dass wir zufrieden mit dem Erreichten sind
+und wir sind zufrieden.
 
 
 % Am Ende Bild- und Quellenverzeichnis
