@@ -11,7 +11,6 @@
 \usepackage{listings}      
 \usepackage{csquotes}
 \usepackage{pifont}
-\usepackage[hyperfootnotes=false]{hyperref}
 
 % Tabellen
 \usepackage{booktabs}
@@ -41,7 +40,7 @@
 
 
 % bibtex
-\usepackage[natbib,bibencoding=auto,style=apa,backend=biber]{biblatex}
+\usepackage[natbib,bibencoding=auto,style=authoryear,backend=biber]{biblatex}
 \bibliography{references.bib}
 \DeclareLanguageMapping{ngerman}{ngerman-apa}
 
@@ -53,6 +52,10 @@
 %Farbnamen benutzen
 \usepackage[usenames,dvipsnames]{color}
 
+\definecolor{black}{gray}{0} % Umdefinition der Farbe black, falls noetig (0=schwarz, 1=weiss)
+\definecolor{dblue}{rgb}{0.1,0.2,0.6} % Dunkelblau, fuer Hyperlinks
+\definecolor{lgray}{gray}{0.9} % Hellgrau, fuer Tabellen (0=schwarz, 1=weiss)
+\usepackage[hyperfootnotes=false,colorlinks=true,linkcolor=black,citecolor=dblue,urlcolor=dblue]{hyperref} 
 
 \usepackage{setspace}
 \onehalfspacing
