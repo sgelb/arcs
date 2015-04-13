@@ -348,9 +348,6 @@ Ist eine Lösung gefunden, wird diese über \texttt{Intent.putExtra()} an
 der Lösungsweg in seine einzelnen Schritte unterteilt und der Text und Animation
 angezeigt.
 
-
-% Bis hierher fertig
-
 \begin{figure}[ht!]
   \centering
   \includegraphics[width=\textwidth]{pics/uml.png}
@@ -359,37 +356,45 @@ angezeigt.
 \end{figure}
 
 
-\subsection{Würfel}
+\subsection{RubiksCube}
 
-Der Würfel an sich besteht aus mehreren Komponenten, dem Rotator, dem
-CubeUpdator und den Facelets, alles eigene Klassen. Bei den Facelets handelt es
-sich um ein Array der größe 54. 54 deshalb, weil dass die Anzahl der Felder ist,
-die ein Rubiks Cube hat. Jedes dieser Facelets ist eine eigene Instanz des
-Facelet Objekts.
+Mit der Klasse \texttt{RubiksCube} wird der gesamte Würfel dargestellt. Dieser
+bestelt aus mehreren Komponenten, die durch jeweils eigene Klassen implementiert
+sind: den \texttt{Facelets}, dem \texttt{Rotator} und dem \texttt{CubeUpdater}.
+Von den \texttt{facelets} gibt es 54 Instanzen, denn jede der sechs Seiten besteht
+aus neun Flächen. Sie sind in einem Array zusammengefasst. Die
+\texttt{RubiksCube}-Klasse selbst enthält fast keine Methoden mit eigener
+Funktionalität. Die meisten Methoden wrappen Funktionen der oben erwähnten
+Klassen. 
 
-\subsubsection{Facelets}
+\subsubsection{Facelet}
 
-Facelets sind die Elementarsten bestandteile des Würfels. Sie enthalten die
-Position des Feldes, die Richtung, in die sie zeigt und ihre Farbe. Position und
-Ausrichtung sind wieder eigene Objekte, die einfache Integerwerte zu dieser
-Bestimmung enthalten.
+Ein \texttt{Facelet} ist der elementarste Bestandteil des Würfels, die einzelne
+Farbfläche. Sie enthält die Position, die Ausrichtung und die Farbe. Position und
+Ausrichtung sind wieder in einer eigenen Klasse, \texttt{FaceletLocation},
+implementiert.
 
 \subsubsection{Rotator}
 
-Der Rotator, der mit den Facelets arbeitet, besitzt die Funktionen, diese
-Facelets zu drehen. Aufgrund der mathematischen Eigenschaften der Facelets ist
-es möglich anhand ihrer Position einfache Drehungen im Raub auszuführen, wenn
-man diese Position als einen Vektor vom Uhrsprung aus betrachtet, der im Zentrum
-des Würfels liegt.
+In \texttt{Rotator} sind alle Methoden enthalten, um die Würfelseiten in die
+verschiedenen Richtungen drehen zu können. Mathematisch werden hierbei die
+einzelnen Facelets als vom Ursprung ausgehende Vektoren begriffen. Eine Drehung
+einer Würfelseite entspricht dann der Rotation des Vektors um eine der drei
+Achsen.
+
 
 \subsubsection{CubeUpdater}
 
-Der CubeUpdater hat die Aufgabe, die in dem Rotator gedrehten Facelets auf dem
+\texttt{CubeUpdater} hat die Aufgabe, die im Rotator gedrehten Facelets auf den
 RubiksCube zu übertragen. RubiksCube und Rotator haben somit ihre eigenen
 Facelets, welche durch diese Klasse synchron gehalten werden.
 
-All diese Objekte, in stark vereinfachtet Darstellung, bilden das Grundgerüst
-für diese App.
+
+Wie man in Abbildung~\ref{fig:uml} erkennen kann, stellen diese Klassen das
+logische Grundgerüst der Anwendung dar. 
+
+
+% Bis hierher fertig
 
 \subsection{Input}
 
