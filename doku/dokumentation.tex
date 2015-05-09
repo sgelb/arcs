@@ -45,7 +45,7 @@ Der \emph{Rubik's Cube} oder \emph{Zauberwürfel} wurde 1974 durch den
 ungarischen Architekturprofessor Ernő Rubik erfunden, um seinen Studierenden
 räumliche Verhältnisse anschaulicher präsentieren zu können. Seitdem beschäftigt
 sich nicht nur die Mathematik immer wieder damit, der Würfel hat auch seinen
-eigenen Sport, das \emph{Speedcubing} geschaffen.\footcite{rubik:history} 
+eigenen Sport, das \emph{Speedcubing}, geschaffen.\footcite{rubik:history} 
 
 \subsection{Aufbau}  % 100% sgelb
 
@@ -53,7 +53,7 @@ Der klassische sechsseitige Würfel aus Abbildung~\ref{fig:rubik1977} besteht au
 insgesamt 26 Teilen. Jede der sechs mittleren Flächen auf jeder Seite – die
 \emph{Mittelteile} – hat eine eigene Farbe.\footnote{In der Regel sind dies
 Orange, Blau, Rot, Grün, Weiß und Gelb} Sie lassen sich nicht rotieren, ihr
-Position zueinander ist also festgelegt. Desweiteren gibt es zwölf
+Position zueinander ist also festgelegt. Des Weiteren gibt es zwölf
 \emph{Kantensteine}, die zwei über eine Kante verbundene \emph{facelets}
 verbinden und acht \emph{Ecksteine}, die drei \emph{facelets} über eine Ecke
 verbinden.
@@ -129,47 +129,39 @@ der einzelnen Würfelflächen erkannt. Zum Einsatz kam OpenCV in der Version 2.4
 
 \subsubsection{Eclipse}  % 100%
 
-Zur Programmierung haben wir auf Eclipse zurückgegriffen. Dafür sprachen mehrere
+Zur Programmierung wurde auf Eclipse zurückgegriffen. Dafür sprachen mehrere
 Gründe: zum damaligen Zeitpunkt war Eclipse die Standard-IDE zur
 Androidentwicklung\footnote{Zumindestens nach Wünschen von Google soll diese
 Rolle in Zukunft von \emph{Android Studio} eingenommen werden.}, das OpenCV SDK
-war hierfür entwickelt worden und zu guter Letzt waren wir beide damit vertraut.
-
-Eclipse bietet zudem die Möglichkeit, sehr einfach Tests mittels JUnit zu
-schreiben. Tests sind sehr wichtig für dieses Projekt gewesen und haben mehrere
-Male Fehler entdeckt, die leicht zu übersehen, auf längere Frist aber
-schwerwiegend gewesen wären.
+war hierfür entwickelt worden und zu guter Letzt waren beide Projektteilnehmer damit vertraut.
+Nicht alle Eclipse Versionen sind gut mit den benötigten Erweiterungen und Tools
+einwandfrei nutzbar. So wurde neben der Standard IDE von Eclipse unter anderem
+Eclipse Juno verwendet. Da Tests mit JUnit unter Juno jedoch schwierig einzurichten
+waren, wurde hierfür die Standard IDE verwendet. Tests waren gerade für dieses Projekt
+sehr wichtig gewesen. Sie haben Fehler vorgebeugt, die erst spät hätten entdeckt werden
+können und von vornherein viel Arbeit und Fehlersuche verhindert.
 
 \subsubsection{Git}  % 100%
 
-Als Versionsverwaltungssoftware haben wir Git gewählt, zur gemeinsamen
-Codeverwaltung griffen wir auf GitHub zurück.
+Als Versionsverwaltungssoftware wurde Git gewählt, zur gemeinsamen
+Codeverwaltung griffen die Projektteilnehmer auf GitHub zurück.
 
 GitHub bietet zudem den Vorteil, dass es diverse Werkzeuge zur Projektplanung zur
 Verfügung stellt. So ist es möglich, in einem Webinterface Milestones zu
 definieren, Issues anzulegen und Aufgaben zuzuordnen. Das vereinfacht die
-Planung ungemein.
+Planung.
 
-Unsere Branching-Struktur folgt in einer vereinfachten Form dem Vorschlag von
+Die Branching-Struktur folgt in einer vereinfachten Form dem Vorschlag von
 Vincent Driessen \citep{git:driessen}: es gibt einen master-Branch, von dem aus
-für vorher festgelegte Aufgaben (in Github \emph{Issues} genannt) ein Branch
+für vorher festgelegte Aufgaben (in GitHub \emph{Issues} genannt) ein Branch
 erstellt wird. Ist die Aufgabe umgesetzt, wird der Branch wieder in den master
 zurück gemergt. So bleiben die einzelnen Arbeiten voneinander getrennt, es gibt
 mit master einen immer stabilen Zweig und das parallele Arbeiten gelingt zumeist
 ohne Probleme.
 
-Wir haben bewusst auf das EGit Plugin für Eclipse verzichtet. Stattdessen haben
-wir auf das \emph{Ur-Git}, dem Kommandozeilenprogram, zurückgegriffen. Da beide
-Projektmitglieder Linux zur Entwicklung nutzen, stellte das kein Problem dar.
-
-\begin{figure}[ht!]
-  \centering
-  \includegraphics[width=\textwidth]{pics/arcs_unsolved}
-  \caption{Das graphische Interface zum Einlesen der Würfelseiten.
-  (Selbst erstellter Screenshot)}
-  \label{fig:arcs_unsolved}
-\end{figure}
-
+Es wurde bewusst auf das EGit Plugin für Eclipse verzichtet. Stattdessen wurde
+auf das \emph{Ur-Git}, dem Kommandozeilenprogram, zurückgegriffen. Da Linux zur
+Entwicklung genutzt wurde, stellte dies kein Problem dar.
 
 \subsection{Gestaltung}  % sgelb 100%
 
@@ -180,6 +172,13 @@ der Lösungsschritte (siehe Abbildung~\ref{fig:arcs_solving}). Der grundlegende
 Aufbau der Oberfläche ist bei beiden der gleiche. Die Anzeige erfolgt im
 Querformat. Auf der linken Seite wird eine Würfelseite angezeigt. Auf der
 rechten Seite gibt konkrete Anweisungen für den User. Unter den Anweisungen
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=\textwidth]{pics/arcs_unsolved}
+  \caption{Das grafische Interface zum Einlesen der Würfelseiten
+  (Selbst erstellter Screenshot).}
+  \label{fig:arcs_unsolved}
+\end{figure}
 sind, leicht mit dem Daumen der rechten Hand zu bedienen, die notwendigen
 Buttons angezeigt. Für die Darstellung wurde wenn möglich auf Standardelemente
 der Android-API zurückgegriffen, das Einblenden der Kameraansicht wurde über die
@@ -201,8 +200,8 @@ Milestones definiert:
 \begin{figure}[ht!]
   \centering
   \includegraphics[width=\textwidth]{pics/github_issues.png}
-  \caption{Die sechs Issues des ersten Milestones in der Github-Ansicht.
-  (Selbst erstellter Screenshot)}
+  \caption{Die sechs Issues des ersten Milestones in der Github-Ansicht
+  (Selbst erstellter Screenshot).}
   \label{fig:github_issues}
 \end{figure}
 
@@ -226,7 +225,7 @@ Die Android-App \emph{A.R.C.S.} ist eine App zur Lösung eines Rubiks Cube.
 Nach dem Starten der App bekommt der User eine GUI im Querformat zu sehen.
 
 Die linke Hälfte nimmt das Kamerafeld ein, rechts sind eine Beschreibung sowie
-drei Buttons zu sehen. Auf dem Kamerafeld links befinden sich, den Farbfeldern
+drei Buttons zu sehen. Auf dem Kamerafeld links befinden sich neun Rechtecke.
 
 Möchte der User den Würfel halbautomatisch einlesen, so hält er den Würfel in
 der richtigen Ausrichtung in die Kamera. Die korrekte Position lässt sich
@@ -278,20 +277,32 @@ sollte der Rubiks Cube gelöst sein.
 \section{Architektur}  % colin 0%
 
 \subsection{Hierarchie}  % 0%
-Der Aufbau des Projekts ist in die fünf folgenden Bereiche unterteilt. Die
-Activities, dem Würfel, der Eingabe, dem Lösungsweg und dem Lösungsalgorithmus
-Die Activities handeln die Android spezifischen Funktionen und das Layout der
-App. Zudem enthält sie die zwei Objekte RubiksCube und CubeSolver. Der RubiksCube
-unter wiederum enthält eine Vielzahl von anderen Objekten, dazu später. Der
-CubeSolver ist eine geschachtelte Klasse, welche die Funktion des Lösens mittels
-des Two Phase Algorithmus besitzt. Sie läuft asynchron um die App nicht anzuhalten
-während der Würfel gelöst wird.
-Die Usereingabe wird durch die Input Klassen bereitgestellt. Sie berechnen auch
-die Farben des automatische Einlesen über die Kamera. Auch sie werden in der
-MainActivity instanziiert.
+Der Aufbau der App lässt sich in fünf elementare Bereiche unterteilt:
+\begin{itemize}
+	\item Die Activities
+	\item Der Würfel
+	\item Die Eingabe
+	\item Der Lösungsweg
+	\item Der Lösungsalgorithmus
+\end{itemize}
+Die MainActivity handelt die Android-spezifischen Funktionen und das Layout der
+App. Die SolutionActivity ist eine eigene Activity, welche die Darstellung des
+Lösungsweges anzeigt.
+Die MainActivity enthält unter anderem die beiden Objekte RubiksCube und CubeSolver.
+Der RubiksCube enthält seinerseits Objekte, die die Eigenschaften des Würfels
+definieren (siehe Abb. \ref{fig:uml}).
+Der CubeSolver ist eine geschachtelte Klasse in der MainActivity, welche die Funktion des Lösens mittels
+des Two-Phase Algorithmus besitzt. Sie läuft asynchron um die App nicht anzuhalten
+während der Würfel gelöst wird. Das Lösen ist durch eine maximale Dauer von 10 Sekunden beschränkt
+\footnote{Es sind frei wählbare Werte für die maximale Dauer und Lösungsschritte, die an die lösende Funktion
+übergeben werden können.}.
+Dauert es länger, bricht der Algorithmus ab. In den Regel dauert das Lösen nur ein bis zwei Sekunden.
+Für den Fall, dass es dennoch länger dauert, soll der User nicht durch eine gefrorene App gestört sein.
+
 Der Würfel an sich besteht aus mehreren Komponenten, dem Rotator, dem CubeUpdater
-und den Facelets, alles eigene Klassen. Bei den Facelets handelt es sich um ein
-Array der Größe 54. 54 deshalb, weil dass die Anzahl der Felder ist, die ein
+und einem Array aus Facelets, alles eigene Klassen. Diese werden in der Klasse
+RubiksCube instanziiert. Bei den Facelets handelt es sich um ein
+Array der Größe 54. 54 deshalb, weil dies die Anzahl der Felder ist, die ein
 Rubiks Cube hat. Jedes dieser Facelets ist eine eigene Instanz des Facelet Objekts.
 Facelets sind die elementarsten Bestandteile des Würfels. Sie enthalten die
 Position des Feldes, die Richtung, in die sie zeigt und ihre Farbe. Position und
@@ -301,35 +312,63 @@ Der Rotator, der mit den Facelets arbeitet, besitzt die Funktionen, diese Facele
 zu drehen. Aufgrund der mathematischen Eigenschaften der Facelets ist es möglich
 anhand ihrer Position einfache Drehungen im Raub auszuführen, wenn man diese
 Position als einen Vektor vom Ursprung aus betrachtet, der im Zentrum des Würfels
-liegt.
+liegt. Es werden drei Variablen, x, y, und z definiert, die ganzzahlige Werte
+von -1 bis 1 annehmen können. Anhand dieser Werte lässt sich die Position im Raum
+bzw auf dem Würfel bestimmen. Hat ein Facelet die Werte x = 1, y = 1, z = 1, so ist
+das Feld auf der Vorderseite (front) oben rechts gemeint. Das Feld unten links hat die
+Werte x = -1, y = -1 z = -1. Diese Notation hat noch ein
+Problem. Im Fall z.B. x = y = z = 1 kann genausogut das Feld oben links der rechten Seite (right), oder das Feld
+unten rechts auf der oberen Seite (up) gemeint sein. Die Lösung hierbei ist die Richtung,
+die eine Facelet besitzt. Zusätzlich zu ihrer Position, die in einem Object namens
+FaceletLocation definiert ist, besitzt ein Facelet zudem eine Position. Diese wird
+in einer zweiten Instanz eines FaceletLocation Objects gespeichert. Von diesen x-, y- und z-Werten
+ist jeweils nur einer nicht 0. Soll das Facelet nach vorne zeigen, so ist der z-Wert 1.
+Soll das Facelet nach rechts zeigen, so ist x = 1. Für den letzten Fall, nach oben, ist y = 1.
+Die anderen Werte sind immmer 0. So lassen sich die Facelets durch die Ausrichtung unterscheiden.
+
 Der CubeUpdater hat die Aufgabe, die in dem Rotator gedrehten Facelets auf dem
 RubiksCube zu übertragen. RubiksCube und Rotator haben somit ihre eigenen Facelets,
 welche durch diese Klasse synchron gehalten werden.
-Die SolutionActivity ist eine eigene Activity, welche die Darstellung des
-Lösungsweges anzeigen soll.
+
+Die Usereingabe wird durch die Input Klassen bereitgestellt. Sie berechnen auch
+die Farben des automatische Einlesen über die Kamera. Auch sie werden in der
+MainActivity instanziiert.
+
+Der Lösungsweg wird, die bereits erwähnt, in der MainActivity durch die Elementklasse CubeSolver
+übernommen. In Ihr wird die Funktion solution aufgerufen. Sie gibt einen String der zur
+Lösung notwendigen Drehungen zurück. Dieser String könnte folgendermaßen aussehen: "r2f1d3l2u2". Der String wird
+in der SolutionDisplay Klasse geparsed und in entsprechenden Schritten grafisch dargestellt.
+Der Lösungsalgorithmus wird durch den Two-Phase Algorithmus erreicht. Auf die Funktion des Algorithmus
+an sich soll an dieser Stelle nicht eingegangen werden, da sie für die Dokumentation an sich nicht von Relevanz ist.
+
 All diese Objekte, in stark vereinfachtet Darstellung, bilden das Grundgerüst
 für diese App.
+\begin{figure}
+	\centering
+	\includegraphics[width=\textwidth]{pics/uml.png}
+	\caption{Vereinfachte Darstellung der Struktur als UML-Diagramm.}
+	\label{fig:uml}
+\end{figure}
 
 \subsection{Prinzipien}  % 0%
 Alle Prinzipien, namentlich Single Responsibility Principle (SRP), Open Closed
 Principle (OCP) und Dont Repeat Yourself (DRP), wurden nach bestem Gewissen stets
 eingehalten und ziehen sich durch dieses Projekt.
 
+\clearpage
+
 \section{Auswertung und Fazit}  % sgelb 0%
 Das Projekt ist zu unserer Zufriedenheit verlaufen und wir konnten alle festgelegten
 Ziele und Features umsetzen. Wir haben viel gelernt was App Entwicklung angeht, mit
 allen seinen Facetten, z.B. Design und Layout, aber auch das Programmieren hat uns
-vor Aufgaben gestellt, die uns forderten und förderten, und der Mensch wächst schließlich
-mit seinen Aufgaben und Herausforderungen. Die Zusammenarbeit funktionierte einwandfrei
+vor Aufgaben gestellt, die uns forderten und förderten.
+Die Zusammenarbeit funktionierte einwandfrei
 und war stets motivierend, was die Voraussetzung eines erfolgreichen Projektes bildet.
-Das Wichtigste jedoch ist die Aussage, dass wir zufrieden mit dem Erreichten sind
-und wir sind zufrieden.
-
-
 
 % Am Ende Bild- und Quellenverzeichnis
 \appendix
 \printbibliography[heading=bibintoc,title={Quellenverzeichnis}]
+\clearpage
 \listoffigures
 
 \end{document}
