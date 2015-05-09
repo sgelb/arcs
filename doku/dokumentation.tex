@@ -182,7 +182,7 @@ Querformat. Auf der linken Seite wird eine Würfelseite angezeigt. Auf der
 rechten Seite gibt konkrete Anweisungen für den User. Unter den Anweisungen
 sind, leicht mit dem Daumen der rechten Hand zu bedienen, die notwendigen
 Buttons angezeigt. Für die Darstellung wurde wenn möglich auf Standardelemente
-der Android-API zurückgegriffen, das Einblenden der Kameransicht wurde über die
+der Android-API zurückgegriffen, das Einblenden der Kameraansicht wurde über die
 OpenCV-API realisiert.
 
 \subsection{Arbeitsprozess}  % sgelb 100%
@@ -211,7 +211,7 @@ Abbildung~\ref{fig:github_issues} zeigt die Issues für den ersten Milestone und
 wer sich für das Lösen verantwortlich zeigt.
 
 Aus unseren Erfahrungen mit den vorherigen Projekten beschlossen wir, uns
-regelmässig einmal die Woche zu treffen. Diese Treffen erfüllten mehrere Ziele:
+regelmäßig einmal die Woche zu treffen. Diese Treffen erfüllten mehrere Ziele:
 in einer Nachbetrachtungsphase berichteten und zeigten wir einander, an was wir
 seit dem letzten Treffen gearbeitet hatten und versuchten, uns auf den gleichen
 Stand in Bezug auf die Kenntnis des Codes zu bringen. In der Planungsphase
@@ -262,7 +262,7 @@ Erst wenn alle neun Felder eine Farbe zugeteilt bekommen haben, wird der
 Selbstverständlich werden dabei die farblichen und textlichen Hinweise
 angepasst. Es ist jederzeit möglich, zu bereits definierten Seiten
 zurückzukehren. Sind alle Farben auf allen Seiten gesetzt, ist der
-"Lösen"-Button freigeschalten. Sollte es ein Problem mit dem eingelesenen Würfel
+"Lösen"-Button freigeschaltet. Sollte es ein Problem mit dem eingelesenen Würfel
 geben, gibt es darauf einen Hinweis und der User erhält die Möglichkeit, das
 Problem zu lösen. Andernfalls berechnet die App die Lösung und wechselt in den
 Lösungsmodus.
@@ -279,28 +279,28 @@ sollte der Rubiks Cube gelöst sein.
 
 \subsection{Hierarchie}  % 0%
 Der Aufbau des Projekts ist in die fünf folgenden Bereiche unterteilt. Die
-Aktivities, dem Würfel, der Eingabe, dem Lösungsweg und dem Lösungsalgorithmus
-Die Aktivities handeln die Android spezifischen Funktionen und das Layout der
-App. Zudem enthällt sie die zwei Objekte RubiksCube und CubeSolver. Der RubiksCube
-unter wiederum enthält eine Vielzahl von anderen Objekten, dazu später. der
+Activities, dem Würfel, der Eingabe, dem Lösungsweg und dem Lösungsalgorithmus
+Die Activities handeln die Android spezifischen Funktionen und das Layout der
+App. Zudem enthält sie die zwei Objekte RubiksCube und CubeSolver. Der RubiksCube
+unter wiederum enthält eine Vielzahl von anderen Objekten, dazu später. Der
 CubeSolver ist eine geschachtelte Klasse, welche die Funktion des Lösens mittels
 des Two Phase Algorithmus besitzt. Sie läuft asynchron um die App nicht anzuhalten
 während der Würfel gelöst wird.
-Die Usereingabe wird duch die Input Klassen bereitgestellt. Sie berechnen auch
+Die Usereingabe wird durch die Input Klassen bereitgestellt. Sie berechnen auch
 die Farben des automatische Einlesen über die Kamera. Auch sie werden in der
 MainActivity instanziiert.
-Der Würfel an sich besteht aus mehreren Komponenten, dem Rotator, dem CubeUpdator
+Der Würfel an sich besteht aus mehreren Komponenten, dem Rotator, dem CubeUpdater
 und den Facelets, alles eigene Klassen. Bei den Facelets handelt es sich um ein
-Array der größe 54. 54 deshalb, weil dass die Anzahl der Felder ist, die ein
+Array der Größe 54. 54 deshalb, weil dass die Anzahl der Felder ist, die ein
 Rubiks Cube hat. Jedes dieser Facelets ist eine eigene Instanz des Facelet Objekts.
-Facelets sind die Elementarsten bestandteile des Würfels. Sie enthalten die
+Facelets sind die elementarsten Bestandteile des Würfels. Sie enthalten die
 Position des Feldes, die Richtung, in die sie zeigt und ihre Farbe. Position und
 Ausrichtung sind wieder eigene Objekte, die einfache Integerwerte zu dieser
 Bestimmung enthalten.
 Der Rotator, der mit den Facelets arbeitet, besitzt die Funktionen, diese Facelets
 zu drehen. Aufgrund der mathematischen Eigenschaften der Facelets ist es möglich
 anhand ihrer Position einfache Drehungen im Raub auszuführen, wenn man diese
-Position als einen Vektor vom Uhrsprung aus betrachtet, der im Zentrum des Würfels
+Position als einen Vektor vom Ursprung aus betrachtet, der im Zentrum des Würfels
 liegt.
 Der CubeUpdater hat die Aufgabe, die in dem Rotator gedrehten Facelets auf dem
 RubiksCube zu übertragen. RubiksCube und Rotator haben somit ihre eigenen Facelets,
@@ -312,7 +312,7 @@ für diese App.
 
 \subsection{Prinzipien}  % 0%
 Alle Prinzipien, namentlich Single Responsibility Principle (SRP), Open Closed
-Principle (OCP) und Dont Repeat Yourself (DRP), wurden nach besten Gewissen stets
+Principle (OCP) und Dont Repeat Yourself (DRP), wurden nach bestem Gewissen stets
 eingehalten und ziehen sich durch dieses Projekt.
 
 \section{Auswertung und Fazit}  % sgelb 0%
@@ -322,7 +322,7 @@ allen seinen Facetten, z.B. Design und Layout, aber auch das Programmieren hat u
 vor Aufgaben gestellt, die uns forderten und förderten, und der Mensch wächst schließlich
 mit seinen Aufgaben und Herausforderungen. Die Zusammenarbeit funktionierte einwandfrei
 und war stets motivierend, was die Voraussetzung eines erfolgreichen Projektes bildet.
-Das wichtigste jedoch ist die Aussage, dass wir zufrieden mit dem Erreichten sind
+Das Wichtigste jedoch ist die Aussage, dass wir zufrieden mit dem Erreichten sind
 und wir sind zufrieden.
 
 
