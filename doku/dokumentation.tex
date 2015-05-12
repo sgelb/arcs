@@ -121,11 +121,11 @@ C++-Bibliotheken aufbaut, über die so zugegriffen werden konnte.
 
 \subsubsection{OpenCV}  % 100%
 
-OpenCV ist eine in C und C++ geschriebene Bibliothek. Sie stellt eine große
+\emph{OpenCV} ist eine in C und C++ geschriebene Bibliothek. Sie stellt eine große
 Fülle an Funktionen zur Bildmanipulation und -erkennung zur Laufzeit zur
 Verfügung. Mittels der \emph{OpenCV for Android
 SDK}\footnote{\url{opencv.org/platforms/android.html}} wurden hiermit die Farben
-der einzelnen Würfelflächen erkannt. Zum Einsatz kam OpenCV in der Version 2.4.9.
+der einzelnen Würfelflächen erkannt. Zum Einsatz kam \emph{OpenCV} in der Version 2.4.9.
 
 \subsubsection{Eclipse}  % 100%
 
@@ -186,16 +186,15 @@ OpenCV-API realisiert.
 
 \subsection{Arbeitsprozess}  % sgelb 100%
 
-Am Anfang stand die Planung der zu erreichenden Ziele. Wir haben vier große
-Milestones definiert:
+Am Anfang stand die Planung der zu erreichenden Ziele. Wir haben vier Milestones definiert:
 
-\begin{itemize}
+\begin{enumerate}
   \item Implementierung des Code-Grundgerüstes, also der Klassen für den Würfel,
-    die Rotation u.ä. sowie die dazugehörigen Tests
+    die Rotation u.ä.
   \item manuelle und automatisierte Eingabemöglichkeiten für den Würfel
   \item Berechnung der Lösung
   \item Anzeigen der Lösung
-\end{itemize}
+\end{enumerate}
 
 \begin{figure}[ht!]
   \centering
@@ -285,77 +284,204 @@ Der Aufbau der App lässt sich in fünf elementare Bereiche unterteilt:
 	\item Der Lösungsweg
 	\item Der Lösungsalgorithmus
 \end{itemize}
-Die MainActivity handelt die Android-spezifischen Funktionen und das Layout der
-App. Die SolutionActivity ist eine eigene Activity, welche die Darstellung des
+Die \texttt{MainActivity} handelt die Android-spezifischen Funktionen und das Layout der
+App. Die \texttt{SolutionActivity} ist eine eigene Activity, welche die Darstellung des
 Lösungsweges anzeigt.
-Die MainActivity enthält unter anderem die beiden Objekte RubiksCube und CubeSolver.
-Der RubiksCube enthält seinerseits Objekte, die die Eigenschaften des Würfels
+Die \texttt{MainActivity} enthält unter anderem die beiden Objekte \texttt{RubiksCube} und \texttt{CubeSolver}.
+Der \texttt{RubiksCube} enthält seinerseits Objekte, die die Eigenschaften des Würfels
 definieren (siehe Abb. \ref{fig:uml}).
-Der CubeSolver ist eine geschachtelte Klasse in der MainActivity, welche die Funktion des Lösens mittels
-des Two-Phase Algorithmus besitzt. Sie läuft asynchron um die App nicht anzuhalten
+Der \texttt{CubeSolver} ist eine geschachtelte Klasse in der \texttt{MainActivity}, welche die Funktion des Lösens mittels
+des \texttt{Two-Phase Algorithmus} besitzt. Sie läuft asynchron um die App nicht anzuhalten
 während der Würfel gelöst wird. Das Lösen ist durch eine maximale Dauer von 10 Sekunden beschränkt
 \footnote{Es sind frei wählbare Werte für die maximale Dauer und Lösungsschritte, die an die lösende Funktion
 übergeben werden können.}.
 Dauert es länger, bricht der Algorithmus ab. In den Regel dauert das Lösen nur ein bis zwei Sekunden.
 Für den Fall, dass es dennoch länger dauert, soll der User nicht durch eine gefrorene App gestört sein.
 
-Der Würfel an sich besteht aus mehreren Komponenten, dem Rotator, dem CubeUpdater
-und einem Array aus Facelets, alles eigene Klassen. Diese werden in der Klasse
-RubiksCube instanziiert. Bei den Facelets handelt es sich um ein
+Der Würfel an sich besteht aus mehreren Komponenten, dem \texttt{Rotator}, dem \texttt{CubeUpdater}
+und einem Array aus \texttt{Facelets}, alles eigene Klassen. Diese werden in der Klasse
+\texttt{RubiksCube} instanziiert. Bei den \texttt{Facelets} handelt es sich um ein
 Array der Größe 54. 54 deshalb, weil dies die Anzahl der Felder ist, die ein
-Rubiks Cube hat. Jedes dieser Facelets ist eine eigene Instanz des Facelet Objekts.
-Facelets sind die elementarsten Bestandteile des Würfels. Sie enthalten die
+Rubiks Cube hat. Jedes dieser \texttt{Facelets} ist eine eigene Instanz des \texttt{Facelet} Objekts.
+\texttt{Facelets} sind die elementarsten Bestandteile des Würfels. Sie enthalten die
 Position des Feldes, die Richtung, in die sie zeigt und ihre Farbe. Position und
 Ausrichtung sind wieder eigene Objekte, die einfache Integerwerte zu dieser
 Bestimmung enthalten.
-Der Rotator, der mit den Facelets arbeitet, besitzt die Funktionen, diese Facelets
-zu drehen. Aufgrund der mathematischen Eigenschaften der Facelets ist es möglich
+Der \texttt{Rotator}, der mit den \texttt{Facelets} arbeitet, besitzt die Funktionen, diese \texttt{Facelets}
+zu drehen. Aufgrund der mathematischen Eigenschaften der \texttt{Facelets} ist es möglich
 anhand ihrer Position einfache Drehungen im Raub auszuführen, wenn man diese
 Position als einen Vektor vom Ursprung aus betrachtet, der im Zentrum des Würfels
-liegt. Es werden drei Variablen, x, y, und z definiert, die ganzzahlige Werte
-von -1 bis 1 annehmen können. Anhand dieser Werte lässt sich die Position im Raum
-bzw auf dem Würfel bestimmen. Hat ein Facelet die Werte x = 1, y = 1, z = 1, so ist
+liegt. Es werden drei Variablen, \emph{x, y,} und \emph{z} definiert, die ganzzahlige Werte
+von \emph{-1} bis \emph{1} annehmen können. Anhand dieser Werte lässt sich die Position im Raum
+bzw auf dem Würfel bestimmen. Hat ein \texttt{Facelet} die Werte \emph{x = 1, y = 1, z = 1}, so ist
 das Feld auf der Vorderseite (front) oben rechts gemeint. Das Feld unten links hat die
-Werte x = -1, y = -1 z = -1. Diese Notation hat noch ein
-Problem. Im Fall z.B. x = y = z = 1 kann genausogut das Feld oben links der rechten Seite (right), oder das Feld
+Werte \emph{x = -1, y = -1, z = -1}. Diese Notation hat noch ein
+Problem. Im Fall z.B. \emph{x = y = z = 1} kann genausogut das Feld oben links der rechten Seite (right), oder das Feld
 unten rechts auf der oberen Seite (up) gemeint sein. Die Lösung hierbei ist die Richtung,
-die eine Facelet besitzt. Zusätzlich zu ihrer Position, die in einem Object namens
-FaceletLocation definiert ist, besitzt ein Facelet zudem eine Position. Diese wird
-in einer zweiten Instanz eines FaceletLocation Objects gespeichert. Von diesen x-, y- und z-Werten
-ist jeweils nur einer nicht 0. Soll das Facelet nach vorne zeigen, so ist der z-Wert 1.
-Soll das Facelet nach rechts zeigen, so ist x = 1. Für den letzten Fall, nach oben, ist y = 1.
-Die anderen Werte sind immmer 0. So lassen sich die Facelets durch die Ausrichtung unterscheiden.
+die eine \texttt{Facelet} besitzt. Zusätzlich zu ihrer Position, die in einem Object namens
+\texttt{FaceletLocation} definiert ist, besitzt ein \texttt{Facelet} zudem eine Position. Diese wird
+in einer zweiten Instanz eines \texttt{FaceletLocation} Objects gespeichert. Von diesen \emph{x-, y-} und \emph{z}-Werten
+ist jeweils nur einer nicht \emph{0}. Soll das \texttt{Facelet} nach vorne zeigen, so ist der \emph{z}-Wert \emph{1}.
+Soll das \texttt{Facelet} nach rechts zeigen, so ist \emph{x = 1}. Für den letzten Fall, nach oben, ist \emph{y = 1}.
+Die anderen Werte sind immmer \emph{0}. So lassen sich die \texttt{Facelets} durch die Ausrichtung unterscheiden.
 
-Der CubeUpdater hat die Aufgabe, die in dem Rotator gedrehten Facelets auf dem
-RubiksCube zu übertragen. RubiksCube und Rotator haben somit ihre eigenen Facelets,
+Der \texttt{CubeUpdater} hat die Aufgabe, die in dem \texttt{Rotator} gedrehten \texttt{Facelets} auf dem
+\texttt{RubiksCube} zu übertragen. \texttt{RubiksCube} und \texttt{Rotator} haben somit ihre eigenen \texttt{Facelets},
 welche durch diese Klasse synchron gehalten werden.
 
 Die Usereingabe wird durch die Input Klassen bereitgestellt. Sie berechnen auch
 die Farben des automatische Einlesen über die Kamera. Auch sie werden in der
-MainActivity instanziiert.
+\texttt{MainActivity} instanziiert.
 
-Der Lösungsweg wird, die bereits erwähnt, in der MainActivity durch die Elementklasse CubeSolver
+Der Lösungsweg wird, die bereits erwähnt, in der \texttt{MainActivity} durch die Elementklasse \texttt{CubeSolver}
 übernommen. In Ihr wird die Funktion solution aufgerufen. Sie gibt einen String der zur
-Lösung notwendigen Drehungen zurück. Dieser String könnte folgendermaßen aussehen: "r2f1d3l2u2". Der String wird
-in der SolutionDisplay Klasse geparsed und in entsprechenden Schritten grafisch dargestellt.
-Der Lösungsalgorithmus wird durch den Two-Phase Algorithmus erreicht. Auf die Funktion des Algorithmus
+Lösung notwendigen Drehungen zurück. Dieser String könnte folgendermaßen aussehen: \textbf{"r2f1d3l2u2"}. Der String wird
+in der \texttt{SolutionDisplay} Klasse geparsed und in entsprechenden Schritten grafisch dargestellt.
+Der Lösungsalgorithmus wird durch den \emph{Two-Phase Algorithmus} erreicht. Auf die Funktion des Algorithmus
 an sich soll an dieser Stelle nicht eingegangen werden, da sie für die Dokumentation an sich nicht von Relevanz ist.
 
 All diese Objekte, in stark vereinfachtet Darstellung, bilden das Grundgerüst
 für diese App.
-\begin{figure}
-	\centering
-	\includegraphics[width=\textwidth]{pics/uml.png}
-	\caption{Vereinfachte Darstellung der Struktur als UML-Diagramm.}
-	\label{fig:uml}
+
+Das Projekt lässt sich in vier logische Bereiche unterteilen, die in eigenen
+\emph{packages} zusammengefasst sind:
+
+\begin{itemize}
+  \item der \emph{Würfel} (\texttt{com.github.sgelb.arcs.cube})
+  \item die \emph{Eingabe} (\texttt{com.github.sgelb.arcs.input})
+  \item der \emph{Lösungsalgorithmus} (\texttt{cs.min2phase})
+  \item der \emph{Lösungsweg} (\texttt{com.github.sgelb.arcs.solution})
+\end{itemize}
+
+Die Klassen in \texttt{arcs.cube} sind für die (interne) Darstellung des Würfels
+und der auf ihn anwendbaren Operationen wie der diversen Rotationsmöglichkeiten
+zuständig.
+
+Im Paket \texttt{arcs.input} ist eine Klasse für das Einlesen des Würfels
+definiert. Der Zugriff läuft, entsprechend dem Strategiemuster, über eine
+\emph{Interface}-Klasse. So ist sichergestellt, dass das Implementieren
+zusätzlicher Einlesemöglichkeiten relativ unkompliziert möglich ist.
+
+Für das Finden der optimalen Lösung nutzen wir die in \texttt{cs.min2phase}
+enthaltenen Klassen.
+
+\texttt{arcs.solution} enthält alles, um die Lösung schrittweise zu
+präsentieren.
+
+\subsection{Activites}
+
+Aus der Perspektive des Users betrachtet besteht das Projekt aus vier
+verschiedene Ansichten und somit auch vier verschiedene \emph{Activities}:
+
+\begin{itemize}
+  \item MainActivity
+  \item SolutionActivity
+  \item SettingsActivity
+  \item AboutActivity
+\end{itemize}
+
+Wie in \emph{Android}-Projekten üblich, ist \texttt{MainActivity} in
+\texttt{AndroidManifest.xml} als \emph{Launcher} definiert und stellt somit den
+Einstieg in das Programm dar.
+
+Die Hauptfunktion der \texttt{MainActivity} ist neben der Initialisierung der
+App das Einlesen der Würfelseiten.
+
+Hierfür stellt sie die graphische Oberfläche dar, wie sie in
+Abbildung~\ref{fig:arcs_unsolved} zu sehen ist und ermöglicht darüber die
+Interaktion mit dem User.
+
+Um das Bild der Kamera in Echtzeit darzustellen, erbt \texttt{MainActivity} von
+der \emph{OpenCV}-Klasse \texttt{CvCameraViewListener2}. Da der Kamerainput auch
+zur automatische Erkennung der Farben notwendig ist, wird jeder Frame an eine
+Instanz von \texttt{FaceInputMethod} weitergegeben.
+
+Zur Verwaltung der aktuellen Würfeldefinition dient ein Objekt vom Typ
+\texttt{RubiksCube}.
+
+Die Anweisungstexte werden über diverse \emph{Views} angezeigt. Die drei Buttons
+sind über \emph{EventListener} mit entsprechenden Funktionen verbunden. Im Falle
+der \emph{Next}- und \emph{Previous}-Buttons wird getestet, ob eine vorherige
+oder nächste Seite angezeigt werden kann und gegebenfalls die Ansicht geändert.
+Ist der gesamte Würfel eingegeben, ruft der \emph{Solve}-Button die innere
+Klasse \texttt{CubeSolver} auf. Diese übergibt die Würfeldefiniton an
+\texttt{Search.soltuion()}. Damit das Userinterface nicht blockiert wird, erbt
+\texttt{CubeSolver} von \texttt{AsyncTask}, läuft also in einem eigenen Thread.
+
+Ist eine Lösung gefunden, wird diese über \texttt{Intent.putExtra()} an
+\texttt{SolutionActivity} weitergegeben, welche dann gestartet wird. Hier wird
+der Lösungsweg in seine einzelnen Schritte unterteilt und der Text und Animation
+angezeigt.
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=\textwidth]{pics/uml.png}
+  \caption{UML-Diagram (selbst erstellt)}
+  \label{fig:uml}
 \end{figure}
 
+
+\subsection{RubiksCube}
+
+Mit der Klasse \texttt{RubiksCube} wird der gesamte Würfel dargestellt. Dieser
+bestelt aus mehreren Komponenten, die durch jeweils eigene Klassen implementiert
+sind: den \texttt{Facelets}, dem \texttt{Rotator} und dem \texttt{CubeUpdater}.
+Von den \texttt{facelets} gibt es 54 Instanzen, denn jede der sechs Seiten besteht
+aus neun Flächen. Sie sind in einem Array zusammengefasst. Die
+\texttt{RubiksCube}-Klasse selbst enthält fast keine Methoden mit eigener
+Funktionalität. Die meisten Methoden wrappen Funktionen der oben erwähnten
+Klassen. 
+
+\subsubsection{Facelet}
+
+Ein \texttt{Facelet} ist der elementarste Bestandteil des Würfels, die einzelne
+Farbfläche. Sie enthält die Position, die Ausrichtung und die Farbe. Position und
+Ausrichtung sind wieder in einer eigenen Klasse, \texttt{FaceletLocation},
+implementiert.
+
+\subsubsection{Rotator}
+
+In \texttt{Rotator} sind alle Methoden enthalten, um die Würfelseiten in die
+verschiedenen Richtungen drehen zu können. Mathematisch werden hierbei die
+einzelnen \texttt{Facelets} als vom Ursprung ausgehende Vektoren begriffen. Eine Drehung
+einer Würfelseite entspricht dann der Drehung des Vektors um eine der drei
+Achsen.
+
+
+\subsubsection{CubeUpdater}
+
+\texttt{CubeUpdater} hat die Aufgabe, die im \texttt{Rotator} gedrehten \texttt{Facelets} auf den
+\texttt{RubiksCube} zu übertragen. \texttt{RubiksCube} und \texttt{Rotator} haben somit ihre eigenen
+\texttt{Facelets}, welche durch diese Klasse synchron gehalten werden.
+
+
+Wie man in Abbildung~\ref{fig:uml} erkennen kann, stellen diese Klassen das
+logische Grundgerüst der Anwendung dar. 
+
+
+% Bis hierher fertig
+
+\subsection{Input}
+
+Die Usereingabe wird duch die Input Klassen bereitgestellt. Sie berechnen auch
+die Farben des automatischen Einlesen über die Kamera. Auch sie werden in der
+\texttt{MainActivity} instanziiert. Hierbei gibt es durch eine Funktion bestimmte
+Schwellwerte (\emph{thresholds}), die fest in den Code eingebunden sind. \emph{OpenCV}
+gibt die eingelesenen Werte an diese Funktion. Je nachdem welche Farbwerte ermittelt
+und von der Funktion determiniert wurde, wird einem \texttt{Facelet} daraufhin eine
+Farbe zugewiesen.
+
+%\subsection{Solution}
+
+%Das Lösen wird, wie bereits erwähnt, durch eine Bibliothek bereitgestellt, die den
+%\emph{Two-Phase}-Algorithmus implementiert. 
+
 \subsection{Prinzipien}  % 0%
-Alle Prinzipien, namentlich Single Responsibility Principle (SRP), Open Closed
-Principle (OCP) und Dont Repeat Yourself (DRP), wurden nach bestem Gewissen stets
+Alle Prinzipien, namentlich \emph{Single Responsibility Principle (SRP)}, \emph{Open Closed
+Principle (OCP)} und \emph{Dont Repeat Yourself (DRP)}, wurden nach bestem Gewissen stets
 eingehalten und ziehen sich durch dieses Projekt.
 
-\clearpage
+%\clearpage
 
 \section{Auswertung und Fazit}  % sgelb 0%
 Das Projekt ist zu unserer Zufriedenheit verlaufen und wir konnten alle festgelegten
